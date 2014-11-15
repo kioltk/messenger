@@ -24,11 +24,19 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
     }
-
+/*
+*
+* я создал репозиторий у себя, а ты его склонил себе.
+* также я дал тебе права доступа на изменение репозитория
+* то есть ты можешь сейчас все это сохранить
+*
+*
+* */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds items to the action bar if it is present. ты понял что я сделал сейчас?
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
