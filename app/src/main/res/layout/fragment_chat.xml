@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity$PlaceholderFragment"
+    android:background="@android:color/background_light">
+
+
+    <ListView
+        android:id="@+id/messages_list"
+        android:background="#f4f4f4"
+        android:layout_above="@+id/new_message_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/new_message_box"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:background="#00000000"
+            android:paddingLeft="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:minHeight="40dp"
+            android:id="@+id/editText"
+            android:hint="Enter the messege"
+            android:layout_toLeftOf="@+id/send_button"
+            />
+        <Button
+            android:textColor="#fff"
+            android:background="#3F51B5"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:id="@+id/send_button"
+            android:layout_alignParentRight="true"
+            android:text="Send"
+            android:layout_width="70dp"
+            android:layout_height="40dp" />
+        </RelativeLayout>
+
+</RelativeLayout>
