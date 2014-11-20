@@ -5,10 +5,15 @@
     tools:context=".MainActivity$PlaceholderFragment"
     android:background="@android:color/background_light">
 
-
     <ListView
-        android:id="@+id/messages_list"
         android:background="#f4f4f4"
+        android:id="@+id/messages_list"
+        android:layout_above="@+id/new_message_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <TextView
+        android:id="@+id/status"
+        android:gravity="center"
         android:layout_above="@+id/new_message_box"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

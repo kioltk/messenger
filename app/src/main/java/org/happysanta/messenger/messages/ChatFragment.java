@@ -1,17 +1,22 @@
 package org.happysanta.messenger.messages;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiMessages;
+import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.messages.core.Message;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
-
-import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -25,16 +30,40 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        final ListView messagesList = (ListView) rootView.findViewById(R.id.messages_list);
+        final TextView statusView = (TextView) rootView.findViewById(R.id.status);
+        int userId = getArguments().getInt(ChatActivity.ARG_CHAT, 0);
 
-        ArrayList<Message> messages = new ArrayList<Message>();
-        messages.add(new Message(){{ text ="Привет."; in = true; }});
-        messages.add(new Message(){{ text ="Здарова!"; in = false; }});
-        messages.add(new Message(){{ text ="Как дела?."; in = true; }});
-        messages.add(new Message(){{ text ="Збс."; in = false; }});
+        statusView.setText("loading");
 
-        ListView messagesList = (ListView) rootView.findViewById(R.id.messages_list);
-        messagesList.setAdapter(new MessagesAdapter(getActivity(), messages));
+        new VKApiMessages().getChatHistory(userId).executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                VKList<VKApiMessage> messages = (VKList<VKApiMessage>) response.parsedModel;
+                messagesList.setAdapter(new MessagesAdapter(getActivity(), messages.toArrayList()));
+                if(messages.isEmpty()){
+                    statusView.setText("Start the conversation");
+                }else{
+                    statusView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(VKError error) {
+                statusView.setText(error.toString());
+
+            }
+        });
+
+
+
 
         return rootView;
+    }
+
+    public static ChatFragment getInstance(Bundle extras) {
+        ChatFragment fragment = new ChatFragment();
+        fragment.setArguments(extras);
+        return fragment;
     }
 }

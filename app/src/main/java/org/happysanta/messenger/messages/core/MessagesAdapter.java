@@ -11,6 +11,8 @@ import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.vk.sdk.api.model.VKApiMessage;
+
 import org.happysanta.messenger.R;
 
 import java.util.ArrayList;
@@ -20,9 +22,9 @@ import java.util.ArrayList;
  */
 public class MessagesAdapter extends BaseAdapter {
     private final Activity activity;
-    private final ArrayList<Message> messages;
+    private final ArrayList<VKApiMessage> messages;
 
-    public MessagesAdapter(Activity activity, ArrayList<Message> messages) {
+    public MessagesAdapter(Activity activity, ArrayList<VKApiMessage> messages) {
         this.activity = activity;
         this.messages = messages;
     }
@@ -33,7 +35,7 @@ public class MessagesAdapter extends BaseAdapter {
     }
 
     @Override
-    public Message getItem(int position) {
+    public VKApiMessage getItem(int position) {
         return messages.get(position);
     }
 
@@ -47,14 +49,14 @@ public class MessagesAdapter extends BaseAdapter {
         RelativeLayout itemView = (RelativeLayout) LayoutInflater.from(activity).inflate(R.layout.item_message, null);
         TextView textView = (TextView) itemView.findViewById(R.id.message_text);
 
-        Message message = getItem(position);
+        VKApiMessage message = getItem(position);
 
-        textView.setText(message.text);
+        textView.setText(message.body);
 
-        if(message.in){
-            itemView.setGravity(Gravity.LEFT);
-        }else{
+        if(message.out){
             itemView.setGravity(Gravity.RIGHT);
+        } else {
+            itemView.setGravity(Gravity.LEFT);
         }
 
         return itemView;
