@@ -14,7 +14,7 @@ import org.happysanta.messenger.R;
  * Created by Jesus Christ. Amen.
  */
 public class NavigationAdapter extends BaseAdapter {
-    private Context context;
+    public Context context;
 
     public NavigationAdapter (Activity activity ) {context = activity;}
 
@@ -32,7 +32,26 @@ public class NavigationAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        switch (position){
+            case 0:
+                return NavigationFragment.NAVIGATION_PROFILE_ID;
+            case 1:
+                return NavigationFragment.NAVIGATION_MESSAGES_ID;
+
+            case 2:
+                return NavigationFragment.NAVIGATION_GROUPS_ID;
+
+            case 3:
+                return NavigationFragment.NAVIGATION_FRIENDS_ID;
+
+            case 4:
+                return NavigationFragment.NAVIGATION_SETTINGS_ID;
+
+            case 5:
+                return NavigationFragment.NAVIGATION_ABOUT_ID;
+
+        }
+        return -1;
     }
 
     @Override

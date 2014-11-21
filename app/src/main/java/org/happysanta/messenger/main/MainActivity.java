@@ -36,34 +36,34 @@ public class MainActivity extends ActionBarActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
-            case 0:
+            case (int) NavigationFragment.NAVIGATION_PROFILE_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new ProfileFragment())
                         .commit();
 
             break;
-            case 1:
+            case (int) NavigationFragment.NAVIGATION_MESSAGES_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new ConversationsFragment())
                         .commit();
 
             break;
-            case 2:
+            case (int) NavigationFragment.NAVIGATION_GROUPS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new GroupsFragment())
                         .commit();
                 break;
-            case 3:
+            case (int) NavigationFragment.NAVIGATION_FRIENDS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new FriendsFragment())
                         .commit();
                 break;
-            case 4:
+            case (int) NavigationFragment.NAVIGATION_SETTINGS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new SettingsFragment())
                         .commit();
                 break;
-            case 5:
+            case (int) NavigationFragment.NAVIGATION_ABOUT_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new AboutFragment())
                         .commit();
