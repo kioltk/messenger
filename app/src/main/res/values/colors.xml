@@ -3,4 +3,8 @@
     <color name="color_primary">#5677FC</color>
     <color name="color_primary_dark">#fafafa</color>
     <color name="color_accent">#b4b4b4</color>
+
+    <!-- Navigation -->
+    <color name="navigation_profile_background">@color/color_primary</color>
+    <color name="navigation_profile_text">#fff</color>
 </resources>
