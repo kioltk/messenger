@@ -7,4 +7,6 @@
     <!-- Navigation -->
     <color name="navigation_profile_background">@color/color_primary</color>
     <color name="navigation_profile_text">#fff</color>
+    <color name="navigation_divider">#d4d4d4</color>
+    <color name="navigation_background">#fff</color>
 </resources>

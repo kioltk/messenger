@@ -53,6 +53,7 @@ public class StartActivity extends ActionBarActivity {
 
     private void startMainActivity() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
     private void start() {
@@ -82,7 +83,6 @@ public class StartActivity extends ActionBarActivity {
                         break;
                     case RESULT_OK:
                         startMainActivity();
-                        finish();
                         break;
                 }
             }

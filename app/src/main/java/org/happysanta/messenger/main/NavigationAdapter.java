@@ -22,7 +22,7 @@ public class NavigationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 6;
+        return 7;
     }
 
     @Override
@@ -44,14 +44,28 @@ public class NavigationAdapter extends BaseAdapter {
             case 3:
                 return NavigationFragment.NAVIGATION_FRIENDS_ID;
 
-            case 4:
+            case 5:
                 return NavigationFragment.NAVIGATION_SETTINGS_ID;
 
-            case 5:
+            case 6:
                 return NavigationFragment.NAVIGATION_ABOUT_ID;
 
         }
         return -1;
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        if(position==4){
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -67,6 +81,7 @@ public class NavigationAdapter extends BaseAdapter {
         TextView textView = (TextView) itemView.findViewById(R.id.text);
         switch (position){
             case 1:
+                itemView.findViewById(R.id.fake_padding).setVisibility(View.VISIBLE);
                 textView.setText(R.string.navigation_messages);
                 break;
             case 2:
@@ -76,9 +91,11 @@ public class NavigationAdapter extends BaseAdapter {
                 textView.setText(R.string.navigation_friends);
                 break;
             case 4:
+                return LayoutInflater.from(context).inflate(R.layout.navigation_divider, null);
+            case 5:
                 textView.setText(R.string.navigation_settings);
                 break;
-            case 5:
+            case 6:
                 textView.setText(R.string.navigation_about);
                 break;
         }

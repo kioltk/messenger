@@ -1,22 +1,17 @@
 package org.happysanta.messenger.messages;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
 public class ChatActivity extends ActionBarActivity {
 
-    public static final String ARG_GROUP = "ARGUMENT_GROUP";
-    public static final String ARG_CHAT = "ARGUMENT_CHAT";
+    public static final String ARG_CHATID = "ARGUMENT_CHATID";
+    public static final String ARG_USERID = "ARGUMENT_USERID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +19,7 @@ public class ChatActivity extends ActionBarActivity {
         setContentView(R.layout.activity_chat);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, ChatFragment.getInstance(getIntent().getExtras()))
+                    .add(R.id.container, ConversationFragment.getInstance(getIntent().getExtras()))
                     .commit();
         }
     }

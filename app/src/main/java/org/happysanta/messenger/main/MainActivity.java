@@ -8,8 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
 import org.happysanta.messenger.friends.FriendsFragment;
-import org.happysanta.messenger.messages.ConversationsFragment;
-import org.happysanta.messenger.messages.GroupsFragment;
+import org.happysanta.messenger.messages.chats.ChatsFragment;
+import org.happysanta.messenger.messages.conversations.ConverstaionsFragment;
 import org.happysanta.messenger.profile.ProfileFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 
@@ -44,13 +44,13 @@ public class MainActivity extends ActionBarActivity
             break;
             case (int) NavigationFragment.NAVIGATION_MESSAGES_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new ConversationsFragment())
+                        .replace(R.id.container, new ConverstaionsFragment())
                         .commit();
 
             break;
             case (int) NavigationFragment.NAVIGATION_GROUPS_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new GroupsFragment())
+                        .replace(R.id.container, new ChatsFragment())
                         .commit();
                 break;
             case (int) NavigationFragment.NAVIGATION_FRIENDS_ID:
