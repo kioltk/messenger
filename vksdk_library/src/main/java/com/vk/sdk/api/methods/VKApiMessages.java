@@ -93,6 +93,30 @@ public class VKApiMessages extends VKApiBase {
 
 
 
+    public VKRequest send(VKApiMessage message){
+        VKParameters params = new VKParameters();
+        params.put("message", message.body);
+        if(message.isChat()){
+            params.put("chat_id", message.chat_id);
+        } else {
+            params.put("user_id", message.user_id);
+        }
+        if(message.attachments !=null && !message.attachments.isEmpty())
+            params.put("attachment", message.attachments.toAttachmentsString());
+        return prepareRequest("send", params);
+    }
+
+    public VKRequest sendSticker(VKApiMessage stickerMessage){
+        VKParameters params = new VKParameters();
+        params.put("sticker_id", stickerMessage.body);
+        if(stickerMessage.isChat()){
+            params.put("chat_id", stickerMessage.chat_id);
+        } else {
+            params.put("user_id", stickerMessage.user_id);
+        }
+        return prepareRequest("send", params);
+    }
+
     public VKRequest getChatHistory(final int userId) {
         return getHistory(new VKParameters(){{ put("user_id",userId); }});
     }

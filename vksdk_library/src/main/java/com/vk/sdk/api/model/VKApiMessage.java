@@ -68,6 +68,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
      */
     public String title;
 
+    public int chat_id;
+
     /**
      * Body of the message.
      */
@@ -107,6 +109,7 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         read_state = ParseUtils.parseBoolean(source, "read_state");
         out = ParseUtils.parseBoolean(source, "out");
         title = source.optString("title");
+        chat_id = source.optInt("title");
         body = source.optString("body");
         attachments .fill(source.optJSONArray("attachments"));
         fwd_messages = new VKList<VKApiMessage>(source.optJSONArray("fwd_messages"), VKApiMessage.class);
@@ -125,6 +128,7 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         this.read_state = in.readByte() != 0;
         this.out = in.readByte() != 0;
         this.title = in.readString();
+        this.chat_id = in.readInt();
         this.body = in.readString();
         this.attachments = in.readParcelable(VKAttachments.class.getClassLoader());
         this.fwd_messages = in.readParcelable(VKList.class.getClassLoader());
@@ -157,6 +161,7 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         dest.writeByte(read_state ? (byte) 1 : (byte) 0);
         dest.writeByte(out ? (byte) 1 : (byte) 0);
         dest.writeString(this.title);
+        dest.writeInt(this.chat_id);
         dest.writeString(this.body);
         dest.writeParcelable(attachments, flags);
         dest.writeParcelable(this.fwd_messages, flags);
@@ -173,4 +178,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
             return new VKApiMessage[size];
         }
     };
+
+    public boolean isChat() {
+        return chat_id!=0;
+    }
 }
