@@ -9,4 +9,28 @@
     <color name="navigation_profile_text">#fff</color>
     <color name="navigation_divider">#d4d4d4</color>
     <color name="navigation_background">#fff</color>
+    <!-- Black-White -->
+    <color name="black_0">#11000000</color>
+    <color name="black_100">#22000000</color>
+    <color name="black_200">#38000000</color>
+    <color name="black_300">#4a000000</color>
+    <color name="black_400">#60000000</color>
+    <color name="black_500">#88000000</color>
+    <color name="black_600">#a0000000</color>
+    <color name="black_700">#b4000000</color>
+    <color name="black_800">#d0000000</color>
+    <color name="black_900">#f0000000</color>
+    <!--Blue-->
+    <color name="blue_0">#11303f9f</color>
+    <color name="blue_100">#22303f9f</color>
+    <color name="blue_200">#38303f9f</color>
+    <color name="blue_300">#4a303f9f</color>
+    <color name="blue_400">#60303f9f</color>
+    <color name="blue_500">#88303f9f</color>
+    <color name="blue_600">#a0303f9f</color>
+    <color name="blue_700">#b4303f9f</color>
+    <color name="blue_800">#d0303f9f</color>
+    <color name="blue_900">#f0303f9f</color>
+    <color name="white">#fff</color>
+    <color name="transparent">#00000000</color>
 </resources>

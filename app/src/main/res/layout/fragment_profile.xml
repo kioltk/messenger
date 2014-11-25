@@ -2,9 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/username"
-        android:text="loading"
+    <LinearLayout
+        android:id="@+id/picture"
+        android:paddingBottom="20dp"
+        android:background="#f0f0f0"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:src="@drawable/cat"
+            android:id="@+id/user_photo"
+            android:layout_marginTop="35dp"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="100dp"
+            />
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Крутой Кошак"
+            android:layout_marginTop="15dp"
+            android:textSize="20sp"
+            android:textColor="#666"/>
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="#888"
+            android:textSize="16dp"
+            android:text="Был 15 минут назад"/>
+    </LinearLayout>
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <ListView
+            android:id="@+id/list_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ListView>
+
+    </RelativeLayout>
 </LinearLayout>

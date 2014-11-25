@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.vk.sdk.api.VKError;
@@ -28,6 +30,15 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         final TextView usernameView = (TextView) rootView.findViewById(R.id.username);
+
+        TextView nameView = (TextView) rootView.findViewById(R.id.username);
+
+        TextView statusView = (TextView) rootView.findViewById(R.id.status);
+
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.user_photo);
+
+        ListView listView = (ListView) rootView.findViewById(R.id.list_profile);
+
         // todo это всё нужно делать заранее на экране загрузки
         new VKApiUsers().get().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
