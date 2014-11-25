@@ -76,6 +76,9 @@ public class NavigationAdapter extends BaseAdapter {
             itemView = LayoutInflater.from(context).inflate(R.layout.navigation_profile, null);
             return itemView;
         }
+        if(position==4){
+            return LayoutInflater.from(context).inflate(R.layout.navigation_divider, null);
+        }
         itemView = LayoutInflater.from(context).inflate(R.layout.navigation_item, null);
 
         TextView textView = (TextView) itemView.findViewById(R.id.text);
@@ -90,8 +93,6 @@ public class NavigationAdapter extends BaseAdapter {
             case 3:
                 textView.setText(R.string.navigation_friends);
                 break;
-            case 4:
-                return LayoutInflater.from(context).inflate(R.layout.navigation_divider, null);
             case 5:
                 textView.setText(R.string.navigation_settings);
                 break;

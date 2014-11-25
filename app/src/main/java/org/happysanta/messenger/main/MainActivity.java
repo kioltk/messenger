@@ -32,10 +32,10 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    public void onNavigationDrawerItemSelected(int itemdId) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        switch (position) {
+        switch (itemdId) {
             case (int) NavigationFragment.NAVIGATION_PROFILE_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new ProfileFragment())

@@ -76,14 +76,12 @@ public class VKApiMessages extends VKApiBase {
     }
 
 
-
-
     public VKRequest getDialogs() {
         return getDialogs(null);
     }
 
     public VKRequest getDialogs(VKParameters params) {
-        return prepareRequest("getDialogs", params,  new VKParser() {
+        return prepareRequest("getDialogs", params, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
                 return new VKList<VKApiDialog>(object, VKApiDialog.class);
@@ -91,41 +89,66 @@ public class VKApiMessages extends VKApiBase {
         });
     }
 
+    public VKRequest typing(int userId) {
+        VKParameters params = new VKParameters();
+        params.put("user_id", userId);
+        return prepareRequest("typing", params);
+    }
 
+    public VKRequest typingChat(int chatId) {
+        VKParameters params = new VKParameters();
+        params.put("chat_id", chatId);
+        return prepareRequest("typing", params);
+    }
 
-    public VKRequest send(VKApiMessage message){
+    public VKRequest send(VKApiMessage message) {
         VKParameters params = new VKParameters();
         params.put("message", message.body);
-        if(message.isChat()){
+        if (message.isChat()) {
             params.put("chat_id", message.chat_id);
         } else {
             params.put("user_id", message.user_id);
         }
-        if(message.attachments !=null && !message.attachments.isEmpty())
+        if (message.attachments != null && !message.attachments.isEmpty())
             params.put("attachment", message.attachments.toAttachmentsString());
-        return prepareRequest("send", params);
+        return prepareRequest("send", params, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return Integer.valueOf(object.toString());
+            }
+        });
     }
 
-    public VKRequest sendSticker(VKApiMessage stickerMessage){
+    public VKRequest sendSticker(VKApiMessage stickerMessage) {
         VKParameters params = new VKParameters();
         params.put("sticker_id", stickerMessage.body);
-        if(stickerMessage.isChat()){
+        if (stickerMessage.isChat()) {
             params.put("chat_id", stickerMessage.chat_id);
         } else {
             params.put("user_id", stickerMessage.user_id);
         }
-        return prepareRequest("send", params);
+        return prepareRequest("send", params, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return Integer.valueOf(object.toString());
+            }
+        });
     }
 
-    public VKRequest getChatHistory(final int userId) {
-        return getHistory(new VKParameters(){{ put("user_id",userId); }});
+    public VKRequest getHistory(final int userId) {
+        return getHistory(new VKParameters() {{
+            put("user_id", userId);
+        }});
     }
-    public VKRequest getGroupHistory(final int chatId) {
-        return getHistory(new VKParameters(){{ put("chat_id", chatId); }});
+
+    public VKRequest getChatHistory(final int chatId) {
+        return getHistory(new VKParameters() {{
+            put("chat_id", chatId);
+        }});
     }
 
     public VKRequest getHistory(VKParameters params) {
-        return prepareRequest("getHistory", params,new VKParser() {
+        return prepareRequest("getHistory", params, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
                 return new VKList<VKApiMessage>(object, VKApiMessage.class);
@@ -133,7 +156,4 @@ public class VKApiMessages extends VKApiBase {
         });
     }
 
-    public VKRequest report(VKParameters params) {
-        return prepareRequest("report", params);
-    }
 }
