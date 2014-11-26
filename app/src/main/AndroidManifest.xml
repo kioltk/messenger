@@ -30,7 +30,7 @@
         </activity>
 
         <service
-            android:name=".core.longpoll.LongPollService"
+            android:name=".core.longpoll.LongPollService1"
             android:enabled="true"
             android:exported="true" >
         </service>
