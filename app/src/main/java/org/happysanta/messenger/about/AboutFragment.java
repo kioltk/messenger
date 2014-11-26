@@ -31,6 +31,16 @@ public class AboutFragment extends Fragment {
             }
         });
 
+        Button licenseButton = (Button) rootView.findViewById(R.id.license);
+        licenseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.vk.com/license"));
+                startActivity(browserIntent);
+            }
+        });
+
         Button privacyButton = (Button) rootView.findViewById(R.id.privacy);
         privacyButton.setOnClickListener(new View.OnClickListener() {
             @Override

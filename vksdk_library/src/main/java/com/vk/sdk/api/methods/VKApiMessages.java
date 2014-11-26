@@ -21,6 +21,7 @@
 
 package com.vk.sdk.api.methods;
 
+import com.google.gson.Gson;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKParser;
@@ -28,6 +29,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKLongPollServer;
 import com.vk.sdk.api.model.VKMessagesArray;
 
 import org.json.JSONObject;
@@ -156,4 +158,15 @@ public class VKApiMessages extends VKApiBase {
         });
     }
 
+    public VKRequest getLongPollService() {
+        return prepareRequest("getLongPollServer",new VKParameters(),new VKParser() {
+            @Override
+            public Object createModel(JSONObject response) {
+
+                VKLongPollServer longPollServer;
+                longPollServer = new Gson().fromJson(response.optJSONObject("response").toString(), VKLongPollServer.class);
+                return longPollServer;
+            }
+        });
+    }
 }

@@ -28,6 +28,12 @@
             android:name="org.happysanta.messenger.messages.ChatActivity"
             android:label="@string/title_activity_chat" >
         </activity>
+
+        <service
+            android:name=".core.longpoll.LongPollService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
