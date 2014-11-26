@@ -19,8 +19,8 @@ import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.longpoll.LongPollService1;
 import org.happysanta.messenger.core.longpoll.listeners.LongPollListener;
-import org.happysanta.messenger.core.longpoll.LongPollService;
 
 import java.util.ArrayList;
 
@@ -72,10 +72,10 @@ public class ProfileFragment extends Fragment implements LongPollListener {
             @Override
             public void onClick(View v) {
                 if(enabled) {
-                    LongPollService.disable(getActivity(), "param1", "param2");
+                    LongPollService1.disable(getActivity(), "param1", "param2");
                 } else {
-                    LongPollService.enable(getActivity(), "param1", "param2");
-                    LongPollService.addListener(ProfileFragment.this);
+                    LongPollService1.enable(getActivity(), "param1", "param2");
+                    LongPollService1.addListener(ProfileFragment.this);
                 }
                 enabled = !enabled;
             }
