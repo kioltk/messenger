@@ -1,4 +1,4 @@
-package org.happysanta.messenger.core.longpoll.updates;
+package org.happysanta.messenger.longpoll.updates;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -6,7 +6,7 @@ import org.json.JSONException;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class LongPollNewMessage {
+public class LongpollNewMessage {
     private static final int FLAG_UNREAD = 1;
     private static final int FLAG_OUTBOX = 2;
     private static final int FLAG_CHAT = 16;
@@ -19,7 +19,7 @@ public class LongPollNewMessage {
     public final Integer timestamp;
     public final int dialogId;
 
-    public LongPollNewMessage(JSONArray jsonUpdate) throws JSONException {
+    public LongpollNewMessage(JSONArray jsonUpdate) throws JSONException {
 
         messageId = jsonUpdate.getInt(1);
         int flags = jsonUpdate.getInt(2);

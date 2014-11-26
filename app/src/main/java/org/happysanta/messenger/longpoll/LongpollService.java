@@ -1,4 +1,4 @@
-package org.happysanta.messenger.core.longpoll;
+package org.happysanta.messenger.longpoll;
 
 import android.app.IntentService;
 import android.app.Service;
@@ -14,8 +14,8 @@ import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKLongPollServer;
 
 import org.happysanta.messenger.core.NetworkStateReceiver;
-import org.happysanta.messenger.core.longpoll.listeners.LongPollListener;
-import org.happysanta.messenger.core.longpoll.updates.LongPollNewMessage;
+import org.happysanta.messenger.longpoll.listeners.LongpollListener;
+import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.core.util.ExceptionUtil;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.HashMap;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-public class LongPollService1 extends Service {
+public class LongpollService extends Service {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_ENABLE = "org.happysanta.messenger.core.action.FOO";
@@ -39,7 +39,7 @@ public class LongPollService1 extends Service {
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "org.happysanta.messenger.core.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "org.happysanta.messenger.core.extra.PARAM2";
-    private static HashMap<Integer,LongPollListener> listeners = new HashMap<Integer, LongPollListener>();
+    private static HashMap<Integer,LongpollListener> listeners = new HashMap<Integer, LongpollListener>();
     private VKLongPollServer server;
 
     /**
@@ -50,7 +50,7 @@ public class LongPollService1 extends Service {
      */
     // TODO: Customize helper method
     public static void enable(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, LongPollService1.class);
+        Intent intent = new Intent(context, LongpollService.class);
         intent.setAction(ACTION_ENABLE);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
@@ -65,7 +65,7 @@ public class LongPollService1 extends Service {
      */
     // TODO: Customize helper method
     public static void disable(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, LongPollService1.class);
+        Intent intent = new Intent(context, LongpollService.class);
         intent.setAction(ACTION_DISABLE);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
@@ -136,9 +136,9 @@ public class LongPollService1 extends Service {
     }
 
     private void connect() {
-        new LongPollTask1(server) {
+        new LongpollTask(server) {
             @Override
-            public void onSuccess(LongPollResponse response) {
+            public void onSuccess(LongpollResponse response) {
                 server.ts = response.ts;
                 notifyListeners(response);
                 connect();
@@ -161,31 +161,31 @@ public class LongPollService1 extends Service {
 
     }
 
-    public static void addListener(LongPollListener longPollListener) {
-        listeners.put(longPollListener.getId(), longPollListener);
+    public static void addListener(LongpollListener longpollListener) {
+        listeners.put(longpollListener.getId(), longpollListener);
     }
 
 
-    private void notifyListeners(LongPollResponse response) {
+    private void notifyListeners(LongpollResponse response) {
 
-        ArrayList<LongPollNewMessage> messages = new ArrayList<LongPollNewMessage>();
+        ArrayList<LongpollNewMessage> messages = new ArrayList<LongpollNewMessage>();
         for (Object update : response.updates) {
-            if(update instanceof LongPollNewMessage){
-                messages.add((LongPollNewMessage) update);
+            if(update instanceof LongpollNewMessage){
+                messages.add((LongpollNewMessage) update);
             }
         }
-        Collections.sort(messages, new Comparator<LongPollNewMessage>() {
+        Collections.sort(messages, new Comparator<LongpollNewMessage>() {
             @Override
-            public int compare(LongPollNewMessage lhs, LongPollNewMessage rhs) {
+            public int compare(LongpollNewMessage lhs, LongpollNewMessage rhs) {
                 return lhs.timestamp.compareTo(rhs.timestamp);
             }
         });
 
         // todo create listeners
 
-        for (LongPollListener longPollListener : listeners.values()) {
+        for (LongpollListener longpollListener : listeners.values()) {
             for (Object update : response.updates) {
-                longPollListener.onLongPollUpdate(update);
+                longpollListener.onLongPollUpdate(update);
             }
         }
 

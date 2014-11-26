@@ -1,4 +1,4 @@
-package org.happysanta.messenger.core.longpoll;
+package org.happysanta.messenger.longpoll;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,17 +10,17 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.happysanta.messenger.core.longpoll.updates.LongPollChatTyping;
-import org.happysanta.messenger.core.longpoll.updates.LongPollConversationTyping;
-import org.happysanta.messenger.core.longpoll.updates.LongPollNewMessage;
-import org.happysanta.messenger.core.longpoll.updates.LongPollOffline;
-import org.happysanta.messenger.core.longpoll.updates.LongPollOnline;
+import org.happysanta.messenger.longpoll.updates.LongpollChatTyping;
+import org.happysanta.messenger.longpoll.updates.LongpollConversationTyping;
+import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
+import org.happysanta.messenger.longpoll.updates.LongpollOffline;
+import org.happysanta.messenger.longpoll.updates.LongpollOnline;
 import org.happysanta.messenger.core.util.ExceptionUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-public abstract class LongPollTask1 extends AsyncTask<Void, Void, Object> {
+public abstract class LongpollTask extends AsyncTask<Void, Void, Object> {
     private final String server;
     private final String key;
     private final int ts;
@@ -29,13 +29,13 @@ public abstract class LongPollTask1 extends AsyncTask<Void, Void, Object> {
     private boolean finished = false;
     public int duration = 0;
 
-    public LongPollTask1(String server, String key, int ts){
+    public LongpollTask(String server, String key, int ts){
         this.server = server;
         this.key = key;
         this.ts = ts;
     }
 
-    public LongPollTask1(VKLongPollServer server) {
+    public LongpollTask(VKLongPollServer server) {
         this.server = server.server;
         this.key = server.key;
         this.ts = server.ts;
@@ -73,13 +73,13 @@ public abstract class LongPollTask1 extends AsyncTask<Void, Void, Object> {
                 }
 
 
-                LongPollResponse longPollResponse = new LongPollResponse();
-                longPollResponse.ts = response.optInt("ts");
+                LongpollResponse longpollResponse = new LongpollResponse();
+                longpollResponse.ts = response.optInt("ts");
                 JSONArray updates = response.optJSONArray("updates");
                 for (int i = 0; i < updates.length(); i++) {
-                    longPollResponse.updates.add(optUpdate(updates.optJSONArray(i)));
+                    longpollResponse.updates.add(optUpdate(updates.optJSONArray(i)));
                 }
-                return longPollResponse;
+                return longpollResponse;
             } catch (Exception e) {
                 this.exception = e;
                 return exception;
@@ -95,7 +95,7 @@ public abstract class LongPollTask1 extends AsyncTask<Void, Void, Object> {
         int type = jsonUpdate.getInt(0);
         switch (type) {
             case 4:
-                return new LongPollNewMessage(jsonUpdate);
+                return new LongpollNewMessage(jsonUpdate);
                 //break;
             case 6:
                 //todo read messages
@@ -105,13 +105,13 @@ public abstract class LongPollTask1 extends AsyncTask<Void, Void, Object> {
                 // 7,$peer_id,$local_id — прочтение всех исходящих сообщений с $peer_id вплоть до $local_id включительно
                 break;
             case 8:
-                return new LongPollOnline(jsonUpdate);
+                return new LongpollOnline(jsonUpdate);
             case 9:
-                return new LongPollOffline(jsonUpdate);
+                return new LongpollOffline(jsonUpdate);
             case 61:
-                return new LongPollConversationTyping(jsonUpdate);
+                return new LongpollConversationTyping(jsonUpdate);
             case 62:
-                return new LongPollChatTyping(jsonUpdate);
+                return new LongpollChatTyping(jsonUpdate);
         }
         return "unparsed update: " + jsonUpdate;
     }
@@ -126,7 +126,7 @@ public abstract class LongPollTask1 extends AsyncTask<Void, Void, Object> {
                 onError(exception);
             }
         } else {
-            onSuccess((LongPollResponse) result);
+            onSuccess((LongpollResponse) result);
         }
 
 
@@ -136,7 +136,7 @@ public abstract class LongPollTask1 extends AsyncTask<Void, Void, Object> {
     }
 
 
-    public abstract void onSuccess(LongPollResponse response);
+    public abstract void onSuccess(LongpollResponse response);
     public abstract void onError(Exception exp);
 
     public void start() {

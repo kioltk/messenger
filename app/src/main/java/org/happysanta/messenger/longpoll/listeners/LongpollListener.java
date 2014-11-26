@@ -1,9 +1,9 @@
-package org.happysanta.messenger.core.longpoll.listeners;
+package org.happysanta.messenger.longpoll.listeners;
 
 /**
  * Created by Jesus Christ. Amen.
  */
-public interface LongPollListener {
+public interface LongpollListener {
     int getId();
     void onLongPollUpdate(Object update);
 }

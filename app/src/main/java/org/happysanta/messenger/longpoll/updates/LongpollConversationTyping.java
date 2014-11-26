@@ -1,4 +1,4 @@
-package org.happysanta.messenger.core.longpoll.updates;
+package org.happysanta.messenger.longpoll.updates;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -6,10 +6,10 @@ import org.json.JSONException;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class LongPollConversationTyping {
+public class LongpollConversationTyping {
     private final int userId;
 
-    public LongPollConversationTyping(JSONArray jsonUpdate) throws JSONException {
+    public LongpollConversationTyping(JSONArray jsonUpdate) throws JSONException {
         this.userId = jsonUpdate.getInt(1);
     }
 }

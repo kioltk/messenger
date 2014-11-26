@@ -19,15 +19,15 @@ import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.core.longpoll.LongPollService1;
-import org.happysanta.messenger.core.longpoll.listeners.LongPollListener;
+import org.happysanta.messenger.longpoll.LongpollService;
+import org.happysanta.messenger.longpoll.listeners.LongpollListener;
 
 import java.util.ArrayList;
 
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ProfileFragment extends Fragment implements LongPollListener {
+public class ProfileFragment extends Fragment implements LongpollListener {
     private View rootView;
     private ListView listView;
     private ArrayList<Object> updates = new ArrayList<Object>();
@@ -72,10 +72,10 @@ public class ProfileFragment extends Fragment implements LongPollListener {
             @Override
             public void onClick(View v) {
                 if(enabled) {
-                    LongPollService1.disable(getActivity(), "param1", "param2");
+                    LongpollService.disable(getActivity(), "param1", "param2");
                 } else {
-                    LongPollService1.enable(getActivity(), "param1", "param2");
-                    LongPollService1.addListener(ProfileFragment.this);
+                    LongpollService.enable(getActivity(), "param1", "param2");
+                    LongpollService.addListener(ProfileFragment.this);
                 }
                 enabled = !enabled;
             }
