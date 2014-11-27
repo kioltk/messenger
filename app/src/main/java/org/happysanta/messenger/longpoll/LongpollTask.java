@@ -10,8 +10,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.happysanta.messenger.longpoll.updates.LongpollChatTyping;
-import org.happysanta.messenger.longpoll.updates.LongpollConversationTyping;
+import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollOffline;
 import org.happysanta.messenger.longpoll.updates.LongpollOnline;
@@ -109,9 +108,9 @@ public abstract class LongpollTask extends AsyncTask<Void, Void, Object> {
             case 9:
                 return new LongpollOffline(jsonUpdate);
             case 61:
-                return new LongpollConversationTyping(jsonUpdate);
+                return new LongpollTyping(jsonUpdate.getInt(1));
             case 62:
-                return new LongpollChatTyping(jsonUpdate);
+                return new LongpollTyping(jsonUpdate.getInt(1),jsonUpdate.getInt(2));
         }
         return "unparsed update: " + jsonUpdate;
     }

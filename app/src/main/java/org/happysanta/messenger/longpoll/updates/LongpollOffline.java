@@ -14,4 +14,10 @@ public class LongpollOffline {
         this.userId = jsonUpdate.getInt(1)*-1;
         this.timeOut = jsonUpdate.getInt(2)==1;
     }
+
+
+    @Override
+    public String toString() {
+        return "u"+ userId + " have gone offline. Timeout: "+ timeOut;
+    }
 }

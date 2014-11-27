@@ -75,7 +75,6 @@ public class ProfileFragment extends Fragment implements LongpollListener {
                     LongpollService.disable(getActivity(), "param1", "param2");
                 } else {
                     LongpollService.enable(getActivity(), "param1", "param2");
-                    LongpollService.addListener(ProfileFragment.this);
                 }
                 enabled = !enabled;
             }

@@ -1,6 +1,5 @@
 package org.happysanta.messenger.longpoll;
 
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.content.Context;
@@ -14,41 +13,34 @@ import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKLongPollServer;
 
 import org.happysanta.messenger.core.NetworkStateReceiver;
+import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.listeners.LongpollListener;
+import org.happysanta.messenger.longpoll.listeners.LongpollStatusListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.core.util.ExceptionUtil;
+import org.happysanta.messenger.longpoll.updates.LongpollOffline;
+import org.happysanta.messenger.longpoll.updates.LongpollOnline;
+import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
- */
+
 public class LongpollService extends Service {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+
+
     private static final String ACTION_ENABLE = "org.happysanta.messenger.core.action.FOO";
     private static final String ACTION_DISABLE = "org.happysanta.messenger.core.action.BAZ";
 
-    // TODO: Rename parameters
+
     private static final String EXTRA_PARAM1 = "org.happysanta.messenger.core.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "org.happysanta.messenger.core.extra.PARAM2";
     private static HashMap<Integer,LongpollListener> listeners = new HashMap<Integer, LongpollListener>();
     private VKLongPollServer server;
 
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
     public static void enable(Context context, String param1, String param2) {
         Intent intent = new Intent(context, LongpollService.class);
         intent.setAction(ACTION_ENABLE);
@@ -57,13 +49,6 @@ public class LongpollService extends Service {
         context.startService(intent);
     }
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
     public static void disable(Context context, String param1, String param2) {
         Intent intent = new Intent(context, LongpollService.class);
         intent.setAction(ACTION_DISABLE);
@@ -161,17 +146,54 @@ public class LongpollService extends Service {
 
     }
 
-    public static void addListener(LongpollListener longpollListener) {
-        listeners.put(longpollListener.getId(), longpollListener);
-    }
 
+
+    HashMap<Integer, LongpollDialogListener> conversationListeners = new HashMap<Integer,LongpollDialogListener>();
+    private LongpollDialogListener globalConversationListener = new LongpollDialogListener(0) {
+        @Override
+        public void onNewMessages(ArrayList<LongpollNewMessage> messages) {
+        }
+
+        @Override
+        public void onTyping(ArrayList<LongpollTyping> typing) {
+            // todo implement global conversation listener
+        }
+    };
+    HashMap<Integer, LongpollDialogListener> chatListeners = new HashMap<Integer,LongpollDialogListener>();
+    private LongpollDialogListener globalChatListener = new LongpollDialogListener(0) {
+        @Override
+        public void onNewMessages(ArrayList<LongpollNewMessage> messages) {
+        }
+
+        @Override
+        public void onTyping(ArrayList<LongpollTyping> typing) {
+            // todo implement global chat listener
+        }
+    };
+
+    HashMap<Integer, LongpollStatusListener> onlinesListeners = new HashMap<Integer, LongpollStatusListener>();
 
     private void notifyListeners(LongpollResponse response) {
 
         ArrayList<LongpollNewMessage> messages = new ArrayList<LongpollNewMessage>();
+        ArrayList<LongpollOnline> onlines = new ArrayList<LongpollOnline>();
+        ArrayList<LongpollOffline> offlines = new ArrayList<LongpollOffline>();
+        ArrayList<LongpollTyping> typings = new ArrayList<>();
         for (Object update : response.updates) {
-            if(update instanceof LongpollNewMessage){
+            if (update instanceof LongpollNewMessage) {
                 messages.add((LongpollNewMessage) update);
+            } else {
+                if (update instanceof LongpollOnline) {
+                    onlines.add((LongpollOnline) update);
+                } else {
+                    if (update instanceof LongpollOffline) {
+                        offlines.add((LongpollOffline) update);
+                    } else {
+                        if (update instanceof LongpollTyping) {
+                            typings.add((LongpollTyping) update);
+                        }
+                    }
+                }
             }
         }
         Collections.sort(messages, new Comparator<LongpollNewMessage>() {
@@ -181,16 +203,103 @@ public class LongpollService extends Service {
             }
         });
 
-        // todo create listeners
+        HashMap<Integer, ArrayList<LongpollNewMessage>> chatMessagesPacks = new HashMap<Integer, ArrayList<LongpollNewMessage>>();
+        HashMap<Integer, ArrayList<LongpollNewMessage>> conversationsMessagesPacks = new HashMap<Integer, ArrayList<LongpollNewMessage>>();
+        HashMap<Integer, ArrayList<LongpollTyping>> chatTypingsPacks = new HashMap<>();
+        HashMap<Integer, ArrayList<LongpollTyping>> conversationTypingsPacks = new HashMap<>();
 
-        for (LongpollListener longpollListener : listeners.values()) {
-            for (Object update : response.updates) {
-                longpollListener.onLongPollUpdate(update);
+
+        // запаковываем
+        for (LongpollNewMessage message : messages) {
+            ArrayList<LongpollNewMessage> pack;
+            if (message.isChat) {
+                if (!chatMessagesPacks.containsKey(message.dialogId)) {
+                    pack = new ArrayList<LongpollNewMessage>();
+                    chatMessagesPacks.put(message.dialogId, pack);
+                } else {
+                    pack = chatMessagesPacks.get(message.dialogId);
+                }
+            } else {
+                if (!conversationsMessagesPacks.containsKey(message.dialogId)) {
+                    pack = new ArrayList<LongpollNewMessage>();
+                    conversationsMessagesPacks.put(message.dialogId, pack);
+                } else {
+                    pack = conversationsMessagesPacks.get(message.dialogId);
+                }
+            }
+            pack.add(message);
+        }
+
+        // пакуем тайпинги
+        for (LongpollTyping typing : typings) {
+            ArrayList<LongpollTyping> pack;
+            if (typing.isChat) {
+                if (!chatTypingsPacks.containsKey(typing.dialogId)) {
+                    pack = new ArrayList<>();
+                    chatTypingsPacks.put(typing.dialogId, pack);
+                } else {
+                    pack = chatTypingsPacks.get(typing.dialogId);
+                }
+            } else {
+                if (!conversationsMessagesPacks.containsKey(typing.dialogId)) {
+                    pack = new ArrayList<>();
+                    conversationTypingsPacks.put(typing.dialogId, pack);
+                } else {
+                    pack = conversationTypingsPacks.get(typing.dialogId);
+                }
+            }
+            pack.add(typing);
+        }
+
+        // бросаем пачки тайпингов по чатам
+        for (Map.Entry<Integer, ArrayList<LongpollTyping>> chatMessagesPackEntry : chatTypingsPacks.entrySet()) {
+            Integer chatid = chatMessagesPackEntry.getKey();
+            ArrayList<LongpollTyping> chatMessagesPack = chatMessagesPackEntry.getValue();
+            if (chatListeners.containsKey(chatid)) {
+                LongpollDialogListener chatListener = chatListeners.get(chatid);
+                chatListener.onTyping(chatMessagesPack);
+            } else {
+                globalChatListener.onTyping(chatMessagesPack);
+            }
+        }
+        // бросаем пачки тайпингов по диалогам
+        for (Map.Entry<Integer, ArrayList<LongpollTyping>> conversationPackEntry : conversationTypingsPacks.entrySet()) {
+            Integer conversationId = conversationPackEntry.getKey();
+            ArrayList<LongpollTyping> conversationPackMessages = conversationPackEntry.getValue();
+            if (chatListeners.containsKey(conversationId)) {
+                LongpollDialogListener conversationListener = conversationListeners.get(conversationId);
+                conversationListener.onTyping(conversationPackMessages);
+            } else {
+                globalConversationListener.onTyping(conversationPackMessages);
             }
         }
 
+        // бросаем пачки сообщений по чатам
+        for (Map.Entry<Integer, ArrayList<LongpollNewMessage>> chatPackEntry : chatMessagesPacks.entrySet()) {
+            Integer chatid = chatPackEntry.getKey();
+            ArrayList<LongpollNewMessage> chatPackMessages = chatPackEntry.getValue();
+            if (chatListeners.containsKey(chatid)) {
+                LongpollDialogListener chatListener = chatListeners.get(chatid);
+                chatListener.onNewMessages(chatPackMessages);
+            } else {
+                globalChatListener.onNewMessages(chatPackMessages);
+            }
+        }
+        // бросаем пачки сообщений по диалогам
+        for (Map.Entry<Integer, ArrayList<LongpollNewMessage>> conversationPackEntry : conversationsMessagesPacks.entrySet()) {
+            Integer conversationId = conversationPackEntry.getKey();
+            ArrayList<LongpollNewMessage> conversationPackMessages = conversationPackEntry.getValue();
+            if (chatListeners.containsKey(conversationId)) {
+                LongpollDialogListener conversationListener = conversationListeners.get(conversationId);
+                conversationListener.onNewMessages(conversationPackMessages);
+            } else {
+                globalConversationListener.onNewMessages(conversationPackMessages);
+            }
+        }
 
-
+        for (Object update : response.updates) {
+            Log.d("Longpoll update",update.toString());
+        }
 
     }
 }

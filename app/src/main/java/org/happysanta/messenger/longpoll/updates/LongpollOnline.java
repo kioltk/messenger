@@ -8,10 +8,14 @@ import org.json.JSONException;
  */
 public class LongpollOnline {
     private final int userId;
-    private final Object platformId;
+    private final int platformId;
 
     public LongpollOnline(JSONArray jsonUpdate) throws JSONException {
         this.userId = jsonUpdate.getInt(1)*-1;
-        this.platformId = jsonUpdate.getInt(2)>0;
+        this.platformId = jsonUpdate.getInt(2);
+    }
+    @Override
+    public String toString() {
+        return "u"+ userId + " is online. Platform id: "+ platformId;
     }
 }

@@ -9,7 +9,7 @@ import org.json.JSONException;
 public class LongpollNewMessage {
     private static final int FLAG_UNREAD = 1;
     private static final int FLAG_OUTBOX = 2;
-    private static final int FLAG_CHAT = 16;
+    private static final int FLAG_CHAT = 8192;
     private static final int FLAG_MEDIA = 512;
     public final int messageId;
     public final boolean unread;
@@ -18,6 +18,7 @@ public class LongpollNewMessage {
     public final String body;
     public final Integer timestamp;
     public final int dialogId;
+    private final int fromUserId;
 
     public LongpollNewMessage(JSONArray jsonUpdate) throws JSONException {
 
@@ -29,12 +30,23 @@ public class LongpollNewMessage {
         isChat = (flags & FLAG_CHAT) == FLAG_CHAT;
 
         if ((flags & FLAG_MEDIA) == FLAG_MEDIA) {
-
+            // todo attaches
+        }
+        if (isChat) {
+            dialogId = jsonUpdate.getInt(3) - (2000000000);
+            fromUserId = jsonUpdate.getJSONObject(7).getInt("from");
+        } else {
+            dialogId = jsonUpdate.getInt(3);
+            fromUserId = dialogId;
         }
 
-        dialogId = jsonUpdate.getInt(3) - (isChat ? 2000000000 : 0);
+
         timestamp = jsonUpdate.getInt(4);
         body = jsonUpdate.getString(6);
 
+    }
+    @Override
+    public String toString() {
+        return "Message " + (isChat ? "in the chat " + dialogId :"")+ " from " + fromUserId + ". \"" + body + "\"";
     }
 }
