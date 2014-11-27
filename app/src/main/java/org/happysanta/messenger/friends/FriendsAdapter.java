@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.model.VKApiUser;
+import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
 
@@ -20,10 +21,10 @@ import java.util.ArrayList;
  */
 public class FriendsAdapter extends BaseAdapter {
 
-    private final ArrayList<VKApiUser> friends;
+    private final ArrayList<VKApiUserFull> friends;
     private final Context context;
 
-    public FriendsAdapter(Context context, ArrayList<VKApiUser> friends) {
+    public FriendsAdapter(Context context, ArrayList<VKApiUserFull> friends) {
         this.context = context;
         this.friends = friends;
     }
@@ -34,7 +35,7 @@ public class FriendsAdapter extends BaseAdapter {
     }
 
     @Override
-    public VKApiUser getItem(int position) {
+    public VKApiUserFull getItem(int position) {
 
         return friends.get(position);
     }
@@ -52,7 +53,7 @@ public class FriendsAdapter extends BaseAdapter {
         ImageView photoView = (ImageView) itemView.findViewById(R.id.user_photo);
         TextView nameView = (TextView) itemView.findViewById(R.id.user_name);
 
-        VKApiUser user = getItem(position);
+        VKApiUserFull user = getItem(position);
 
 
         nameView.setText(user.toString());

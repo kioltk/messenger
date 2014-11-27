@@ -4,60 +4,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:background="@color/white"
-        android:textSize="10dp"
-        android:text="Terms of service"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/terms"/>
 
-    <Button
-        android:id="@+id/report"
-        android:textSize="10dp"
-        android:text="Report a problem"
-        android:layout_marginLeft="22dp"
-        android:background="@color/white"
-        android:layout_marginBottom="15dp"
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/terms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/help"
-        android:layout_marginBottom="50dp"
-        android:background="@color/white"
-        android:text="Help"
-        android:textSize="10dp"
-        android:layout_marginLeft="87dp"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:layout_marginBottom="50dp"
-        android:id="@+id/license"
-        android:layout_toRightOf="@+id/help"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:textSize="10dp"
-        android:text="License"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <Button
+                android:textColor="@color/about_bottom_text"
+                android:background="@color/white"
+                android:textSize="@dimen/about_bottom_text"
+                android:text="@string/about_terms"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/about_bottom_height"
+                android:id="@+id/terms"/>
 
-    <Button
-        android:background="@color/white"
-        android:textSize="10dp"
-        android:text="Privacy"
-        android:layout_marginBottom="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/license"
-        android:layout_width="wrap_content"
-        android:id="@+id/privacy"
-        android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/report"
+                android:textSize="@dimen/about_bottom_text"
+                android:text="@string/about_report"
+                android:background="@color/white"
+                android:textColor="@color/about_bottom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/about_bottom_height" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+
+                android:id="@+id/help"
+                android:background="@color/white"
+                android:text="@string/about_help"
+                android:textColor="@color/about_bottom_text"
+                android:textSize="@dimen/about_bottom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/about_bottom_height" />
+
+            <Button
+                android:textColor="@color/about_bottom_text"
+                android:id="@+id/license"
+                android:background="@color/white"
+                android:textSize="@dimen/about_bottom_text"
+                android:text="@string/about_license"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/about_bottom_height" />
+
+            <Button
+                android:textColor="@color/about_bottom_text"
+                android:background="@color/white"
+                android:textSize="@dimen/about_bottom_text"
+                android:text="@string/about_privacy"
+                android:layout_width="wrap_content"
+                android:id="@+id/privacy"
+                android:layout_height="@dimen/about_bottom_height" />
+
+        </LinearLayout>
+
+
+        </LinearLayout>
 
 </RelativeLayout>

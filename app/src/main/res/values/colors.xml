@@ -33,4 +33,5 @@
     <color name="blue_900">#f0303f9f</color>
     <color name="white">#fff</color>
     <color name="transparent">#00000000</color>
+    <color name="about_bottom_text">#a0a0a0</color>
 </resources>
