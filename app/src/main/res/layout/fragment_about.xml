@@ -1,77 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+
+    <ScrollView
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
+
         android:layout_width="match_parent"
-        android:layout_marginBottom="16dp"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/top_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <Button
-                android:textColor="@color/about_bottom_text"
-                android:background="@color/white"
-                android:textSize="@dimen/about_bottom_text"
-                android:text="@string/about_terms"
+            <LinearLayout
+                android:id="@+id/dev_jenya"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/about_bottom_height"
-                android:id="@+id/terms"/>
-
-            <Button
-                android:id="@+id/report"
-                android:textSize="@dimen/about_bottom_text"
-                android:text="@string/about_report"
-                android:background="@color/white"
-                android:textColor="@color/about_bottom_text"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/about_bottom_height" />
-
-
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/cat"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <TextView
+                    android:layout_marginLeft="7dp"
+                    android:text="Евгений Король"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/dev_artem"
+                android:gravity="right|center_vertical"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginRight="5dp"
+                    android:text="Артем Войтехочвич"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:src="@drawable/cat"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/dev_denya"
+                android:gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/cat"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <TextView
+                    android:text="Денис Давыдов"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/dev_andrey"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="Андрей Шмельков"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:src="@drawable/cat"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+            </LinearLayout>
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/money"
+            android:layout_below="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/text_money"
+                android:layout_marginTop="6dp"
+                android:text="Сделайте доброе дело, подайте на пропитание"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/beer_button"
+                android:layout_centerInParent="true"
+                android:textSize="10dp"
+                android:layout_below="@+id/text_money"
+                android:layout_marginTop="7dp"
+                android:text="пиво на всех(10$)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:textSize="10dp"
+                android:text="Пиво(2$)"
+                android:layout_marginTop="7dp"
+                android:layout_below="@+id/text_money"
+                android:layout_toLeftOf="@+id/beer_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:textSize="10dp"
+                android:text="щедрый дар(100$)"
+                android:layout_marginTop="7dp"
+                android:layout_below="@+id/text_money"
+                android:layout_toRightOf="@+id/beer_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_marginTop="7dp"
+            android:layout_below="@+id/money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="7dp"
+                android:layout_toRightOf="@+id/text_santa"
+                android:id="@+id/image_happy"
+                android:src="@drawable/cat"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/text_santa"
+                android:textSize="22dp"
+                android:text="При поддержке HappySanta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/little_buttons_layout"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="16dp"
             android:layout_height="wrap_content">
 
-            <Button
-
-                android:id="@+id/help"
-                android:background="@color/white"
-                android:text="@string/about_help"
-                android:textColor="@color/about_bottom_text"
-                android:textSize="@dimen/about_bottom_text"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/about_bottom_height" />
+                android:layout_height="wrap_content">
 
-            <Button
-                android:textColor="@color/about_bottom_text"
-                android:id="@+id/license"
-                android:background="@color/white"
-                android:textSize="@dimen/about_bottom_text"
-                android:text="@string/about_license"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/about_bottom_height" />
+                <Button
+                    android:textColor="@color/about_bottom_text"
+                    android:background="@color/white"
+                    android:textSize="@dimen/about_bottom_text"
+                    android:text="@string/about_terms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/about_bottom_height"
+                    android:id="@+id/terms"/>
 
-            <Button
-                android:textColor="@color/about_bottom_text"
-                android:background="@color/white"
-                android:textSize="@dimen/about_bottom_text"
-                android:text="@string/about_privacy"
+                <Button
+                    android:id="@+id/report"
+                    android:textSize="@dimen/about_bottom_text"
+                    android:text="@string/about_report"
+                    android:background="@color/white"
+                    android:textColor="@color/about_bottom_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/about_bottom_height" />
+
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:id="@+id/privacy"
-                android:layout_height="@dimen/about_bottom_height" />
+                android:layout_height="wrap_content">
+
+                <Button
+
+                    android:id="@+id/help"
+                    android:background="@color/white"
+                    android:text="@string/about_help"
+                    android:textColor="@color/about_bottom_text"
+                    android:textSize="@dimen/about_bottom_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/about_bottom_height" />
+
+                <Button
+                    android:textColor="@color/about_bottom_text"
+                    android:id="@+id/license"
+                    android:background="@color/white"
+                    android:textSize="@dimen/about_bottom_text"
+                    android:text="@string/about_license"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/about_bottom_height" />
+
+                <Button
+                    android:textColor="@color/about_bottom_text"
+                    android:background="@color/white"
+                    android:textSize="@dimen/about_bottom_text"
+                    android:text="@string/about_privacy"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/privacy"
+                    android:layout_height="@dimen/about_bottom_height" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
-
-        </LinearLayout>
-
-</RelativeLayout>
+    </LinearLayout>
+    </ScrollView>

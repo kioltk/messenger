@@ -25,7 +25,7 @@ import org.happysanta.messenger.messages.ChatActivity;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ConverstaionsFragment extends Fragment {
+public class ConversathionsListFragment extends Fragment {
     private View rootView;
     private VKList<VKApiDialog> dialogs;
     private TextView status;

@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +17,8 @@ import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
+import org.happysanta.messenger.KeyboardUtil;
+import org.happysanta.messenger.Photo.MakePhotoFragment;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.messages.ChatActivity;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
@@ -30,10 +34,24 @@ public class ConversationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         final ListView messagesList = (ListView) rootView.findViewById(R.id.messages_list);
         final TextView statusView = (TextView) rootView.findViewById(R.id.status);
+        final EditText box = (EditText) rootView.findViewById(R.id.send_box);
         int userId = getArguments().getInt(ChatActivity.ARG_USERID, 0);
+
+        Button photoButton = (Button) rootView.findViewById(R.id.make_photo_camera);
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rootView.findViewById(R.id.extra_container).setVisibility(View.VISIBLE);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.extra_container, new MakePhotoFragment())
+                        .commit();
+                KeyboardUtil.hide(box, getActivity());
+
+            }
+        });
 
         statusView.setText("loading");
 

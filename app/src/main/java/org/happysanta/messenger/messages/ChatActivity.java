@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.vk.sdk.VKUIHelper;
+
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
@@ -16,6 +18,7 @@ public class ChatActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        VKUIHelper.onCreate(this);
         setContentView(R.layout.activity_chat);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
