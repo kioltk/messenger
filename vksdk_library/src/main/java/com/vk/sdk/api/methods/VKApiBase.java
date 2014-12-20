@@ -72,7 +72,7 @@ class VKApiBase {
 
     VKRequest prepareRequest(String methodName, String methodGroup,VKRequest.HttpMethod httpMethod, VKParameters methodParameters, VKParser responseParser){
 
-        VKRequest result = new VKRequest(String.format(Locale.US, "%s.%s", mMethodGroup, methodName),
+        VKRequest result = new VKRequest(String.format(Locale.US, "%s.%s", methodGroup, methodName),
                 methodParameters, httpMethod);
         result.setResponseParser(responseParser);
         return result;

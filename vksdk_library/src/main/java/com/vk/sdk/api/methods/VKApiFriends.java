@@ -10,6 +10,14 @@ import com.vk.sdk.api.model.VKUsersArray;
  */
 public class VKApiFriends extends VKApiBase {
 
+    public VKRequest get() {
+        return prepareRequest("get",
+                new VKParameters() {{
+                    put("fields", "name,last_name,age,photo_50");
+                }},
+                VKRequest.HttpMethod.GET, VKUsersArray.class);
+    }
+
     public VKRequest get(VKParameters params) {
         if (params.get("fields") != null) {
             return prepareRequest("get", params, VKRequest.HttpMethod.GET, VKUsersArray.class);

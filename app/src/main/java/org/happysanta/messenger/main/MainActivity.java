@@ -9,7 +9,7 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
 import org.happysanta.messenger.friends.FriendsFragment;
 import org.happysanta.messenger.messages.chats.ChatsListFragment;
-import org.happysanta.messenger.messages.conversations.ConversathionsListFragment;
+import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
 import org.happysanta.messenger.profile.ProfileFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 
@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity
             break;
             case (int) NavigationFragment.NAVIGATION_MESSAGES_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new ConversathionsListFragment())
+                        .replace(R.id.container, new ConversationsListFragment())
                         .commit();
 
             break;

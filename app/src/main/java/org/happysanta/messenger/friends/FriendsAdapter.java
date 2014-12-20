@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKApiUserFull;
@@ -57,8 +58,7 @@ public class FriendsAdapter extends BaseAdapter {
 
 
         nameView.setText(user.toString());
-        //photoView.setImageResource(user.imageResId);
-
+        ImageLoader.getInstance().displayImage(user.photo_50, photoView);
 
         return itemView;
     }
