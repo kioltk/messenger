@@ -19,7 +19,11 @@ public class VKApiFriends extends VKApiBase {
     }
 
     public VKRequest getOnline(VKParameters params) {
-        return prepareRequest("getOnline", params);
+        if (params.get("fields") != null) {
+            return prepareRequest("getOnline", params, VKRequest.HttpMethod.GET, VKUsersArray.class);
+        } else {
+            return prepareRequest("getOnline", params);
+        }
     }
 
     public VKRequest getMutual(VKParameters params) {

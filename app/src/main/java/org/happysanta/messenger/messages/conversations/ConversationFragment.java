@@ -1,5 +1,7 @@
 package org.happysanta.messenger.messages.conversations;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -32,7 +34,7 @@ public class ConversationFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         final ListView messagesList = (ListView) rootView.findViewById(R.id.messages_list);
@@ -44,10 +46,21 @@ public class ConversationFragment extends Fragment {
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rootView.findViewById(R.id.extra_container).setVisibility(View.VISIBLE);
+
+
+                View photoView = inflater.inflate(R.layout.dialog_fast_photo, null);
+
+                AlertDialog photoDialog = new AlertDialog.Builder(getActivity())
+                        .setView(photoView)
+                        .create();
+                photoDialog.show();
                 getFragmentManager().beginTransaction()
                         .replace(R.id.extra_container, new MakePhotoFragment())
                         .commit();
+
+
+
+
                 KeyboardUtil.hide(box, getActivity());
 
             }
