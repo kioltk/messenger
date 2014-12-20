@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
@@ -35,12 +37,19 @@ public class ProfileDialog {
         setUserName(user.toString());
         setUserId(user.id);
         setOnline(user.online);
+        setPhoto(user.photo_50);
+    }
+
+    private void setPhoto(String photo) {
+        ImageView photoView = (ImageView) dialogView.findViewById(R.id.user_photo);
+        ImageLoader.getInstance().displayImage(photo,photoView);
     }
 
     public void setUserName(String userName) {
         TextView nameView = (TextView) dialogView.findViewById(R.id.text_name);
         nameView.setText(userName);
     }
+
 
     public void setUserId(int id) {
         this.userId = id;

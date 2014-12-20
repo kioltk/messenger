@@ -18,6 +18,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiFriends;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKUsersArray;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.profile.ProfileDialog;
@@ -26,7 +27,7 @@ import org.happysanta.messenger.profile.ProfileDialog;
  * Created by Jesus Christ. Amen.
  */
 public class FriendsFragment extends Fragment {
-    private VKList<VKApiUserFull> friends;
+    private VKUsersArray friends;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,13 +37,11 @@ public class FriendsFragment extends Fragment {
         final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progress);
         final Button onlineButton = (Button) rootView.findViewById(R.id.online);
 
-        new VKApiFriends().get(new VKParameters(){{
-            put("fields","name,last_name,age,photo_50");
-        }}).executeWithListener(new VKRequest.VKRequestListener() {
+        new VKApiFriends().get().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
 
-                friends = (VKList<VKApiUserFull>) response.parsedModel;
+                friends = (VKUsersArray) response.parsedModel;
                 friendsList.setAdapter(new FriendsAdapter(getActivity(), friends.toArrayList()));
                 progressBar.setVisibility(View.GONE);
 

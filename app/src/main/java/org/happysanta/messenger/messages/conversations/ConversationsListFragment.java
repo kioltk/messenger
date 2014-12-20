@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -25,7 +27,7 @@ import org.happysanta.messenger.messages.ChatActivity;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ConversathionsListFragment extends Fragment {
+public class ConversationsListFragment extends Fragment {
     private View rootView;
     private VKList<VKApiDialog> dialogs;
     private TextView status;
@@ -86,11 +88,15 @@ public class ConversathionsListFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View dialogView = getActivity().getLayoutInflater().inflate(R.layout.item_dialog, null);
+            TextView titleView = (TextView) dialogView.findViewById(R.id.title);
             TextView bodyView = (TextView) dialogView.findViewById(R.id.body);
-
+            ImageView photoView = (ImageView) dialogView.findViewById(R.id.dialog_photo);
             VKApiDialog dialog = getItem(position);
 
-            bodyView.setText(dialog.message.body);
+
+            titleView.setText(dialog.title);
+            bodyView.setText(dialog.body);
+            ImageLoader.getInstance().displayImage(dialog.getPhoto(), photoView);
 
             return dialogView;
         }

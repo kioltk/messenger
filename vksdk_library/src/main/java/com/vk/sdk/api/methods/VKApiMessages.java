@@ -83,7 +83,7 @@ public class VKApiMessages extends VKApiBase {
     }
 
     public VKRequest getDialogs(VKParameters params) {
-        return prepareRequest("getDialogs", params, new VKParser() {
+        return prepareRequest("getDialogs","execute", VKRequest.HttpMethod.GET, params, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
                 return new VKList<VKApiDialog>(object, VKApiDialog.class);

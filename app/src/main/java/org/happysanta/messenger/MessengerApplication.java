@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
@@ -22,6 +24,7 @@ public class MessengerApplication extends Application implements VKSdkListener {
     public void onCreate() {
         super.onCreate();
         VKSdk.initialize(this, "4486133");
+        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).build());
     }
 
 
