@@ -19,6 +19,7 @@
         android:layout_height="match_parent"/>
 
     <RelativeLayout
+        android:layout_alignParentBottom="true"
         android:layout_above="@+id/extra_container"
         android:id="@+id/new_message_box"
         android:padding="8dp"
@@ -48,6 +49,7 @@
             android:layout_width="70dp"
             android:layout_height="40dp" />
         <Button
+            android:visibility="gone"
             android:layout_marginRight="2dp"
             android:paddingRight="5dp"
             android:paddingLeft="5dp"
@@ -59,14 +61,5 @@
             android:layout_height="40dp" />
 
         </RelativeLayout>
-
-    <FrameLayout
-        android:layout_alignParentBottom="true"
-        android:id="@+id/extra_container"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="#000"
-        android:visibility="invisible">
-    </FrameLayout>
 
 </RelativeLayout>

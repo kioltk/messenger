@@ -57,7 +57,7 @@ public class StartActivity extends ActionBarActivity {
     }
 
     private void start() {
-        VKSdk.authorize( new String[]{ VKScope.MESSAGES }, false, true);
+        VKSdk.authorize( new String[]{ VKScope.MESSAGES, VKScope.FRIENDS }, false, true);
     }
 
     @Override
