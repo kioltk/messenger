@@ -24,6 +24,7 @@ import com.vk.sdk.api.model.VKList;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.messages.ChatActivity;
 
+
 /**
  * Created by Jesus Christ. Amen.
  */
@@ -68,6 +69,7 @@ public class ConversationsListFragment extends Fragment {
 
         return rootView;
     }
+
 
     private class ConversationsAdapter extends BaseAdapter {
         @Override

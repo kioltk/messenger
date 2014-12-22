@@ -10,7 +10,9 @@
         android:id="@+id/messages_list"
         android:layout_above="@+id/new_message_box"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:divider="#fff4f4f4"/>
+
     <TextView
         android:id="@+id/status"
         android:gravity="center"
@@ -20,7 +22,6 @@
 
     <RelativeLayout
         android:layout_alignParentBottom="true"
-        android:layout_above="@+id/extra_container"
         android:id="@+id/new_message_box"
         android:padding="8dp"
         android:layout_width="match_parent"
@@ -33,11 +34,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:minHeight="40dp"
-            android:id="@+id/send_box"
+            android:id="@+id/editMessageText"
             android:hint="Enter the messege"
             android:layout_toLeftOf="@+id/send_button"
             />
-
         <Button
             android:textColor="#fff"
             android:background="#3F51B5"
@@ -47,19 +47,9 @@
             android:layout_alignParentRight="true"
             android:text="Send"
             android:layout_width="70dp"
-            android:layout_height="40dp" />
-        <Button
-            android:visibility="gone"
-            android:layout_marginRight="2dp"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:background="#3F51B5"
-            android:id="@+id/make_photo_camera"
-            android:layout_toLeftOf="@+id/send_button"
-            android:text="photo"
-            android:layout_width="70dp"
-            android:layout_height="40dp" />
-
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            android:nestedScrollingEnabled="true" />
         </RelativeLayout>
 
 </RelativeLayout>
