@@ -58,6 +58,7 @@ public class ConversationFragment extends Fragment {
                             statusView.setVisibility(View.GONE);
                         }
                         ((BaseAdapter) messagesList.getAdapter()).notifyDataSetChanged();
+                        messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
                     }
                     @Override
                     public void onError(VKError error) {
