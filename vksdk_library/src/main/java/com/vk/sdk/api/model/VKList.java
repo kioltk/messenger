@@ -220,6 +220,23 @@ public class VKList<T extends VKApiModel & Parcelable & Identifiable> extends VK
         return null;
     }
 
+    public VKList<T> getById(int[] ids) {
+
+        ArrayList<Integer> idsArray = new ArrayList<>();
+        for (int id : ids) {
+            idsArray.add(id);
+        }
+
+        VKList<T> itemsResponse = new VKList<>();
+        for(T item: this) {
+            if(idsArray.contains(item.getId())) {
+                itemsResponse.add(item);
+            }
+        }
+        return itemsResponse;
+    }
+
+
     /**
      * Searches through the list of available items. <br />
      * <br />

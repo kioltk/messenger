@@ -94,8 +94,11 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
      * Whether the message is deleted (false — no, true — yes).
      */
     public boolean deleted;
+    public String photo_50;
+    public int admin_id;
+    public int[] chat_active;
 
-	public VKApiMessage(JSONObject from) throws JSONException
+    public VKApiMessage(JSONObject from) throws JSONException
 	{
 		parse(from);
 	}
@@ -109,8 +112,13 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         read_state = ParseUtils.parseBoolean(source, "read_state");
         out = ParseUtils.parseBoolean(source, "out");
         title = source.optString("title");
-        chat_id = source.optInt("title");
         body = source.optString("body");
+        chat_id = source.optInt("chat_id");
+        if(chat_id!=0) {
+            admin_id = source.optInt("admin_id");
+            chat_active = ParseUtils.parseIntArray(source.getJSONArray("chat_active"));
+            photo_50 = source.optString("photo_50");
+        }
         attachments .fill(source.optJSONArray("attachments"));
         fwd_messages = new VKList<VKApiMessage>(source.optJSONArray("fwd_messages"), VKApiMessage.class);
         emoji = ParseUtils.parseBoolean(source, "emoji");
@@ -128,8 +136,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         this.read_state = in.readByte() != 0;
         this.out = in.readByte() != 0;
         this.title = in.readString();
-        this.chat_id = in.readInt();
         this.body = in.readString();
+        this.chat_id = in.readInt();
         this.attachments = in.readParcelable(VKAttachments.class.getClassLoader());
         this.fwd_messages = in.readParcelable(VKList.class.getClassLoader());
         this.emoji = in.readByte() != 0;

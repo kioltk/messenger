@@ -26,13 +26,20 @@ import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKParser;
 import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.model.VKApiChat;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKLongPollServer;
 import com.vk.sdk.api.model.VKMessagesArray;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Builds requests for API.messages part
@@ -76,19 +83,48 @@ public class VKApiMessages extends VKApiBase {
             }
         });
     }
-
-
-    public VKRequest getDialogs() {
-        return getDialogs(null);
-    }
-
-    public VKRequest getDialogs(VKParameters params) {
-        return prepareRequest("getDialogs","execute", VKRequest.HttpMethod.GET, params, new VKParser() {
+    public VKRequest getChats() {
+        return prepareRequest("getDialogs","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
-                return new VKList<VKApiDialog>(object, VKApiDialog.class);
+                return parseDialogs(object, true);
             }
         });
+    }
+
+    public VKRequest getDialogs() {
+        return prepareRequest("getDialogs","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return parseDialogs(object, false);
+            }
+        });
+    }
+    private VKList<VKApiDialog> parseDialogs(JSONObject object, boolean isChats){
+        VKList<VKApiDialog> dialogs = new VKList<VKApiDialog>();
+        try {
+            JSONObject response = object.getJSONObject("response");
+            VKList<VKApiUserFull> users = new VKList(response.getJSONObject("users"), VKApiUserFull.class);
+            VKList<VKApiMessage> messages = new VKList<VKApiMessage>(response.getJSONObject("messages"), VKApiMessage.class);
+            for (final VKApiMessage dialogMessage : messages) {
+                if(isChats) {
+                    if (dialogMessage.isChat()) {
+                        VKApiUserFull chatOwner = users.getById(dialogMessage.admin_id);
+                        VKList<VKApiUserFull> chatUsers = users.getById(dialogMessage.chat_active);
+                        dialogs.add(new VKApiDialog(dialogMessage, chatOwner, chatUsers));
+                    }
+                }else{
+                    if (!dialogMessage.isChat()) {
+                        VKApiUserFull dialogOwner = users.getById(dialogMessage.user_id);
+                        dialogs.add(new VKApiDialog(dialogMessage, dialogOwner));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return dialogs;
     }
 
     public VKRequest typing(int userId) {

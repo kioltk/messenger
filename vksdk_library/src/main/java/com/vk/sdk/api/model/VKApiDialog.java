@@ -7,14 +7,34 @@ import android.os.Parcel;
  */
 public class VKApiDialog extends VKApiModel implements Identifiable {
 
+    private final boolean isChat;
+    public int usersCount = 1;
     //public int id;
     public int unread = 0;
     public String body;
-    public int chat_id;
-    public int user_id;
+    public int dialogId;
     public String title;
-    public int date;
+    public long date;
     public String photo_50;
+
+    public VKApiDialog(VKApiMessage dialogMessage, VKApiUserFull dialogOwner) {
+        isChat = false;
+        this.body = dialogMessage.body;
+        this.title = dialogOwner.toString();
+        this.dialogId = dialogOwner.id;
+        this.photo_50 = dialogOwner.photo_50;
+        this.date = dialogMessage.date;
+    }
+
+    public VKApiDialog(VKApiMessage dialogMessage, VKApiUserFull chatOwner, VKList<VKApiUserFull> chatUsers) {
+        isChat = true;
+        this.body = "CHAT";
+        this.dialogId = dialogMessage.chat_id;
+        this.title = dialogMessage.title;
+        this.photo_50 = dialogMessage.photo_50;
+        this.date = dialogMessage.date;
+        this.usersCount = chatUsers.size();
+    }
 
 
     @Override
@@ -28,13 +48,10 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
 
     @Override
     public int getId() {
-        if(isChat()){
-            return chat_id;
-        }
-        return user_id;
+        return dialogId;
     }
     public boolean isChat(){
-        return chat_id != 0;
+        return isChat;
     }
 
 
