@@ -9,6 +9,7 @@
         <item name="colorControlHighlight">@color/color_primary</item>
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:textColorPrimary">#fff</item>
+        <item name="android:textColorSecondary">#fff</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
     <style name="AppTheme" parent="AppTheme.Base">
@@ -23,5 +24,11 @@
         <item name="color">@android:color/white</item>
     </style>
 
-    <color name="window_background">#fff</color>
+    <style name="toolbar" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">#fff</item>
+        <item name="android:colorBackground">@color/color_primary</item>
+        <item name="actionMenuTextColor">#fff</item>
+        <item name="android:textColorSecondary">#fff</item>
+    </style>
+
 </resources>
