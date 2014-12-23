@@ -94,7 +94,7 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
      * Whether the message is deleted (false — no, true — yes).
      */
     public boolean deleted;
-    public String photo_50;
+    public String photo_200;
     public int admin_id;
     public int[] chat_active;
 
@@ -117,7 +117,7 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         if(chat_id!=0) {
             admin_id = source.optInt("admin_id");
             chat_active = ParseUtils.parseIntArray(source.getJSONArray("chat_active"));
-            photo_50 = source.optString("photo_50");
+            photo_200 = source.optString("photo_200");
         }
         attachments .fill(source.optJSONArray("attachments"));
         fwd_messages = new VKList<VKApiMessage>(source.optJSONArray("fwd_messages"), VKApiMessage.class);

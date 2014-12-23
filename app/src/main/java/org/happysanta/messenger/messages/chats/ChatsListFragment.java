@@ -94,7 +94,7 @@ public class ChatsListFragment extends Fragment {
 
 
             titleView.setText(dialog.title);
-            bodyView.setText("" + dialog.usersCount);
+            bodyView.setText(dialog.usersCount+ " в чате");
             ImageLoader.getInstance().displayImage(dialog.getPhoto(), photoView);
 
             return dialogView;

@@ -15,14 +15,14 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
     public int dialogId;
     public String title;
     public long date;
-    public String photo_50;
+    public String photo_200;
 
     public VKApiDialog(VKApiMessage dialogMessage, VKApiUserFull dialogOwner) {
         isChat = false;
         this.body = dialogMessage.body;
         this.title = dialogOwner.toString();
         this.dialogId = dialogOwner.id;
-        this.photo_50 = dialogOwner.photo_50;
+        this.photo_200 = dialogOwner.photo_200;
         this.date = dialogMessage.date;
     }
 
@@ -31,7 +31,7 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
         this.body = "CHAT";
         this.dialogId = dialogMessage.chat_id;
         this.title = dialogMessage.title;
-        this.photo_50 = dialogMessage.photo_50;
+        this.photo_200 = dialogMessage.photo_200;
         this.date = dialogMessage.date;
         this.usersCount = chatUsers.size();
     }
@@ -56,6 +56,6 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
 
 
     public String getPhoto() {
-        return photo_50;
+        return photo_200;
     }
 }
