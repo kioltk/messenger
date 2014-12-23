@@ -84,7 +84,7 @@ public class VKApiMessages extends VKApiBase {
         });
     }
     public VKRequest getChats() {
-        return prepareRequest("getDialogs","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
+        return prepareRequest("getChats","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
                 return parseDialogs(object, true);

@@ -114,8 +114,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         title = source.optString("title");
         body = source.optString("body");
         chat_id = source.optInt("chat_id");
-        if(chat_id!=0) {
-            admin_id = source.optInt("admin_id");
+        admin_id = source.optInt("admin_id");
+        if(admin_id!=0) {
             chat_active = ParseUtils.parseIntArray(source.getJSONArray("chat_active"));
             photo_200 = source.optString("photo_200");
         }

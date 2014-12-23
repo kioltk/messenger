@@ -53,12 +53,9 @@ public class ChatActivity extends BaseActivity {
         }
 
 
-        final Button btnSend = (Button) findViewById(R.id.send_button);
-        final EditText editMessageText = (EditText) findViewById(R.id.message_box);
 
         Bundle bundle = getIntent().getExtras();
-        final int userId = bundle.getInt(ARG_DIALOGID);
-        String title = bundle.getString(ARG_TITLE,"Dialog");
+        String title = bundle.getString(ARG_TITLE, "Dialog");
         setTitle(title);
 
         if (savedInstanceState == null) {
@@ -66,25 +63,7 @@ public class ChatActivity extends BaseActivity {
                     .add(R.id.container, ConversationFragment.getInstance(bundle))
                     .commit();
         }
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VKApiMessage message = new VKApiMessage();
-                message.user_id = userId;
-                message.body = editMessageText.getText().toString();
-                VKRequest request = new VKApiMessages().send(message);
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        editMessageText.setText(null);
-                    }
 
-                    @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
-                    }
-                });
-            }});
     }
 
 

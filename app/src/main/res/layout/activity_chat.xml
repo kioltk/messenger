@@ -18,39 +18,7 @@
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/new_message_holder"
         tools:context="org.happysanta.messenger.messages.ChatActivity"
         tools:ignore="MergeRootFrame" />
 
-    <RelativeLayout
-        android:layout_alignParentBottom="true"
-        android:id="@+id/new_message_holder"
-        android:background="#fff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:background="#00000000"
-            android:paddingLeft="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:minHeight="56dp"
-            android:id="@+id/message_box"
-            android:hint="Enter the messege"
-            android:textColorHint="#949494"
-            android:layout_toLeftOf="@+id/send_button"
-            />
-        <Button
-            android:textColor="#fff"
-            android:background="#3F51B5"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:id="@+id/send_button"
-            android:layout_alignParentRight="true"
-            android:text=""
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:onClick="onClick" />
-    </RelativeLayout>
 </RelativeLayout>

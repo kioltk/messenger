@@ -52,8 +52,8 @@ public class ChatsListFragment extends Fragment {
         new VKApiMessages().getChats().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                VKList<VKApiDialog> messages = (VKList<VKApiDialog>) response.parsedModel;
-                dialogs = messages;
+                VKList<VKApiDialog> dialogs = (VKList<VKApiDialog>) response.parsedModel;
+                ChatsListFragment.this.dialogs = dialogs;
                 list.setAdapter(new ConversationsAdapter());
                 status.setVisibility(View.GONE);
             }

@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,8 +37,10 @@ public class ConversationFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         final ListView messagesList = (ListView) rootView.findViewById(R.id.messages_list);
         final TextView statusView = (TextView) rootView.findViewById(R.id.status);
+        final Button btnSend = (Button) rootView.findViewById(R.id.send_button);
+        final EditText editMessageText = (EditText) rootView.findViewById(R.id.message_box);
         final int dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
-        boolean isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
+        final boolean isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
 
 
         statusView.setText("loading");
@@ -66,7 +70,29 @@ public class ConversationFragment extends Fragment {
                     }
                 });
 
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VKApiMessage message = new VKApiMessage();
+                if (isChat) {
+                    message.chat_id = dialogId;
+                }else {
+                    message.user_id = dialogId;
+                }
+                message.body = editMessageText.getText().toString();
+                VKRequest request = new VKApiMessages().send(message);
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        editMessageText.setText(null);
+                    }
 
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                    }
+                });
+            }});
         return rootView;
     }
 
