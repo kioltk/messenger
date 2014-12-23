@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#5677FC</color>
-    <color name="color_primary_dark">#fafafa</color>
+    <color name="color_primary">#4b7ab1</color>
+    <color name="color_primary_dark_shadow">#88ff0000</color>
     <color name="color_accent">#b4b4b4</color>
 
     <!-- Navigation -->
-    <color name="navigation_profile_background">@color/color_primary</color>
+    <color name="navigation_profile_background">#3f506c</color>
     <color name="navigation_profile_text">#fff</color>
     <color name="navigation_divider">#d4d4d4</color>
     <color name="navigation_background">#fff</color>
@@ -18,7 +18,7 @@
     <color name="black_500">#88000000</color>
     <color name="black_600">#a0000000</color>
     <color name="black_700">#b4000000</color>
-    <color name="black_800">#d0000000</color>
+    <color name="black_800">#4c4c4c</color>
     <color name="black_900">#f0000000</color>
     <!--Blue-->
     <color name="blue_0">#11303f9f</color>
@@ -34,4 +34,6 @@
     <color name="white">#fff</color>
     <color name="transparent">#00000000</color>
     <color name="about_bottom_text">#a0a0a0</color>
+    <color name="navigation_item_text_normal">#212121</color>
+    <color name="navigation_item_text_selected">#3873b8</color>
 </resources>

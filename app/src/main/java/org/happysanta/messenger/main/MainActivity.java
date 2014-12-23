@@ -4,31 +4,36 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
+import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.friends.FriendsFragment;
 import org.happysanta.messenger.messages.chats.ChatsListFragment;
 import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
 import org.happysanta.messenger.profile.ProfileFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends BaseActivity
         implements NavigationFragment.NavigationDrawerCallbacks {
 
      private NavigationFragment mNavigationFragment;
+    private DrawerLayout mDrawerLayout;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mNavigationFragment = (NavigationFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                mDrawerLayout);
     }
 
     @Override

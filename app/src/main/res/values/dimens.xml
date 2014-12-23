@@ -7,5 +7,6 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="about_bottom_text">12sp</dimen>
     <dimen name="about_bottom_height">35dp</dimen>
+    <dimen name="status_bar_padding">0dp</dimen>
 
 </resources>

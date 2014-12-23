@@ -298,8 +298,15 @@ public class LongpollService extends Service {
         }
 
         for (Object update : response.updates) {
+            for (LongpollListener longpollListener : listeners.values()) {
+                longpollListener.onLongPollUpdate(update);
+            }
             Log.d("Longpoll update",update.toString());
         }
 
+    }
+
+    public static void addListener(LongpollListener listener) {
+        listeners.put(1,listener);
     }
 }

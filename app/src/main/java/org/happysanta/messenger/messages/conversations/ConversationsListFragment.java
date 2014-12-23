@@ -44,10 +44,7 @@ public class ConversationsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 VKApiDialog dialog = dialogs.get(position);
-                Intent intent = new Intent(getActivity(), ChatActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt(ChatActivity.ARG_USERID, dialog.getId() );
-                intent.putExtras(bundle);
+                Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
                 startActivity(intent);
             }
         });
