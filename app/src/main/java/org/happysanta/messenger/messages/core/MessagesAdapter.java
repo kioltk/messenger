@@ -47,17 +47,33 @@ public class MessagesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         RelativeLayout itemView = (RelativeLayout) LayoutInflater.from(activity).inflate(R.layout.item_message, null);
-        TextView textView = (TextView) itemView.findViewById(R.id.message_text);
 
-        VKApiMessage message = getItem(position);
+        TextView textView = (TextView) itemView.findViewById(R.id.message_text);
+        final TextView dateView = (TextView) itemView.findViewById(R.id.dateView);
+
+        final VKApiMessage message = getItem(position);
 
         textView.setText(message.body);
+        dateView.setText("" + message.date);
+        dateView.setVisibility(View.INVISIBLE);
 
         if(message.out){
             itemView.setGravity(Gravity.RIGHT);
+            dateView.setGravity(Gravity.RIGHT);
         } else {
             itemView.setGravity(Gravity.LEFT);
         }
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dateView.getVisibility()==View.VISIBLE){
+                    dateView.setVisibility(View.INVISIBLE);
+                }else{
+                    dateView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         return itemView;
     }
