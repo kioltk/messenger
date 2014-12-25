@@ -40,6 +40,7 @@ public class ChatActivity extends BaseActivity {
 
 
 
+
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         if (null != actionbar) {
             actionbar.setHomeButtonEnabled(true);
