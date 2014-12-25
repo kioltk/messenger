@@ -62,6 +62,7 @@ public class MessagesAdapter extends BaseAdapter {
             dateView.setGravity(Gravity.RIGHT);
         } else {
             itemView.setGravity(Gravity.LEFT);
+            dateView.setGravity(Gravity.LEFT);
         }
 
         textView.setOnClickListener(new View.OnClickListener() {
