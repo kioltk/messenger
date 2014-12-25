@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,30 +47,35 @@ public class MessagesAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        RelativeLayout itemView = (RelativeLayout) LayoutInflater.from(activity).inflate(R.layout.item_message, null);
+        View itemView = LayoutInflater.from(activity).inflate(R.layout.item_message, null);
 
         TextView textView = (TextView) itemView.findViewById(R.id.message_text);
         final TextView dateView = (TextView) itemView.findViewById(R.id.dateView);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
 
         final VKApiMessage message = getItem(position);
 
         textView.setText(message.body);
         dateView.setText("" + message.date);
-        dateView.setVisibility(View.INVISIBLE);
+        dateView.setVisibility(View.GONE);
 
         if(message.out){
-            itemView.setGravity(Gravity.RIGHT);
-            dateView.setGravity(Gravity.RIGHT);
+            layoutParams.gravity = Gravity.LEFT;
         } else {
-            itemView.setGravity(Gravity.LEFT);
-            dateView.setGravity(Gravity.LEFT);
+            layoutParams.gravity = Gravity.RIGHT;
         }
+        textView.setLayoutParams(layoutParams);
+        dateView.setLayoutParams(layoutParams);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(dateView.getVisibility()==View.VISIBLE){
-                    dateView.setVisibility(View.INVISIBLE);
+                    dateView.setVisibility(View.GONE);
                 }else{
                     dateView.setVisibility(View.VISIBLE);
                 }
