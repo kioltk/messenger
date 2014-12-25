@@ -1,23 +1,19 @@
 package org.happysanta.messenger.messages.core;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
-
-import java.util.ArrayList;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -49,8 +45,10 @@ public class MessagesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View itemView = LayoutInflater.from(activity).inflate(R.layout.item_message, null);
-
-        TextView textView = (TextView) itemView.findViewById(R.id.message_text);
+        View bodyView;
+        TextView textView = (TextView) itemView.findViewById(R.id.text);
+        ImageView emojiView = (ImageView) itemView.findViewById(R.id.emoji);
+        ImageView stickerView = (ImageView) itemView.findViewById(R.id.sticker);
         final TextView dateView = (TextView) itemView.findViewById(R.id.dateView);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -60,7 +58,27 @@ public class MessagesAdapter extends BaseAdapter {
 
         final VKApiMessage message = getItem(position);
 
-        textView.setText(message.body);
+        if(message.body!=null&&!message.body.equals("")) {
+            if(message.emoji&&message.body.length()==2){
+                textView.setVisibility(View.GONE);
+                emojiView.setVisibility(View.VISIBLE);
+                bodyView = emojiView;
+                // todo set emoji?
+            }else {
+                textView.setText(message.body);
+                bodyView = textView;
+            }
+        }else{
+            if(message.sticker!=null){
+                stickerView.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.GONE);
+                bodyView = stickerView;
+                // todo sticker
+            } else {
+                textView.setText("ERROR");
+                bodyView = textView;
+            }
+        }
         dateView.setText("" + message.date);
         dateView.setVisibility(View.GONE);
 
@@ -69,15 +87,15 @@ public class MessagesAdapter extends BaseAdapter {
         } else {
             layoutParams.gravity = Gravity.LEFT;
         }
-        textView.setLayoutParams(layoutParams);
+        bodyView.setLayoutParams(layoutParams);
         dateView.setLayoutParams(layoutParams);
 
-        textView.setOnClickListener(new View.OnClickListener() {
+        bodyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(dateView.getVisibility()==View.VISIBLE){
+                if (dateView.getVisibility() == View.VISIBLE) {
                     dateView.setVisibility(View.GONE);
-                }else{
+                } else {
                     dateView.setVisibility(View.VISIBLE);
                 }
             }

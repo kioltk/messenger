@@ -116,6 +116,7 @@ public class VKAttachments extends VKList<VKAttachments.VKApiAttachment> impleme
      */
     public static final String TYPE_ALBUM = "album";
 
+    public static final String TYPE_STICKER = "sticker";
 
     public VKAttachments() {
         super();
@@ -161,7 +162,9 @@ public class VKAttachments extends VKList<VKAttachments.VKApiAttachment> impleme
         @Override
         public VKApiAttachment parseObject(JSONObject attachment) throws Exception {
             String type = attachment.optString("type");
-            if(TYPE_PHOTO.equals(type)) {
+            if(TYPE_STICKER.equals(type)){
+                return new VKApiSticker().parse(attachment.getJSONObject(TYPE_STICKER));
+            } else if(TYPE_PHOTO.equals(type)) {
                 return new VKApiPhoto().parse(attachment.getJSONObject(TYPE_PHOTO));
             } else if(TYPE_VIDEO.equals(type)) {
                 return new VKApiVideo().parse(attachment.getJSONObject(TYPE_VIDEO));

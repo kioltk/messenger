@@ -4,6 +4,7 @@ import com.vk.sdk.api.model.VKApiMessage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -23,13 +24,13 @@ public class LongpollNewMessage extends VKApiMessage {
         read_state = (flags & FLAG_UNREAD) == FLAG_UNREAD;
         out = (flags & FLAG_OUTBOX) == FLAG_OUTBOX;
         isChat = (flags & FLAG_CHAT) == FLAG_CHAT;
-
+        JSONObject extras = jsonUpdate.getJSONObject(7);
         if ((flags & FLAG_MEDIA) == FLAG_MEDIA) {
             // todo attaches
         }
         if (isChat) {
             chat_id = jsonUpdate.getInt(3) - (2000000000);
-            user_id = jsonUpdate.getJSONObject(7).getInt("from");
+            user_id = extras.getInt("from");
         } else {
             user_id = jsonUpdate.getInt(3);
         }
@@ -37,7 +38,7 @@ public class LongpollNewMessage extends VKApiMessage {
 
         date = jsonUpdate.getInt(4);
         body = jsonUpdate.getString(6);
-
+        emoji = extras.optInt("emoji",0)>0;
     }
     @Override
     public String toString() {

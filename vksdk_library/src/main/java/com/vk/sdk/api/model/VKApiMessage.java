@@ -29,6 +29,9 @@
 package com.vk.sdk.api.model;
 
 import android.os.Parcel;
+
+import com.vk.sdk.api.VKApi;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,6 +100,7 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
     public String photo_200;
     public int admin_id;
     public int[] chat_active;
+    public VKApiSticker sticker;
 
     public VKApiMessage(JSONObject from) throws JSONException
 	{
@@ -120,6 +124,9 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
             photo_200 = source.optString("photo_200");
         }
         attachments .fill(source.optJSONArray("attachments"));
+        if(attachments.size()>0 && attachments.get(0) instanceof VKApiSticker){
+            sticker = (VKApiSticker) attachments.get(0);
+        }
         fwd_messages = new VKList<VKApiMessage>(source.optJSONArray("fwd_messages"), VKApiMessage.class);
         emoji = ParseUtils.parseBoolean(source, "emoji");
         deleted = ParseUtils.parseBoolean(source, "deleted");
