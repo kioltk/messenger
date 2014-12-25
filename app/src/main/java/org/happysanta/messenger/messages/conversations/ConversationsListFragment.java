@@ -22,7 +22,13 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.longpoll.LongpollService;
+import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
+import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
+import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.ChatActivity;
+
+import java.util.ArrayList;
 
 
 /**
@@ -56,6 +62,28 @@ public class ConversationsListFragment extends Fragment {
                 dialogs = messages;
                 list.setAdapter(new ConversationsAdapter());
                 status.setVisibility(View.GONE);
+
+                LongpollService.addGlobalConversationListener(new LongpollDialogListener(0) {
+                    @Override
+                    public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
+                        for (LongpollNewMessage newMessage : newMessages) {
+                            for (VKApiDialog dialog : dialogs) {
+                                if(dialog.dialogId==newMessage.user_id){
+                                    dialog.body = newMessage.body;
+                                    dialogs.remove(dialog);
+                                    dialogs.add(0,dialog);
+                                    break;
+                                }
+                            }
+                        }
+                        ((BaseAdapter)list.getAdapter()).notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onTyping(ArrayList<LongpollTyping> typing) {
+
+                    }
+                });
             }
 
             @Override
@@ -63,6 +91,7 @@ public class ConversationsListFragment extends Fragment {
                 status.setText(error.toString());
             }
         });
+
 
         return rootView;
     }

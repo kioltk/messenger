@@ -149,6 +149,7 @@ public class LongpollService extends Service {
 
 
     static HashMap<Integer, LongpollDialogListener> conversationListeners = new HashMap<Integer,LongpollDialogListener>();
+    static HashMap<Integer, LongpollDialogListener> globalConversationListeners = new HashMap<Integer,LongpollDialogListener>();
     private LongpollDialogListener globalConversationListener = new LongpollDialogListener(0) {
         @Override
         public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
@@ -292,7 +293,8 @@ public class LongpollService extends Service {
             if (conversationListeners.containsKey(conversationId)) {
                 LongpollDialogListener conversationListener = conversationListeners.get(conversationId);
                 conversationListener.onNewMessages(conversationPackMessages);
-            } else {
+            }
+            for (LongpollDialogListener globalConversationListener : globalConversationListeners.values()) {
                 globalConversationListener.onNewMessages(conversationPackMessages);
             }
         }
@@ -311,5 +313,9 @@ public class LongpollService extends Service {
     }
     public static void addConversationListener(LongpollDialogListener listener){
         conversationListeners.put(listener.getId(),  listener);
+    }
+
+    public static void addGlobalConversationListener(LongpollDialogListener listener) {
+        globalConversationListeners.put(listener.getId(),listener);
     }
 }
