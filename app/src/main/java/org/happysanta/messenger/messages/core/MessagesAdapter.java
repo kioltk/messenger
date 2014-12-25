@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 
@@ -23,9 +24,9 @@ import java.util.ArrayList;
  */
 public class MessagesAdapter extends BaseAdapter {
     private final Activity activity;
-    private final ArrayList<VKApiMessage> messages;
+    private final VKList<VKApiMessage> messages;
 
-    public MessagesAdapter(Activity activity, ArrayList<VKApiMessage> messages) {
+    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages) {
         this.activity = activity;
         this.messages = messages;
     }
@@ -64,9 +65,9 @@ public class MessagesAdapter extends BaseAdapter {
         dateView.setVisibility(View.GONE);
 
         if(message.out){
-            layoutParams.gravity = Gravity.LEFT;
-        } else {
             layoutParams.gravity = Gravity.RIGHT;
+        } else {
+            layoutParams.gravity = Gravity.LEFT;
         }
         textView.setLayoutParams(layoutParams);
         dateView.setLayoutParams(layoutParams);

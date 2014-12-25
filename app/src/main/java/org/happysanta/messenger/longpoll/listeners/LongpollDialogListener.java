@@ -28,7 +28,7 @@ public abstract class LongpollDialogListener implements LongpollListener {
 
     }
 
-    public abstract void onNewMessages(ArrayList<LongpollNewMessage> messages);
+    public abstract void onNewMessages(ArrayList<LongpollNewMessage> newMessages);
     public abstract void onTyping(ArrayList<LongpollTyping> typing);
 
 }

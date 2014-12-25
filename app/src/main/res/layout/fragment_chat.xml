@@ -38,6 +38,7 @@
             android:id="@+id/message_box"
             android:hint="Enter the messege"
             android:textColorHint="#949494"
+            android:textColor="#444"
             android:layout_toLeftOf="@+id/send_button"
             />
         <Button

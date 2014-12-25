@@ -148,10 +148,10 @@ public class LongpollService extends Service {
 
 
 
-    HashMap<Integer, LongpollDialogListener> conversationListeners = new HashMap<Integer,LongpollDialogListener>();
+    static HashMap<Integer, LongpollDialogListener> conversationListeners = new HashMap<Integer,LongpollDialogListener>();
     private LongpollDialogListener globalConversationListener = new LongpollDialogListener(0) {
         @Override
-        public void onNewMessages(ArrayList<LongpollNewMessage> messages) {
+        public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
         }
 
         @Override
@@ -162,7 +162,7 @@ public class LongpollService extends Service {
     HashMap<Integer, LongpollDialogListener> chatListeners = new HashMap<Integer,LongpollDialogListener>();
     private LongpollDialogListener globalChatListener = new LongpollDialogListener(0) {
         @Override
-        public void onNewMessages(ArrayList<LongpollNewMessage> messages) {
+        public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
         }
 
         @Override
@@ -199,7 +199,7 @@ public class LongpollService extends Service {
         Collections.sort(messages, new Comparator<LongpollNewMessage>() {
             @Override
             public int compare(LongpollNewMessage lhs, LongpollNewMessage rhs) {
-                return lhs.timestamp.compareTo(rhs.timestamp);
+                return ((Long)lhs.date).compareTo(rhs.date);
             }
         });
 
@@ -213,18 +213,18 @@ public class LongpollService extends Service {
         for (LongpollNewMessage message : messages) {
             ArrayList<LongpollNewMessage> pack;
             if (message.isChat) {
-                if (!chatMessagesPacks.containsKey(message.dialogId)) {
+                if (!chatMessagesPacks.containsKey(message.chat_id)) {
                     pack = new ArrayList<LongpollNewMessage>();
-                    chatMessagesPacks.put(message.dialogId, pack);
+                    chatMessagesPacks.put(message.chat_id, pack);
                 } else {
-                    pack = chatMessagesPacks.get(message.dialogId);
+                    pack = chatMessagesPacks.get(message.chat_id);
                 }
             } else {
-                if (!conversationsMessagesPacks.containsKey(message.dialogId)) {
+                if (!conversationsMessagesPacks.containsKey(message.user_id)) {
                     pack = new ArrayList<LongpollNewMessage>();
-                    conversationsMessagesPacks.put(message.dialogId, pack);
+                    conversationsMessagesPacks.put(message.user_id, pack);
                 } else {
-                    pack = conversationsMessagesPacks.get(message.dialogId);
+                    pack = conversationsMessagesPacks.get(message.user_id);
                 }
             }
             pack.add(message);
@@ -241,7 +241,7 @@ public class LongpollService extends Service {
                     pack = chatTypingsPacks.get(typing.dialogId);
                 }
             } else {
-                if (!conversationsMessagesPacks.containsKey(typing.dialogId)) {
+                if (!conversationTypingsPacks.containsKey(typing.dialogId)) {
                     pack = new ArrayList<>();
                     conversationTypingsPacks.put(typing.dialogId, pack);
                 } else {
@@ -289,7 +289,7 @@ public class LongpollService extends Service {
         for (Map.Entry<Integer, ArrayList<LongpollNewMessage>> conversationPackEntry : conversationsMessagesPacks.entrySet()) {
             Integer conversationId = conversationPackEntry.getKey();
             ArrayList<LongpollNewMessage> conversationPackMessages = conversationPackEntry.getValue();
-            if (chatListeners.containsKey(conversationId)) {
+            if (conversationListeners.containsKey(conversationId)) {
                 LongpollDialogListener conversationListener = conversationListeners.get(conversationId);
                 conversationListener.onNewMessages(conversationPackMessages);
             } else {
@@ -307,6 +307,9 @@ public class LongpollService extends Service {
     }
 
     public static void addListener(LongpollListener listener) {
-        listeners.put(1,listener);
+        listeners.put(listener.getId(),listener);
+    }
+    public static void addConversationListener(LongpollDialogListener listener){
+        conversationListeners.put(listener.getId(),  listener);
     }
 }
