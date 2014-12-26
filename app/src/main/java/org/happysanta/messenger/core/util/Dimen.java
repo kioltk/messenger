@@ -25,4 +25,8 @@ public class Dimen {
     public static void init(Context context){
         Dimen.context = context;
     }
+
+    public static int get(int resourceId) {
+        return context.getResources().getDimensionPixelSize(resourceId);
+    }
 }

@@ -51,10 +51,7 @@ public class MessagesAdapter extends BaseAdapter {
         ImageView stickerView = (ImageView) itemView.findViewById(R.id.sticker);
         final TextView dateView = (TextView) itemView.findViewById(R.id.dateView);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
+
 
         final VKApiMessage message = getItem(position);
 
@@ -82,13 +79,20 @@ public class MessagesAdapter extends BaseAdapter {
         dateView.setText("" + message.date);
         dateView.setVisibility(View.GONE);
 
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) bodyView.getLayoutParams();
+        LinearLayout.LayoutParams dateLayoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
         if(message.out){
             layoutParams.gravity = Gravity.RIGHT;
+            dateLayoutParams.gravity = Gravity.RIGHT;
         } else {
             layoutParams.gravity = Gravity.LEFT;
+            dateLayoutParams.gravity = Gravity.LEFT;
         }
         bodyView.setLayoutParams(layoutParams);
-        dateView.setLayoutParams(layoutParams);
+        dateView.setLayoutParams(dateLayoutParams);
 
         bodyView.setOnClickListener(new View.OnClickListener() {
             @Override

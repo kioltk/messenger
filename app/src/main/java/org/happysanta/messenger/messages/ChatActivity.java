@@ -1,26 +1,23 @@
 package org.happysanta.messenger.messages;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiDialog;
-import com.vk.sdk.api.model.VKApiMessage;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
+import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
@@ -29,6 +26,7 @@ public class ChatActivity extends BaseActivity {
     public static final String ARG_DIALOGID = "arg_dialogid";
     public static final java.lang.String ARG_ISCHAT = "arg_ischat";
     private static final String ARG_TITLE = "arg_title";
+    private static final String ARG_LOGO = "arg_logo";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,13 +37,47 @@ public class ChatActivity extends BaseActivity {
 
 
 
+        Bundle bundle = getIntent().getExtras();
+        String title = bundle.getString(ARG_TITLE, "Dialog");
+        String logo = bundle.getString(ARG_LOGO, null);
+        setTitle(title);
 
 
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         if (null != actionbar) {
             actionbar.setHomeButtonEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-            ((Toolbar)findViewById(R.id.toolbar)).setNavigationOnClickListener(new View.OnClickListener() {
+            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+            toolbar.setLogo(R.drawable.ab_logo_placeholder);
+            ImageLoader.getInstance().loadImage(logo,new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap logoBitmap) {
+
+                    int size = Dimen.get(R.dimen.ab_logo_size);
+                    logoBitmap = BitmapUtil.resize(logoBitmap, size, size);
+                    logoBitmap = BitmapUtil.circle(logoBitmap);
+                    Drawable logoDrawable = new BitmapDrawable(getResources(), logoBitmap);
+                    toolbar.setLogo(logoDrawable);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            });
+            toolbar.setSubtitle("offline");
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
@@ -55,9 +87,7 @@ public class ChatActivity extends BaseActivity {
 
 
 
-        Bundle bundle = getIntent().getExtras();
-        String title = bundle.getString(ARG_TITLE, "Dialog");
-        setTitle(title);
+
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -74,6 +104,7 @@ public class ChatActivity extends BaseActivity {
         bundle.putInt(ARG_DIALOGID, dialog.getId());
         bundle.putBoolean(ARG_ISCHAT, dialog.isChat());
         bundle.putString(ARG_TITLE, dialog.title);
+        bundle.putString(ARG_LOGO, dialog.photo_200);
         intent.putExtras(bundle);
         return intent;
     }
