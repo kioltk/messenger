@@ -1,7 +1,11 @@
 package org.happysanta.messenger.messages.core;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,7 @@ import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.MapUtil;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 
@@ -105,8 +110,32 @@ public class MessagesAdapter extends BaseAdapter {
             }
         }
         if(message.geo!=null){
+            final VKApiGeo geo = message.geo;
             mapView.setVisibility(View.VISIBLE);
-            VKApiGeo geo = message.geo;
+            mapView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(activity)
+                            .setTitle(R.string.map_show_title)
+                            .setMessage(R.string.map_show_message)
+                            .setPositiveButton(R.string.map_show_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    activity.startActivity(
+                                            new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + geo.lat + "," + geo.lon
+                                                    + "?q=" + geo.lat + "," + geo.lon + "&z=" + 10)));
+                                }
+                            })
+                            .setNegativeButton(R.string.map_show_cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .setCancelable(true).show();
+                }
+            });
             ImageLoader.getInstance().displayImage(MapUtil.getMap(geo.lat, geo.lon, mapLayoutParams.width, mapLayoutParams.height, true, "").toString(), mapView, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
@@ -133,17 +162,41 @@ public class MessagesAdapter extends BaseAdapter {
         dateView.setVisibility(View.GONE);
 
 
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) bodyView.getLayoutParams();
-        if(message.out){
-            layoutParams.gravity = Gravity.RIGHT;
+        LinearLayout.LayoutParams itemLayoutParams = (LinearLayout.LayoutParams) bodyView.getLayoutParams();
+        int itemDefaultPadding =  Dimen.get(R.dimen.default_message_padding);
+        int itemLeftPadding = itemDefaultPadding;
+        int itemTopPadding = itemDefaultPadding;
+        int itemRightPadding = itemDefaultPadding;
+        int itemBottomPadding = itemDefaultPadding;
+
+        if(message.out) {
+            itemLayoutParams.gravity = Gravity.RIGHT;
             dateLayoutParams.gravity = Gravity.RIGHT;
             mapLayoutParams.gravity = Gravity.RIGHT;
+            itemLeftPadding = itemDefaultPadding * 4;
+
+            if(position!=0 && messages.get(position-1).out){
+                itemTopPadding = itemDefaultPadding / 4;
+            }
+            if(position<messages.size()-1 && messages.get(position+1).out){
+                itemBottomPadding = itemDefaultPadding /4;
+            }
         } else {
-            layoutParams.gravity = Gravity.LEFT;
+            itemLayoutParams.gravity = Gravity.LEFT;
             dateLayoutParams.gravity = Gravity.LEFT;
             mapLayoutParams.gravity = Gravity.LEFT;
+            itemRightPadding = itemDefaultPadding * 4;
+            if(position!=0 && !messages.get(position-1).out){
+                itemTopPadding = itemDefaultPadding / 4;
+            }
+            if(position<messages.size()-1 && !messages.get(position+1).out){
+                itemBottomPadding = itemDefaultPadding /4;
+            }
         }
-        bodyView.setLayoutParams(layoutParams);
+
+
+        itemView.setPadding(itemLeftPadding,itemTopPadding, itemRightPadding, itemBottomPadding);
+        bodyView.setLayoutParams(itemLayoutParams);
         mapView.setLayoutParams(mapLayoutParams);
         dateView.setLayoutParams(dateLayoutParams);
 
@@ -173,6 +226,6 @@ public class MessagesAdapter extends BaseAdapter {
             public void run() {
                 typingView.setVisibility(View.INVISIBLE);
             }
-        },4000);
+        },5500);
     }
 }

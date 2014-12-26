@@ -23,5 +23,9 @@
     <string name="about_report">Report</string>
     <string name="about_terms">Terms</string>
     <string name="google_static_map_api_key">AIzaSyCbnjC8ARVzo_mAr9ujOSts4EwtFTWumZs</string>
+    <string name="map_show_ok">Открыть</string>
+    <string name="map_show_title">Карта</string>
+    <string name="map_show_cancel">Отмена</string>
+    <string name="map_show_message">Открыть карту в другом приложении?</string>
 
 </resources>

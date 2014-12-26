@@ -267,7 +267,7 @@ public class LongpollService extends Service {
         for (Map.Entry<Integer, ArrayList<LongpollTyping>> conversationPackEntry : conversationTypingsPacks.entrySet()) {
             Integer conversationId = conversationPackEntry.getKey();
             ArrayList<LongpollTyping> conversationPackMessages = conversationPackEntry.getValue();
-            if (chatListeners.containsKey(conversationId)) {
+            if (conversationListeners.containsKey(conversationId)) {
                 LongpollDialogListener conversationListener = conversationListeners.get(conversationId);
                 conversationListener.onTyping(conversationPackMessages);
             } else {
