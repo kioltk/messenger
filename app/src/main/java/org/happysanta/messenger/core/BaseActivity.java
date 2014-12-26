@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.vk.sdk.VKUIHelper;
+
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.Dimen;
 
@@ -24,6 +26,7 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        VKUIHelper.onCreate(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if(toolbar!=null) {
             setSupportActionBar(toolbar);
@@ -31,5 +34,17 @@ public class BaseActivity extends ActionBarActivity {
             toolbar.setPadding(0,paddingTop, 0, 0);
             //toolbar.color
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        VKUIHelper.onDestroy(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        VKUIHelper.onResume(this);
     }
 }

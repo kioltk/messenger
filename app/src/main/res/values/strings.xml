@@ -22,5 +22,6 @@
     <string name="about_privacy">Privacy</string>
     <string name="about_report">Report</string>
     <string name="about_terms">Terms</string>
+    <string name="google_static_map_api_key">AIzaSyCbnjC8ARVzo_mAr9ujOSts4EwtFTWumZs</string>
 
 </resources>

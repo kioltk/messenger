@@ -43,6 +43,7 @@ public class ConversationFragment extends Fragment {
     private EditText editMessageText;
     private int dialogId;
     private boolean isChat;
+    private MessagesAdapter messagesAdapter;
 
     public ConversationFragment() {
     }
@@ -71,7 +72,8 @@ public class ConversationFragment extends Fragment {
                             messagesSort.add(0, message);
                             messages = messagesSort;
                         }
-                        messagesList.setAdapter(new MessagesAdapter(getActivity(), messages));
+                        messagesAdapter = new MessagesAdapter(getActivity(), messages);
+                        messagesList.setAdapter(messagesAdapter);
                         if (messages.isEmpty()) {
                             statusView.setText("Start the conversation");
                         } else {
@@ -95,13 +97,13 @@ public class ConversationFragment extends Fragment {
         LongpollService.addConversationListener(new LongpollDialogListener(dialogId) {
             @Override
             public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
-                messages.addAll(newMessages);
-                ((BaseAdapter) messagesList.getAdapter()).notifyDataSetChanged();
+                messagesAdapter.newMessages(newMessages);
                 tryScrollToDown();
             }
 
             @Override
             public void onTyping(ArrayList<LongpollTyping> typing) {
+                messagesAdapter.typing();
 
             }
         });
@@ -135,7 +137,7 @@ public class ConversationFragment extends Fragment {
             }
         });
         messages.add(message);
-        ((BaseAdapter) messagesList.getAdapter()).notifyDataSetChanged();
+        messagesAdapter.notifyDataSetChanged();
         tryScrollToDown();
     }
 

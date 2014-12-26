@@ -23,6 +23,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <ImageView
+        android:id="@+id/map"
+        android:background="#fff"
+        android:src="@drawable/ic_launcher"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        android:layout_marginTop="6dp"
+        android:layout_width="250dp"
+        android:layout_height="125dp" />
+    <ImageView
         android:visibility="gone"
         android:id="@+id/emoji"
         android:src="@drawable/emoji"

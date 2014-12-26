@@ -93,6 +93,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
      */
     public boolean emoji;
 
+    public VKApiGeo geo;
+
     /**
      * Whether the message is deleted (false — no, true — yes).
      */
@@ -130,6 +132,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         fwd_messages = new VKList<VKApiMessage>(source.optJSONArray("fwd_messages"), VKApiMessage.class);
         emoji = ParseUtils.parseBoolean(source, "emoji");
         deleted = ParseUtils.parseBoolean(source, "deleted");
+        geo = new VKApiGeo().parse(source.optJSONObject("geo"));
+
         return this;
     }
 
