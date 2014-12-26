@@ -1,6 +1,7 @@
 package org.happysanta.messenger.longpoll.updates;
 
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKApiSticker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +17,18 @@ public class LongpollNewMessage extends VKApiMessage {
     private static final int FLAG_MEDIA = 512;
     public final boolean isChat;
 
+    /*
+    *
+    * attaches
+    * {"attach1_product_id":"10","attach1_type":"sticker","attach1":"364"} - sticker
+    * {"attach1_type":"photo","attach1":"32018303_349190109"} - photo
+    * {"attach1_type":"audio","attach1":"32018303_324858579"} - audio
+    * {"attach1_type":"video","attach1":"121935185_165655682"} - video
+    * {"attach1_type":"doc","attach1":"32018303_347630079"} - doc
+    * {"geo":"9VZT4RBV","geo_provider":"3"}
+    *
+    *
+    * */
     public LongpollNewMessage(JSONArray jsonUpdate) throws JSONException {
 
         id = jsonUpdate.getInt(1);
@@ -35,10 +48,17 @@ public class LongpollNewMessage extends VKApiMessage {
             user_id = jsonUpdate.getInt(3);
         }
 
-
         date = jsonUpdate.getInt(4);
-        body = jsonUpdate.getString(6);
         emoji = extras.optInt("emoji",0)>0;
+
+        if(extras.optString("attach1_type","").equals("sticker")) {
+            sticker = new VKApiSticker();
+            sticker.id = extras.optInt("attach1");
+            sticker.product_id = extras.optInt("attach1_product_id");
+        }else{
+            body = jsonUpdate.getString(6);
+        }
+
     }
     @Override
     public String toString() {

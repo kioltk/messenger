@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class VKApiSticker extends VKAttachments.VKApiAttachment  implements Parcelable, Identifiable {
     public int id;
 
-    private int product_id;
+    public int product_id;
 
     public int height;
     public int width;
@@ -20,6 +20,18 @@ public class VKApiSticker extends VKAttachments.VKApiAttachment  implements Parc
     public String photo_128;
     public String photo_256;
 
+    /*
+    *
+    *   {
+    *       "id":347,
+    *       "product_id":10,
+    *       "photo_64":"https:\/\/vk.com\/images\/stickers\/347\/64b.png",
+    *       "photo_128":"https:\/\/vk.com\/images\/stickers\/347\/128b.png",
+    *       "photo_256":"https:\/\/vk.com\/images\/stickers\/347\/256b.png",
+    *       "width":256,
+    *       "height":256
+    *   }
+    * */
 
     @Override
     public int getId() {
