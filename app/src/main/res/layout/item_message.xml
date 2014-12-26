@@ -26,14 +26,14 @@
         android:visibility="gone"
         android:id="@+id/emoji"
         android:src="@drawable/emoji"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        android:layout_width="45dp"
+        android:layout_height="45dp" />
     <ImageView
         android:visibility="gone"
         android:id="@+id/sticker"
         android:src="@drawable/sticker"
-        android:layout_width="45dp"
-        android:layout_height="45dp" />
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
