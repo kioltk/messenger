@@ -27,7 +27,7 @@ public class BitmapUtil {
         matrix.postScale(scaleWidth, scaleHeight);
 
         // "RECREATE" THE NEW BITMAP
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, false);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
     }
 
     public static Bitmap circle(Bitmap bitmap) {
@@ -37,6 +37,7 @@ public class BitmapUtil {
         Paint paint = new Paint();
         paint.setShader(shader);
         paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
         Canvas c = new Canvas(circleBitmap);
         c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, bitmap.getWidth()/2, paint);
         return circleBitmap;
