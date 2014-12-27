@@ -19,6 +19,7 @@ import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ConversationFragment extends Fragment {
+public class ConversationFragment extends BaseFragment {
 
     // core
     private VKList<VKApiMessage> messages;
@@ -51,11 +52,11 @@ public class ConversationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
-        messagesList = (ListView) rootView.findViewById(R.id.messages_list);
-        final TextView statusView = (TextView) rootView.findViewById(R.id.status);
-        sendButton = (Button) rootView.findViewById(R.id.send_button);
-        editMessageText = (EditText) rootView.findViewById(R.id.message_box);
+        rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        messagesList = (ListView) findViewById(R.id.messages_list);
+        final TextView statusView = (TextView) findViewById(R.id.status);
+        sendButton = (Button) findViewById(R.id.send_button);
+        editMessageText = (EditText) findViewById(R.id.message_box);
         dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
         isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
 
@@ -87,12 +88,6 @@ public class ConversationFragment extends Fragment {
                     }
                 });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage();
-            }
-        });
 
         LongpollService.addConversationListener(new LongpollDialogListener(dialogId) {
             @Override
@@ -107,35 +102,43 @@ public class ConversationFragment extends Fragment {
 
             }
         });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String messageText = editMessageText.getText().toString();
+                if(messageText==null || messageText.equals("")){
+                    return;
+                }
+                VKApiMessage message = new VKApiMessage();
+                if (isChat) {
+                    message.chat_id = dialogId;
+                }else {
+                    message.user_id = dialogId;
+                }
+                message.body = messageText;
+                message.out = true;
+                message.read_state = false;
+                VKRequest request = new VKApiMessages().send(message);
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        editMessageText.setText(null);
+                    }
+
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                    }
+                });
+                sendMessage(message);
+            }
+        });
+
         return rootView;
     }
 
-    private void sendMessage() {
-        String messageText = editMessageText.getText().toString();
-        if(messageText==null || messageText.equals("")){
-            return;
-        }
-        VKApiMessage message = new VKApiMessage();
-        if (isChat) {
-            message.chat_id = dialogId;
-        }else {
-            message.user_id = dialogId;
-        }
-        message.body = messageText;
-        message.out = true;
-        message.read_state = false;
-        VKRequest request = new VKApiMessages().send(message);
-        request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                editMessageText.setText(null);
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
-        });
+    public void sendMessage(VKApiMessage message) {
         messages.add(message);
         messagesAdapter.notifyDataSetChanged();
         tryScrollToDown();
