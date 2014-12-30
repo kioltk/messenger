@@ -103,6 +103,7 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
     public int admin_id;
     public int[] chat_active;
     public VKApiSticker sticker;
+    public int guid;
 
     public VKApiMessage(JSONObject from) throws JSONException
 	{

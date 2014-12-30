@@ -35,6 +35,11 @@ public class MainActivity extends BaseActivity
         mNavigationFragment.setUp(
                 R.id.navigation_drawer,
                 mDrawerLayout);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, new ConversationsListFragment())
+                .commit();
     }
 
     @Override

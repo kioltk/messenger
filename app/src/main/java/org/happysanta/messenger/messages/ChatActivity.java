@@ -2,6 +2,7 @@ package org.happysanta.messenger.messages;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -117,6 +118,10 @@ public class ChatActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     public static Intent getActivityIntent(Context context, VKApiDialog dialog) {
         Intent intent = new Intent(context, ChatActivity.class);

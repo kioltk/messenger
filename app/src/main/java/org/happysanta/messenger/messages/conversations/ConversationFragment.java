@@ -1,11 +1,10 @@
 package org.happysanta.messenger.messages.conversations;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -80,7 +79,7 @@ public class ConversationFragment extends BaseFragment {
                         } else {
                             statusView.setVisibility(View.GONE);
                         }
-                        messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                        //messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
                     }
                     @Override
                     public void onError(VKError error) {
@@ -93,7 +92,7 @@ public class ConversationFragment extends BaseFragment {
             @Override
             public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
                 messagesAdapter.newMessages(newMessages);
-                tryScrollToDown();
+                tryScrollToBottom();
             }
 
             @Override
@@ -119,19 +118,9 @@ public class ConversationFragment extends BaseFragment {
                 message.body = messageText;
                 message.out = true;
                 message.read_state = false;
-                VKRequest request = new VKApiMessages().send(message);
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        editMessageText.setText(null);
-                    }
-
-                    @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
-                    }
-                });
+                message.guid = (int) (System.currentTimeMillis()/1000L * dialogId);
                 sendMessage(message);
+                editMessageText.setText(null);
             }
         });
 
@@ -139,15 +128,24 @@ public class ConversationFragment extends BaseFragment {
     }
 
     public void sendMessage(VKApiMessage message) {
-        messages.add(message);
-        messagesAdapter.notifyDataSetChanged();
-        tryScrollToDown();
+        messagesAdapter.send(message);
+        tryScrollToBottom();
     }
 
-    private void tryScrollToDown() {
-        // todo проскроливать вниз
+    private void tryScrollToBottom() {
+        messagesList.post(new Runnable() {
+            @Override
+            public void run() {
+                messagesList.smoothScrollToPosition(messagesAdapter.getCount() - 1);
+                //messagesList.scrollTo(0,messagesList.getHeight());
+            }
+        });
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     public static ConversationFragment getInstance(Bundle extras) {
         ConversationFragment fragment = new ConversationFragment();

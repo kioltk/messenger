@@ -22,24 +22,17 @@
 package com.vk.sdk.api.methods;
 
 import com.google.gson.Gson;
-import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKParser;
 import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.model.VKApiChat;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKLongPollServer;
-import com.vk.sdk.api.model.VKMessagesArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Builds requests for API.messages part
@@ -149,6 +142,7 @@ public class VKApiMessages extends VKApiBase {
         }
         if (message.attachments != null && !message.attachments.isEmpty())
             params.put("attachment", message.attachments.toAttachmentsString());
+        params.put("guid",message.guid);
         return prepareRequest("send", params, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {

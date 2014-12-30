@@ -2,17 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity$PlaceholderFragment"
     android:background="@android:color/background_light">
 
     <ListView
-        android:background="#e8ecf0"
         android:id="@+id/messages_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:divider="#00ffffff"
         android:dividerHeight="0dp"
+        android:background="#e8ecf0"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
         android:layout_above="@+id/new_message_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
 
     <TextView

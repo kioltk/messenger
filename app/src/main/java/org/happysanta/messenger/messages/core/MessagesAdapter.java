@@ -18,6 +18,10 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiGeo;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
@@ -227,5 +231,22 @@ public class MessagesAdapter extends BaseAdapter {
                 typingView.setVisibility(View.INVISIBLE);
             }
         },5500);
+    }
+
+    public void send(final VKApiMessage message) {
+        VKRequest request = new VKApiMessages().send(message);
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                //message.id = (int) response.parsedModel;
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+            }
+        });
+        messages.add(message);
+        notifyDataSetChanged();
     }
 }
