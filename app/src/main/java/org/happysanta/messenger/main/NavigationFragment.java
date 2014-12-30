@@ -30,12 +30,14 @@ import org.happysanta.messenger.R;
  */
 public class NavigationFragment extends Fragment {
 
-    public static final long NAVIGATION_PROFILE_ID = 0;
-    public static final long NAVIGATION_MESSAGES_ID = 1;
-    public static final long NAVIGATION_GROUPS_ID = 2;
-    public static final long NAVIGATION_FRIENDS_ID = 3;
-    public static final long NAVIGATION_SETTINGS_ID = 4;
-    public static final long NAVIGATION_ABOUT_ID = 5;
+    public static final int NAVIGATION_PROFILE_ID = 11;
+    public static final int NAVIGATION_NEWS_ID = 10;
+    public static final int NAVIGATION_MESSAGES_ID = 1;
+    public static final int NAVIGATION_GROUPS_ID = 2;
+    public static final int NAVIGATION_FRIENDS_ID = 3;
+    public static final int NAVIGATION_SETTINGS_ID = 4;
+    public static final int NAVIGATION_ABOUT_ID = 5;
+
     /**
      * Remember the position of the selected item.
      */

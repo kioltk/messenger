@@ -12,6 +12,7 @@ import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.friends.FriendsFragment;
 import org.happysanta.messenger.messages.chats.ChatsListFragment;
 import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
+import org.happysanta.messenger.news.NewsListFragment;
 import org.happysanta.messenger.profile.ProfileFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 
@@ -46,13 +47,17 @@ public class MainActivity extends BaseActivity
                         .replace(R.id.container, new ProfileFragment())
                         .commit();
 
-            break;
+                break;
+            case NavigationFragment.NAVIGATION_NEWS_ID:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new NewsListFragment())
+                        .commit();
+                break;
             case (int) NavigationFragment.NAVIGATION_MESSAGES_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new ConversationsListFragment())
                         .commit();
-
-            break;
+                break;
             case (int) NavigationFragment.NAVIGATION_GROUPS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new ChatsListFragment())
@@ -77,7 +82,6 @@ public class MainActivity extends BaseActivity
                 break;
         }
     }
-
 
 
 

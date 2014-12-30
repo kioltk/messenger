@@ -27,5 +27,6 @@
     <string name="map_show_title">Карта</string>
     <string name="map_show_cancel">Отмена</string>
     <string name="map_show_message">Открыть карту в другом приложении?</string>
+    <string name="navigation_news">Новости</string>
 
 </resources>
