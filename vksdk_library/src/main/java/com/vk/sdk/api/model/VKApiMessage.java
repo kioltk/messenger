@@ -29,6 +29,9 @@
 package com.vk.sdk.api.model;
 
 import android.os.Parcel;
+
+import com.vk.sdk.api.VKApi;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,12 +93,18 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
      */
     public boolean emoji;
 
+    public VKApiGeo geo;
+
     /**
      * Whether the message is deleted (false — no, true — yes).
      */
     public boolean deleted;
+    public String photo_200;
+    public int admin_id;
+    public int[] chat_active;
+    public VKApiSticker sticker;
 
-	public VKApiMessage(JSONObject from) throws JSONException
+    public VKApiMessage(JSONObject from) throws JSONException
 	{
 		parse(from);
 	}
@@ -109,12 +118,22 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         read_state = ParseUtils.parseBoolean(source, "read_state");
         out = ParseUtils.parseBoolean(source, "out");
         title = source.optString("title");
-        chat_id = source.optInt("title");
         body = source.optString("body");
+        chat_id = source.optInt("chat_id");
+        admin_id = source.optInt("admin_id");
+        if(admin_id!=0) {
+            chat_active = ParseUtils.parseIntArray(source.getJSONArray("chat_active"));
+            photo_200 = source.optString("photo_200");
+        }
         attachments .fill(source.optJSONArray("attachments"));
+        if(attachments.size()>0 && attachments.get(0) instanceof VKApiSticker){
+            sticker = (VKApiSticker) attachments.get(0);
+        }
         fwd_messages = new VKList<VKApiMessage>(source.optJSONArray("fwd_messages"), VKApiMessage.class);
         emoji = ParseUtils.parseBoolean(source, "emoji");
         deleted = ParseUtils.parseBoolean(source, "deleted");
+        geo = new VKApiGeo().parse(source.optJSONObject("geo"));
+
         return this;
     }
 
@@ -128,8 +147,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         this.read_state = in.readByte() != 0;
         this.out = in.readByte() != 0;
         this.title = in.readString();
-        this.chat_id = in.readInt();
         this.body = in.readString();
+        this.chat_id = in.readInt();
         this.attachments = in.readParcelable(VKAttachments.class.getClassLoader());
         this.fwd_messages = in.readParcelable(VKList.class.getClassLoader());
         this.emoji = in.readByte() != 0;

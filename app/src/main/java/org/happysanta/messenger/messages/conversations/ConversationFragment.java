@@ -1,12 +1,11 @@
 package org.happysanta.messenger.messages.conversations;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -19,88 +18,140 @@ import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
-import org.happysanta.messenger.KeyboardUtil;
-import org.happysanta.messenger.Photo.MakePhotoFragment;
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseFragment;
+import org.happysanta.messenger.longpoll.LongpollService;
+import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
+import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
+import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.ChatActivity;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
+
+import java.util.ArrayList;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ConversationFragment extends Fragment {
+public class ConversationFragment extends BaseFragment {
+
+    // core
+    private VKList<VKApiMessage> messages;
+
+    // ui
+    private ListView messagesList;
+    private Button sendButton;
+    private EditText editMessageText;
+    private int dialogId;
+    private boolean isChat;
+    private MessagesAdapter messagesAdapter;
 
     public ConversationFragment() {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
-        final ListView messagesList = (ListView) rootView.findViewById(R.id.messages_list);
-        final TextView statusView = (TextView) rootView.findViewById(R.id.status);
-        final EditText box = (EditText) rootView.findViewById(R.id.send_box);
-        int userId = getArguments().getInt(ChatActivity.ARG_USERID, 0);
+        rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        messagesList = (ListView) findViewById(R.id.messages_list);
+        final TextView statusView = (TextView) findViewById(R.id.status);
+        sendButton = (Button) findViewById(R.id.send_button);
+        editMessageText = (EditText) findViewById(R.id.message_box);
+        dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
+        isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
 
-        Button photoButton = (Button) rootView.findViewById(R.id.make_photo_camera);
-        photoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                View photoView = inflater.inflate(R.layout.dialog_fast_photo, null);
-
-                AlertDialog photoDialog = new AlertDialog.Builder(getActivity())
-                        .setView(photoView)
-                        .create();
-                photoDialog.show();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.extra_container, new MakePhotoFragment())
-                        .commit();
-
-
-
-
-                KeyboardUtil.hide(box, getActivity());
-
-            }
-        });
 
         statusView.setText("loading");
 
-        new VKApiMessages().getHistory(userId).executeWithListener(new VKRequest.VKRequestListener() {
+        VKRequest request = isChat? new VKApiMessages().getChatHistory(dialogId):new VKApiMessages().getHistory(dialogId);
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        messages = (VKList<VKApiMessage>) response.parsedModel;
+                        VKList<VKApiMessage> messagesSort = new VKList();
+                        for (VKApiMessage message : messages) {
+                            messagesSort.add(0, message);
+                            messages = messagesSort;
+                        }
+                        messagesAdapter = new MessagesAdapter(getActivity(), messages);
+                        messagesList.setAdapter(messagesAdapter);
+                        if (messages.isEmpty()) {
+                            statusView.setText("Start the conversation");
+                        } else {
+                            statusView.setVisibility(View.GONE);
+                        }
+                        messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                    }
+                    @Override
+                    public void onError(VKError error) {
+                        statusView.setText(error.toString());
+                    }
+                });
+
+
+        LongpollService.addConversationListener(new LongpollDialogListener(dialogId) {
             @Override
-            public void onComplete(VKResponse response) {
-                VKList<VKApiMessage> messages = (VKList<VKApiMessage>) response.parsedModel;
-                messagesList.setAdapter(new MessagesAdapter(getActivity(), messages.toArrayList()));
-                if(messages.isEmpty()){
-                    statusView.setText("Start the conversation");
-                }else{
-                    statusView.setVisibility(View.GONE);
-                }
+            public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
+                messagesAdapter.newMessages(newMessages);
+                tryScrollToDown();
             }
 
             @Override
-            public void onError(VKError error) {
-                statusView.setText(error.toString());
+            public void onTyping(ArrayList<LongpollTyping> typing) {
+                messagesAdapter.typing();
 
             }
         });
 
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String messageText = editMessageText.getText().toString();
+                if(messageText==null || messageText.equals("")){
+                    return;
+                }
+                VKApiMessage message = new VKApiMessage();
+                if (isChat) {
+                    message.chat_id = dialogId;
+                }else {
+                    message.user_id = dialogId;
+                }
+                message.body = messageText;
+                message.out = true;
+                message.read_state = false;
+                VKRequest request = new VKApiMessages().send(message);
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        editMessageText.setText(null);
+                    }
 
-
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                    }
+                });
+                sendMessage(message);
+            }
+        });
 
         return rootView;
     }
+
+    public void sendMessage(VKApiMessage message) {
+        messages.add(message);
+        messagesAdapter.notifyDataSetChanged();
+        tryScrollToDown();
+    }
+
+    private void tryScrollToDown() {
+        // todo проскроливать вниз
+    }
+
 
     public static ConversationFragment getInstance(Bundle extras) {
         ConversationFragment fragment = new ConversationFragment();
         fragment.setArguments(extras);
         return fragment;
-    }
-    public static ConversationFragment getInstance(int userId){
-        Bundle bundle = new Bundle();
-        bundle.putInt(ChatActivity.ARG_USERID, userId);
-        return getInstance(bundle);
     }
 }

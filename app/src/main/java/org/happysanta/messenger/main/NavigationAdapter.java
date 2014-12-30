@@ -2,6 +2,7 @@ package org.happysanta.messenger.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.Dimen;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -22,7 +24,7 @@ public class NavigationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 7;
+        return 8;
     }
 
     @Override
@@ -35,19 +37,19 @@ public class NavigationAdapter extends BaseAdapter {
         switch (position){
             case 0:
                 return NavigationFragment.NAVIGATION_PROFILE_ID;
-            case 1:
+            case 2:
                 return NavigationFragment.NAVIGATION_MESSAGES_ID;
 
-            case 2:
+            case 3:
                 return NavigationFragment.NAVIGATION_GROUPS_ID;
 
-            case 3:
+            case 4:
                 return NavigationFragment.NAVIGATION_FRIENDS_ID;
 
-            case 5:
+            case 6:
                 return NavigationFragment.NAVIGATION_SETTINGS_ID;
 
-            case 6:
+            case 7:
                 return NavigationFragment.NAVIGATION_ABOUT_ID;
 
         }
@@ -61,11 +63,9 @@ public class NavigationAdapter extends BaseAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        if(position==4){
-            return false;
-        }
+        return position!=1 && position != 5 ;
 
-        return true;
+
     }
 
     @Override
@@ -74,29 +74,35 @@ public class NavigationAdapter extends BaseAdapter {
         View itemView = null;
         if(position==0){
             itemView = LayoutInflater.from(context).inflate(R.layout.navigation_profile, null);
+            int paddingBottom = itemView.getPaddingBottom();
+            int paddingTop = Dimen.getStatusBarHeight();
+            itemView.setPadding(0,paddingTop, 0,paddingBottom);
             return itemView;
         }
-        if(position==4){
+        if(position==5){
             return LayoutInflater.from(context).inflate(R.layout.navigation_divider, null);
+        }
+        if(position==1){
+            return LayoutInflater.from(context).inflate(R.layout.navigation_divider_small, null);
         }
         itemView = LayoutInflater.from(context).inflate(R.layout.navigation_item, null);
 
         TextView textView = (TextView) itemView.findViewById(R.id.text);
-        switch (position){
-            case 1:
-                itemView.findViewById(R.id.fake_padding).setVisibility(View.VISIBLE);
+
+        switch ((int) getItemId(position)){
+            case (int) NavigationFragment.NAVIGATION_MESSAGES_ID:
                 textView.setText(R.string.navigation_messages);
                 break;
-            case 2:
+            case (int) NavigationFragment.NAVIGATION_GROUPS_ID:
                 textView.setText(R.string.navigation_groups);
                 break;
-            case 3:
+            case (int) NavigationFragment.NAVIGATION_FRIENDS_ID:
                 textView.setText(R.string.navigation_friends);
                 break;
-            case 5:
+            case (int) NavigationFragment.NAVIGATION_SETTINGS_ID:
                 textView.setText(R.string.navigation_settings);
                 break;
-            case 6:
+            case (int) NavigationFragment.NAVIGATION_ABOUT_ID:
                 textView.setText(R.string.navigation_about);
                 break;
         }

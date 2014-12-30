@@ -18,7 +18,9 @@
             android:name="org.happysanta.messenger.main.MainActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
+        <activity
+            android:theme="@style/AppTheme.ActionBar"
+            android:name="com.vk.sdk.VKOpenAuthActivity" />
         <activity
             android:name="org.happysanta.messenger.start.StartActivity"
             android:label="@string/title_activity_start" >

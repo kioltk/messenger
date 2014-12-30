@@ -22,7 +22,14 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.longpoll.LongpollService;
+import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
+import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
+import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.ChatActivity;
+
+import java.util.ArrayList;
+
 
 /**
  * Created by Jesus Christ. Amen.
@@ -35,7 +42,7 @@ public class ConversationsListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView = inflater.inflate(R.layout.fragment_conversations_list, container, false);
         final ListView list = (ListView) rootView.findViewById(R.id.list);
         status = (TextView) rootView.findViewById(R.id.status);
 
@@ -43,10 +50,7 @@ public class ConversationsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 VKApiDialog dialog = dialogs.get(position);
-                Intent intent = new Intent(getActivity(), ChatActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt(ChatActivity.ARG_USERID, dialog.getId() );
-                intent.putExtras(bundle);
+                Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
                 startActivity(intent);
             }
         });
@@ -58,6 +62,28 @@ public class ConversationsListFragment extends Fragment {
                 dialogs = messages;
                 list.setAdapter(new ConversationsAdapter());
                 status.setVisibility(View.GONE);
+
+                LongpollService.addGlobalConversationListener(new LongpollDialogListener(0) {
+                    @Override
+                    public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
+                        for (LongpollNewMessage newMessage : newMessages) {
+                            for (VKApiDialog dialog : dialogs) {
+                                if(dialog.dialogId==newMessage.user_id){
+                                    dialog.body = newMessage.body;
+                                    dialogs.remove(dialog);
+                                    dialogs.add(0,dialog);
+                                    break;
+                                }
+                            }
+                        }
+                        ((BaseAdapter)list.getAdapter()).notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onTyping(ArrayList<LongpollTyping> typing) {
+
+                    }
+                });
             }
 
             @Override
@@ -66,8 +92,10 @@ public class ConversationsListFragment extends Fragment {
             }
         });
 
+
         return rootView;
     }
+
 
     private class ConversationsAdapter extends BaseAdapter {
         @Override

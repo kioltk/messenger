@@ -6,3 +6,12 @@
 /build
 
 *.iml
+messenger.iml
+.idea
+build
+gradle
+app/app.iml
+gradlew
+gradlew.bat
+local.properties
+app/.gitignore

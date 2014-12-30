@@ -1,53 +1,131 @@
 package org.happysanta.messenger.messages;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiMessages;
+import com.vk.sdk.api.model.VKApiDialog;
+import com.vk.sdk.api.model.VKApiMessage;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseActivity;
+import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
-public class ChatActivity extends ActionBarActivity {
+public class ChatActivity extends BaseActivity {
 
-    public static final String ARG_CHATID = "ARGUMENT_CHATID";
-    public static final String ARG_USERID = "ARGUMENT_USERID";
+    public static final String ARG_DIALOGID = "arg_dialogid";
+    public static final java.lang.String ARG_ISCHAT = "arg_ischat";
+    private static final String ARG_TITLE = "arg_title";
+    private static final String ARG_LOGO = "arg_logo";
+    private ConversationFragment conversationFragment;
+    private String title;
+    private String logo;
+    private boolean isChat;
+    private int dialogId;
+
+    private EditText editMessageText;
+    private Button sendButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         VKUIHelper.onCreate(this);
         setContentView(R.layout.activity_chat);
+
+
+
+
+        Bundle bundle = getIntent().getExtras();
+        title = bundle.getString(ARG_TITLE, "Dialog");
+        logo = bundle.getString(ARG_LOGO, null);
+        dialogId = bundle.getInt(ChatActivity.ARG_DIALOGID, 0);
+        isChat = bundle.getBoolean(ChatActivity.ARG_ISCHAT, false);
+
+        setTitle(title);
+
+
+        android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+        if (null != actionbar) {
+            actionbar.setHomeButtonEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+            toolbar.setLogo(R.drawable.ab_logo_placeholder);
+            ImageLoader.getInstance().loadImage(logo,new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap logoBitmap) {
+
+                    int size = Dimen.get(R.dimen.ab_logo_size);
+                    logoBitmap = BitmapUtil.resize(logoBitmap, size, size);
+                    logoBitmap = BitmapUtil.circle(logoBitmap);
+                    Drawable logoDrawable = new BitmapDrawable(getResources(), logoBitmap);
+                    toolbar.setLogo(logoDrawable);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            });
+            toolbar.setSubtitle("offline");
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
+
+
+
+
+
         if (savedInstanceState == null) {
+            conversationFragment = ConversationFragment.getInstance(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, ConversationFragment.getInstance(getIntent().getExtras()))
+                    .add(R.id.container, conversationFragment)
                     .commit();
         }
+
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chat, menu);
-        return true;
+    public static Intent getActivityIntent(Context context, VKApiDialog dialog) {
+        Intent intent = new Intent(context, ChatActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_DIALOGID, dialog.getId());
+        bundle.putBoolean(ARG_ISCHAT, dialog.isChat());
+        bundle.putString(ARG_TITLE, dialog.title);
+        bundle.putString(ARG_LOGO, dialog.photo_200);
+        intent.putExtras(bundle);
+        return intent;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 }
