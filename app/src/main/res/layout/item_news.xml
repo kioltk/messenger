@@ -14,21 +14,25 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         card_view:cardCornerRadius="12dp"
         style="@style/CardView">
 
-        <RelativeLayout
-
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="7dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <ImageView
                 android:src="@drawable/cat"
                 android:layout_width="70px"
                 android:layout_height="70px"
-                android:id="@+id/user_photo" />
+                android:id="@+id/user_photo" 
+                android:layout_marginRight="10dp"/>
             <TextView
                 android:text="Jesus Allahov"
                 android:layout_width="wrap_content"
@@ -36,8 +40,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/user_photo"
                 android:layout_toEndOf="@+id/user_photo"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"
                 android:id="@+id/user_name"
                 android:textColor="#ff343434"/>
 
@@ -48,8 +50,20 @@
                 android:text="20:00"
                 android:id="@+id/news_date"
                 android:layout_below="@+id/user_name"
-                android:layout_alignRight="@+id/user_name" />
+                android:layout_toRightOf="@+id/user_photo"
 
+                />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/news_menu"
+                    android:background="@drawable/ic_drawer"
+                    android:layout_above="@+id/news_date"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,20 +86,17 @@
                 android:background="@android:color/darker_gray"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="23dp" />
+                android:layout_alignParentStart="true"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_margin="10dp"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp" />
+                </RelativeLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/news_menu"
-                android:background="@drawable/ic_drawer"
-                android:layout_above="@+id/news_date"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:focusableInTouchMode="true" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
