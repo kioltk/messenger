@@ -2,16 +2,25 @@ package org.happysanta.messenger.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.happysanta.messenger.BuildConfig;
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
+import org.happysanta.messenger.core.util.ImageUtil;
+import org.happysanta.messenger.core.util.ProfileUtil;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -110,9 +119,48 @@ public class NavigationAdapter extends BaseAdapter {
         switch ((int) getItemId(position)){
             case NavigationFragment.NAVIGATION_PROFILE_ID:
                 itemView = LayoutInflater.from(context).inflate(R.layout.navigation_profile, null);
+
+                final ImageView userPhoto = (ImageView) itemView.findViewById(R.id.user_photo);
+                TextView userName = (TextView) itemView.findViewById(R.id.user_name);
+                TextView userStatus = (TextView) itemView.findViewById(R.id.user_status);
+                View searchButton = itemView.findViewById(R.id.search);
+
+
+                ImageUtil.showFromCache(new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        loadedImage = BitmapUtil.circle(loadedImage);
+                        userPhoto.setImageBitmap(loadedImage);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                    }
+                }, ProfileUtil.getUserPhoto());
+                userName.setText(ProfileUtil.getUserName());
+                userStatus.setText(ProfileUtil.getUserStatus());
                 int paddingBottom = itemView.getPaddingBottom();
                 int paddingTop = Dimen.getStatusBarHeight();
                 itemView.setPadding(0,paddingTop, 0,paddingBottom);
+
+                searchButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "Search", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 break;
             case NavigationFragment.NAVIGATION_NEWS_ID:
                     textView.setText(R.string.navigation_news);

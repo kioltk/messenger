@@ -12,7 +12,7 @@
         android:layout_height="75dp">
 
         <ImageView
-            android:layout_marginRight="11dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="11dp"
             android:id="@+id/user_photo"
             android:src="@drawable/cat"
@@ -24,7 +24,6 @@
             android:textSize="18dp"
             android:textColor="@color/black_800"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="3dp"
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@+id/user_photo"
             android:layout_height="wrap_content" />
@@ -33,7 +32,6 @@
             android:text="online"
             android:textSize="16dp"
             android:textColor="#a1a1a1"
-            android:layout_marginLeft="3dp"
             android:layout_marginTop="3dp"
             android:layout_below="@+id/text_name"
             android:layout_toRightOf="@+id/user_photo"
@@ -41,7 +39,7 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
     <View
-        android:layout_marginLeft="85dp"
+        android:layout_marginLeft="75dp"
         android:background="#e0e0e0"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
@@ -50,8 +48,10 @@
         android:layout_width="match_parent"
         android:layout_height="45dp">
         <ImageView
+            android:layout_marginRight="11dp"
+            android:src="@drawable/ic_launcher"
             android:scaleType="centerInside"
-            android:layout_width="85dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent" />
         <TextView
             android:text="Город"
@@ -61,7 +61,7 @@
             android:layout_height="match_parent" />
         </LinearLayout>
     <View
-        android:layout_marginLeft="85dp"
+        android:layout_marginLeft="75dp"
         android:background="#e0e0e0"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
@@ -164,7 +164,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/user_photo"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="33dp" />
         <Button
             android:id="@+id/button_friends"
@@ -178,7 +178,7 @@
             android:layout_marginLeft="4dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/user_photo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="33dp"  />
     </LinearLayout>
 </LinearLayout>

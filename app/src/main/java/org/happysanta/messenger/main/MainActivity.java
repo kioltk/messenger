@@ -1,19 +1,18 @@
 package org.happysanta.messenger.main;
 
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
 import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.friends.FriendsFragment;
+import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.messages.chats.ChatsListFragment;
 import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
 import org.happysanta.messenger.news.NewsListFragment;
-import org.happysanta.messenger.profile.ProfileFragment;
+import org.happysanta.messenger.user.UserFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 
 public class MainActivity extends BaseActivity
@@ -28,6 +27,8 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        LongpollService.toggle(this, "param1", "param2");
 
         mNavigationFragment = (NavigationFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -49,7 +50,7 @@ public class MainActivity extends BaseActivity
         switch (itemdId) {
             case (int) NavigationFragment.NAVIGATION_PROFILE_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new ProfileFragment())
+                        .replace(R.id.container, new UserFragment())
                         .commit();
 
                 break;

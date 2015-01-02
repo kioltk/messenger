@@ -12,16 +12,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiFriends;
-import com.vk.sdk.api.model.VKApiUserFull;
-import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKUsersArray;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.profile.ProfileDialog;
+import org.happysanta.messenger.user.UserDialog;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -35,7 +32,6 @@ public class FriendsFragment extends Fragment {
         final ListView friendsList = (ListView) rootView.findViewById(R.id.friends_list);
         final TextView statusView = (TextView) rootView.findViewById(R.id.status);
         final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progress);
-        final Button onlineButton = (Button) rootView.findViewById(R.id.online);
 
         new VKApiFriends().get().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -59,39 +55,10 @@ public class FriendsFragment extends Fragment {
             }
         });
 
- /*       onlineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                friendsList.setAdapter(null);
-                progressBar.setVisibility(View.VISIBLE);
-                new VKApiFriends().getOnline(new VKParameters(){{
-                put("fields","name,last name,age,photo_50");
-                }}).executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        friends = (VKList<VKApiUserFull>) response.parsedModel;
-                        friendsList.setAdapter(new FriendsAdapter(getActivity(), friends.toArrayList()));
-                        progressBar.setVisibility(View.GONE);
-                        if (friends.isEmpty()){
-                            statusView.setVisibility(View.VISIBLE);
-                            statusView.setText("Нет друзей онлайн");
-                        }
-                    }
-
-                    @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
-                        statusView.setText(error.toString());
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
-        }});*/
-
         friendsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                new ProfileDialog(getActivity(), friends.get(position)).show();
+                new UserDialog(getActivity(), friends.get(position)).show();
             }
         });
         return rootView;

@@ -41,7 +41,9 @@ public class VKApiUsers extends VKApiBase {
      * @return Request for load
      */
     public VKRequest get() {
-        return get(null);
+        return get(new VKParameters(){{
+            put("fields", "photo_200,activity");
+        }});
     }
 
     /**

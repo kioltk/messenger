@@ -13,7 +13,7 @@ public class VKApiFriends extends VKApiBase {
     public VKRequest get() {
         return prepareRequest("get",
                 new VKParameters() {{
-                    put("fields", "name,last_name,age,photo_50");
+                    put("fields", "name,last_name,age,photo_200");
                 }},
                 VKRequest.HttpMethod.GET, VKUsersArray.class);
     }

@@ -1,27 +1,31 @@
-package org.happysanta.messenger.profile;
+package org.happysanta.messenger.user;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.support.v4.app.FragmentActivity;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.ImageUtil;
 
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ProfileDialog {
+public class UserDialog {
 
     private final AlertDialog userDialog;
     private View dialogView;
     private int userId;
 
-    public ProfileDialog(Activity context) {
+    public UserDialog(Activity context) {
         dialogView = View.inflate(context, R.layout.dialog_friend, null);
 
 
@@ -32,17 +36,37 @@ public class ProfileDialog {
         userDialog.setCanceledOnTouchOutside(true);
     }
 
-    public ProfileDialog(Activity activity, VKApiUserFull user) {
+    public UserDialog(Activity activity, VKApiUserFull user) {
         this(activity);
         setUserName(user.toString());
         setUserId(user.id);
         setOnline(user.online);
-        setPhoto(user.photo_50);
+        setPhoto(user.getPhoto());
     }
 
     private void setPhoto(String photo) {
-        ImageView photoView = (ImageView) dialogView.findViewById(R.id.user_photo);
-        ImageLoader.getInstance().displayImage(photo,photoView);
+        final ImageView photoView = (ImageView) dialogView.findViewById(R.id.user_photo);
+        ImageUtil.showFromCache(new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        }, photo);
     }
 
     public void setUserName(String userName) {

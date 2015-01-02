@@ -32,7 +32,7 @@ import java.util.Map;
 public class LongpollService extends Service {
 
 
-    private static final String ACTION_ENABLE = "org.happysanta.messenger.core.action.FOO";
+    private static final String ACTION_TOGGLE = "org.happysanta.messenger.core.action.FOO";
     private static final String ACTION_DISABLE = "org.happysanta.messenger.core.action.BAZ";
 
 
@@ -41,9 +41,9 @@ public class LongpollService extends Service {
     private static HashMap<Integer,LongpollListener> listeners = new HashMap<Integer, LongpollListener>();
     private VKLongPollServer server;
 
-    public static void enable(Context context, String param1, String param2) {
+    public static void toggle(Context context, String param1, String param2) {
         Intent intent = new Intent(context, LongpollService.class);
-        intent.setAction(ACTION_ENABLE);
+        intent.setAction(ACTION_TOGGLE);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
@@ -62,7 +62,7 @@ public class LongpollService extends Service {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_ENABLE.equals(action)) {
+            if (ACTION_TOGGLE.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
                 startLongPoll();

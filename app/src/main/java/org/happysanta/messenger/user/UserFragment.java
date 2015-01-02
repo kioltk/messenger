@@ -1,4 +1,4 @@
-package org.happysanta.messenger.profile;
+package org.happysanta.messenger.user;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ProfileFragment extends Fragment implements LongpollListener {
+public class UserFragment extends Fragment implements LongpollListener {
     private View rootView;
     private ListView listView;
     private ArrayList<Object> updates = new ArrayList<Object>();
@@ -67,19 +67,7 @@ public class ProfileFragment extends Fragment implements LongpollListener {
             }
         });
 
-        rootView.findViewById(R.id.toggler).setOnClickListener(new View.OnClickListener() {
-            public boolean enabled = false;
-            @Override
-            public void onClick(View v) {
-                if(enabled) {
-                    LongpollService.disable(getActivity(), "param1", "param2");
-                } else {
-                    LongpollService.enable(getActivity(), "param1", "param2");
-                }
-                enabled = !enabled;
-                LongpollService.addListener(ProfileFragment.this);
-            }
-        });
+
 
 
 

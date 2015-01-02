@@ -1,5 +1,6 @@
 package org.happysanta.messenger.start;
 
+import android.app.MediaRouteButton;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,10 +15,17 @@ import com.vk.sdk.VKOpenAuthActivity;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiUsers;
+import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.util.VKUtil;
 
 import org.happysanta.messenger.MessengerApplication;
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.ProfileUtil;
 import org.happysanta.messenger.main.MainActivity;
 
 import java.util.Arrays;
@@ -25,11 +33,15 @@ import java.util.Arrays;
 
 public class StartActivity extends ActionBarActivity {
 
+    private View splash;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         VKUIHelper.onCreate(this);
         setContentView(R.layout.activity_start);
+
+        splash = findViewById(R.id.splash);
 
         if(VKSdk.wakeUpSession(this)){
             startMainActivity();
@@ -48,12 +60,41 @@ public class StartActivity extends ActionBarActivity {
         String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
         Log.d("fingerprint", Arrays.toString(fingerprints));
 
-
+        button.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                button.setVisibility(View.VISIBLE);
+                splash.setVisibility(View.GONE);
+            }
+        }, 1500);
     }
 
     private void startMainActivity() {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        finish();
+        new VKApiUsers().get().executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+            }
+
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                try {
+                    VKList<VKApiUserFull> users = (VKList<VKApiUserFull>) response.parsedModel;
+                    VKApiUserFull currentUser = users.get(0);
+                    ProfileUtil.setFromUser(currentUser);
+                }catch (Exception exp){
+
+                }
+            }
+        });
+        splash.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            }
+        },1500);
     }
 
     private void start() {

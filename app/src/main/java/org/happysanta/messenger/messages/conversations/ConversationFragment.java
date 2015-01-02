@@ -39,7 +39,7 @@ public class ConversationFragment extends BaseFragment {
 
     // ui
     private ListView messagesList;
-    private Button sendButton;
+    private View sendButton;
     private EditText editMessageText;
     private int dialogId;
     private boolean isChat;
@@ -54,7 +54,7 @@ public class ConversationFragment extends BaseFragment {
         rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         messagesList = (ListView) findViewById(R.id.messages_list);
         final TextView statusView = (TextView) findViewById(R.id.status);
-        sendButton = (Button) findViewById(R.id.send_button);
+        sendButton = findViewById(R.id.send_button);
         editMessageText = (EditText) findViewById(R.id.message_box);
         dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
         isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);

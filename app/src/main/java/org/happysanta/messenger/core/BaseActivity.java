@@ -32,7 +32,6 @@ public class BaseActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
             int paddingTop = Dimen.getStatusBarHeight();
             toolbar.setPadding(0,paddingTop, 0, 0);
-            //toolbar.color
         }
     }
 

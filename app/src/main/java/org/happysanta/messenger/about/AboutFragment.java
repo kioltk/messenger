@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.profile.ProfileDialog;
+import org.happysanta.messenger.user.UserDialog;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -33,7 +33,7 @@ public class AboutFragment extends Fragment {
                 user.first_name = "Евгений";
                 user.last_name = "Король";
                 user.id = 51916034;
-                ProfileDialog dialog = new ProfileDialog(getActivity(), user);
+                UserDialog dialog = new UserDialog(getActivity(), user);
                 dialog.disableOffline();
                 dialog.show();
 
@@ -48,7 +48,7 @@ public class AboutFragment extends Fragment {
                     user.first_name = "Артем";
                     user.last_name = "Войтехович";
                     user.id = 103850036;
-                    ProfileDialog dialog = new ProfileDialog(getActivity(), user);
+                    UserDialog dialog = new UserDialog(getActivity(), user);
                     dialog.disableOffline();
                     dialog.show();
             }
@@ -62,7 +62,7 @@ public class AboutFragment extends Fragment {
                     user.first_name = "Денис";
                     user.last_name = "Давыдов";
                     user.id = 32018303;
-                    ProfileDialog dialog = new ProfileDialog(getActivity(), user);
+                    UserDialog dialog = new UserDialog(getActivity(), user);
                     dialog.disableOffline();
                     dialog.show();
                            }
@@ -76,7 +76,7 @@ public class AboutFragment extends Fragment {
                     user.first_name = "Андрей";
                     user.last_name = "Шмельков";
                     user.id = 121935185;
-                    ProfileDialog dialog = new ProfileDialog(getActivity(), user);
+                    UserDialog dialog = new UserDialog(getActivity(), user);
                     dialog.disableOffline();
                     dialog.show();
             }

@@ -37,12 +37,6 @@
             android:textSize="16dp"
             android:text="Мужицкий статус"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/toggler"
-        android:text="toggle"
-        android:layout_gravity="center"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content" />
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

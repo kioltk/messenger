@@ -1,6 +1,7 @@
 package org.happysanta.messenger.messages.conversations;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -22,6 +25,8 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
@@ -118,13 +123,33 @@ public class ConversationsListFragment extends Fragment {
             View dialogView = getActivity().getLayoutInflater().inflate(R.layout.item_dialog, null);
             TextView titleView = (TextView) dialogView.findViewById(R.id.title);
             TextView bodyView = (TextView) dialogView.findViewById(R.id.body);
-            ImageView photoView = (ImageView) dialogView.findViewById(R.id.dialog_photo);
+            final ImageView photoView = (ImageView) dialogView.findViewById(R.id.dialog_photo);
             VKApiDialog dialog = getItem(position);
 
 
             titleView.setText(dialog.title);
             bodyView.setText(dialog.body);
-            ImageLoader.getInstance().displayImage(dialog.getPhoto(), photoView);
+            ImageUtil.showFromCache(new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            }, dialog.getPhoto());
 
             return dialogView;
         }

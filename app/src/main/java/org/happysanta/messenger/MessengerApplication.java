@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vk.sdk.VKAccessToken;
@@ -14,6 +16,7 @@ import com.vk.sdk.api.VKError;
 
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.MapUtil;
+import org.happysanta.messenger.core.util.ProfileUtil;
 import org.happysanta.messenger.main.MainActivity;
 import org.happysanta.messenger.start.StartActivity;
 
@@ -26,9 +29,19 @@ public class MessengerApplication extends Application implements VKSdkListener {
     public void onCreate() {
         super.onCreate();
         VKSdk.initialize(this, "4486133");
-        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).build());
+        ImageLoaderConfiguration imageLoaderConfig= new ImageLoaderConfiguration.Builder(this)
+                .threadPriority(Thread.MAX_PRIORITY)
+                .memoryCache(new LruMemoryCache(5 * 1024 * 1024))
+                .memoryCacheSize(5 * 1024 * 1024)
+                .memoryCacheSizePercentage(40)
+                .diskCacheSize(100 * 1024 * 1024)
+                .diskCacheFileCount(1000)
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .build();
+        ImageLoader.getInstance().init(imageLoaderConfig);
         Dimen.init(this);
         MapUtil.init(this);
+        ProfileUtil.init(this);
     }
 
 
@@ -51,6 +64,7 @@ public class MessengerApplication extends Application implements VKSdkListener {
     public void onReceiveNewToken(VKAccessToken newToken) {
         Log.d("VKSDK", "ReceiveNewToken");
         newToken.saveTokenToSharedPreferences(getApplicationContext(),VKSdk.VK_SDK_ACCESS_TOKEN_PREF_KEY);
+        ProfileUtil.setUserId(newToken.userId);
 
     }
 
