@@ -202,4 +202,10 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
     public boolean isChat() {
         return chat_id!=0;
     }
+
+    public String getBody() {
+        if(body!=null && !body.equals(""))
+            return body;
+        return null;
+    }
 }

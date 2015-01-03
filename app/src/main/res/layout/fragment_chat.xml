@@ -21,7 +21,11 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
+    <View
+        android:layout_above="@+id/new_message_holder"
+        android:background="@drawable/new_message_holder_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
     <RelativeLayout
         android:id="@+id/new_message_holder"
         android:layout_alignParentBottom="true"
@@ -44,7 +48,7 @@
             />
         <ImageButton
             android:textColor="#fff"
-            android:background="#00000000"
+            android:background="@drawable/send_background"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:id="@+id/send_button"

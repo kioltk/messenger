@@ -41,9 +41,7 @@ public class VKApiUsers extends VKApiBase {
      * @return Request for load
      */
     public VKRequest get() {
-        return get(new VKParameters(){{
-            put("fields", "photo_200,activity");
-        }});
+        return get(null);
     }
 
     /**
@@ -53,6 +51,11 @@ public class VKApiUsers extends VKApiBase {
      * @return Request for load
      */
     public VKRequest get(VKParameters params) {
+        if(params==null){
+            params = new VKParameters(){{
+                put("fields", "photo_200,activity");
+            }};
+        }
         return prepareRequest("get", params, VKRequest.HttpMethod.GET, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {

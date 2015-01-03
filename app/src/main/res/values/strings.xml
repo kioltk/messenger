@@ -28,5 +28,7 @@
     <string name="map_show_cancel">Отмена</string>
     <string name="map_show_message">Открыть карту в другом приложении?</string>
     <string name="navigation_news">Новости</string>
+    <string name="conversation_body">You: %s</string>
+    <string name="conversation_action_profile">Profile</string>
 
 </resources>

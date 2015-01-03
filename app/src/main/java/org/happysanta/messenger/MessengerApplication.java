@@ -18,6 +18,7 @@ import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.MapUtil;
 import org.happysanta.messenger.core.util.ProfileUtil;
 import org.happysanta.messenger.main.MainActivity;
+import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.start.StartActivity;
 
 /**
@@ -42,6 +43,7 @@ public class MessengerApplication extends Application implements VKSdkListener {
         Dimen.init(this);
         MapUtil.init(this);
         ProfileUtil.init(this);
+        DialogUtil.init(this);
     }
 
 

@@ -29,12 +29,7 @@ public class AboutFragment extends Fragment {
         jenyaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VKApiUserFull user = new VKApiUserFull();
-                user.first_name = "Евгений";
-                user.last_name = "Король";
-                user.id = 51916034;
-                UserDialog dialog = new UserDialog(getActivity(), user);
-                dialog.disableOffline();
+                UserDialog dialog = new UserDialog(getActivity(), 51916034);
                 dialog.show();
 
             }
@@ -44,12 +39,7 @@ public class AboutFragment extends Fragment {
         artemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    VKApiUserFull user = new VKApiUserFull();
-                    user.first_name = "Артем";
-                    user.last_name = "Войтехович";
-                    user.id = 103850036;
-                    UserDialog dialog = new UserDialog(getActivity(), user);
-                    dialog.disableOffline();
+                    UserDialog dialog = new UserDialog(getActivity(), 103850036);
                     dialog.show();
             }
         });
@@ -58,12 +48,7 @@ public class AboutFragment extends Fragment {
         denyaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    VKApiUserFull user = new VKApiUserFull();
-                    user.first_name = "Денис";
-                    user.last_name = "Давыдов";
-                    user.id = 32018303;
-                    UserDialog dialog = new UserDialog(getActivity(), user);
-                    dialog.disableOffline();
+                    UserDialog dialog = new UserDialog(getActivity(), 32018303);
                     dialog.show();
                            }
         });
@@ -72,12 +57,7 @@ public class AboutFragment extends Fragment {
         andreyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    VKApiUserFull user = new VKApiUserFull();
-                    user.first_name = "Андрей";
-                    user.last_name = "Шмельков";
-                    user.id = 121935185;
-                    UserDialog dialog = new UserDialog(getActivity(), user);
-                    dialog.disableOffline();
+                    UserDialog dialog = new UserDialog(getActivity(), 121935185);
                     dialog.show();
             }
         });

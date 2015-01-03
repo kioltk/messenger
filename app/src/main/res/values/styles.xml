@@ -1,15 +1,16 @@
 <resources>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark_shadow</item>
         <item name="colorAccent">@color/color_accent</item>
-        <item name="colorControlNormal">@color/color_primary</item>
+        <!--item name="colorControlNormal">@color/color_primary</item>
         <item name="colorControlActivated">@color/color_primary</item>
-        <item name="colorControlHighlight">@color/color_primary</item>
+        <item name="colorControlHighlight">@color/color_primary</item-->
         <item name="android:windowBackground">@color/window_background</item>
-        <item name="android:textColorPrimary">#fff</item>
-        <item name="android:textColorSecondary">#fff</item>
+        <item name="android:textColorPrimary">#f00</item>
+        <item name="android:textColorSecondary">#0f0</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
     <style name="AppTheme" parent="AppTheme.Base">
@@ -24,11 +25,15 @@
         <item name="color">@android:color/white</item>
     </style>
 
-    <style name="toolbar" parent="Theme.AppCompat">
-        <item name="android:textColorPrimary">#fff</item>
-        <item name="android:colorBackground">@color/color_primary</item>
-        <item name="actionMenuTextColor">#fff</item>
-        <item name="android:textColorSecondary">#fff</item>
+    <style name="toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionMenuTextColor">#fff</item><!-- actionbar buttons text color -->
+        <item name="android:textColorPrimary">#fff</item><!-- actionbar text color -->
+        <item name="android:textColorSecondary">#fff</item><!-- actionbar buttons color -->
+        <!--item name="android:background">@color/color_primary</item--><!-- it have to be defined inside Toolbar tag -->
+    </style>
+
+    <style name="actionbar_popup" parent="ThemeOverlay.AppCompat.Light">
+        <!--<item name="android:textColorPrimary">#444</item>-->
     </style>
 
 </resources>

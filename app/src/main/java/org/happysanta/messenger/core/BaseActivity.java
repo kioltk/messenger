@@ -3,6 +3,7 @@ package org.happysanta.messenger.core;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,6 +18,8 @@ import org.happysanta.messenger.core.util.Dimen;
  * Created by d_great on 23.12.14.
  */
 public class BaseActivity extends ActionBarActivity {
+    private Toolbar toolbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +30,7 @@ public class BaseActivity extends ActionBarActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         VKUIHelper.onCreate(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         if(toolbar!=null) {
             setSupportActionBar(toolbar);
             int paddingTop = Dimen.getStatusBarHeight();
@@ -45,5 +48,9 @@ public class BaseActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         VKUIHelper.onResume(this);
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 }

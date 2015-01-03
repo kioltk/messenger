@@ -18,7 +18,7 @@
             android:paddingTop="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="org.happysanta.messenger.messages.ChatActivity"
+            tools:context="org.happysanta.messenger.messages.DialogActivity"
             tools:ignore="MergeRootFrame" />
 
     </RelativeLayout>
@@ -29,5 +29,12 @@
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/color_primary"
-        app:theme="@style/toolbar" />
+        app:theme="@style/toolbar"
+        app:popupTheme="@style/actionbar_popup"
+        />
+    <View
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
 </RelativeLayout>
