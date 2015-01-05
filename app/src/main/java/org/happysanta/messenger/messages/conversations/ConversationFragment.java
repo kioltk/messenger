@@ -2,10 +2,14 @@ package org.happysanta.messenger.messages.conversations;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,8 +27,10 @@ import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
-import org.happysanta.messenger.messages.ChatActivity;
+import org.happysanta.messenger.messages.DialogActivity;
+import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
+import org.happysanta.messenger.user.UserDialog;
 
 import java.util.ArrayList;
 
@@ -44,6 +50,7 @@ public class ConversationFragment extends BaseFragment {
     private int dialogId;
     private boolean isChat;
     private MessagesAdapter messagesAdapter;
+    private DialogUtil dialogUtil;
 
     public ConversationFragment() {
     }
@@ -56,11 +63,13 @@ public class ConversationFragment extends BaseFragment {
         final TextView statusView = (TextView) findViewById(R.id.status);
         sendButton = findViewById(R.id.send_button);
         editMessageText = (EditText) findViewById(R.id.message_box);
-        dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
-        isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
+        dialogId = getArguments().getInt(DialogActivity.ARG_DIALOGID, 0);
+        isChat = getArguments().getBoolean(DialogActivity.ARG_ISCHAT, false);
 
+        dialogUtil = new DialogUtil(isChat, dialogId);
 
         statusView.setText("loading");
+        editMessageText.setText(dialogUtil.getBody());
 
         VKRequest request = isChat? new VKApiMessages().getChatHistory(dialogId):new VKApiMessages().getHistory(dialogId);
                 request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -124,6 +133,23 @@ public class ConversationFragment extends BaseFragment {
             }
         });
 
+        editMessageText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dialogUtil.saveBody(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         return rootView;
     }
 
@@ -140,6 +166,28 @@ public class ConversationFragment extends BaseFragment {
                 //messagesList.scrollTo(0,messagesList.getHeight());
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu,MenuInflater menuInflater) {
+
+        if(isChat) {
+            menuInflater.inflate(R.menu.menu_chat, menu);
+        } else {
+            menuInflater.inflate(R.menu.menu_conversation, menu);
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_profile:
+                UserDialog profileDialog = new UserDialog(activity, dialogId);
+                profileDialog.show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

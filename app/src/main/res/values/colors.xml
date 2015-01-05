@@ -37,4 +37,6 @@
     <color name="navigation_item_text_normal">#212121</color>
     <color name="navigation_item_text_selected">#3873b8</color>
     <color name="window_background">#e8ecf0</color>
+    <color name="conversation_unread_background">#e0e0e4</color>
+    <color name="dialog_unread_background">#d0e0e0</color>
 </resources>

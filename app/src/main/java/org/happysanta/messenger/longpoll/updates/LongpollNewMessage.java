@@ -62,6 +62,6 @@ public class LongpollNewMessage extends VKApiMessage {
     }
     @Override
     public String toString() {
-        return "Message " + (isChat ? "in the chat " + chat_id :"")+ " from " + user_id + ". \"" + body + "\"";
+        return "Message " + (isChat ? "in the chat " + chat_id :"")+ " from " + user_id+ "\". Attachments: " + attachments.size() + ". \"" + getBody() ;
     }
 }

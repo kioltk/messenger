@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,7 +22,7 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.messages.ChatActivity;
+import org.happysanta.messenger.messages.DialogActivity;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -44,7 +43,7 @@ public class ChatsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 VKApiDialog dialog = dialogs.get(position);
-                Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
+                Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
                 startActivity(intent);
             }
         });

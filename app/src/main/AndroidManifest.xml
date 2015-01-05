@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.happysanta.messenger.messages.ChatActivity"
+            android:name=".messages.DialogActivity"
             android:label="@string/title_activity_chat" >
         </activity>
 

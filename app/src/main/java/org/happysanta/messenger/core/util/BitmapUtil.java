@@ -16,6 +16,9 @@ import android.graphics.Shader;
  */
 public class BitmapUtil {
     public static Bitmap resize(Bitmap bitmap, int newWidth, int newHeight) {
+        if(bitmap==null){
+            return null;
+        }
 
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
@@ -31,6 +34,9 @@ public class BitmapUtil {
     }
 
     public static Bitmap circle(Bitmap bitmap) {
+        if(bitmap==null){
+            return null;
+        }
 
         Bitmap circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         BitmapShader shader = new BitmapShader(bitmap,  Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
