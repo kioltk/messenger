@@ -13,7 +13,6 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.settings.customElements.PopupPreference;
 
@@ -45,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         // TODO fix RingtonePreference
         // listener below still does not work
-        // bindPreferenceSummaryToValue(findPreference(NOTIFY_RINGTONE_KEY));
+        bindPreferenceSummaryToValue(findPreference(NOTIFY_RINGTONE_KEY));
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
