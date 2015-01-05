@@ -15,21 +15,12 @@ import org.happysanta.messenger.R;
 
 public class StyledPreferencesCategory extends PreferenceCategory {
 
-
-    public StyledPreferencesCategory(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     public StyledPreferencesCategory(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     public StyledPreferencesCategory(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public StyledPreferencesCategory(Context context) {
-        super(context);
     }
 
     @Override

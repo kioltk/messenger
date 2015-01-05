@@ -17,10 +17,6 @@ public class PopupPreference extends DialogPreference {
 
     private SharedPreferences mPreferences;
 
-    public PopupPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     public PopupPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
@@ -28,11 +24,6 @@ public class PopupPreference extends DialogPreference {
     public PopupPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
-    public PopupPreference(Context context) {
-        super(context);
-    }
-
 
     @Override
     protected View onCreateDialogView() {
