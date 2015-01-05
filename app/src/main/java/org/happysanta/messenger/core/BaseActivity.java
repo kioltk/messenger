@@ -14,6 +14,8 @@ import org.happysanta.messenger.core.util.Dimen;
  */
 public class BaseActivity extends ActionBarActivity {
 
+    private Toolbar toolbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +27,7 @@ public class BaseActivity extends ActionBarActivity {
         super.setContentView(layoutResID);
         VKUIHelper.onCreate(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         if(toolbar!=null) {
 
@@ -47,5 +49,9 @@ public class BaseActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         VKUIHelper.onResume(this);
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 }

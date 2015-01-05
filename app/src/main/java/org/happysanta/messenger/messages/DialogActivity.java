@@ -24,12 +24,12 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
-public class ChatActivity extends BaseActivity {
+public class DialogActivity extends BaseActivity {
 
-    public  static final String ARG_DIALOGID   = "arg_dialogid";
-    public  static final String ARG_ISCHAT     = "arg_ischat";
-    private static final String ARG_TITLE      = "arg_title";
-    private static final String ARG_LOGO       = "arg_logo";
+    public  static final String ARG_DIALOGID    = "arg_dialogid";
+    public  static final String ARG_ISCHAT      = "arg_ischat";
+    private static final String ARG_TITLE       = "arg_title";
+    private static final String ARG_LOGO        = "arg_logo";
 
     private ConversationFragment conversationFragment;
     private String title;
@@ -46,12 +46,14 @@ public class ChatActivity extends BaseActivity {
         VKUIHelper.onCreate(this);
         setContentView(R.layout.activity_chat);
 
-        Bundle bundle = getIntent().getExtras();
 
-        title       = bundle.getString (ARG_TITLE,   "Dialog");
-        logo        = bundle.getString (ARG_LOGO,     null);
-        dialogId    = bundle.getInt    (ARG_DIALOGID, 0);
-        isChat      = bundle.getBoolean(ARG_ISCHAT,   false);
+
+
+        Bundle bundle = getIntent().getExtras();
+        title = bundle.getString(ARG_TITLE, "Dialog");
+        logo = bundle.getString(ARG_LOGO, null);
+        dialogId = bundle.getInt(DialogActivity.ARG_DIALOGID, 0);
+        isChat = bundle.getBoolean(DialogActivity.ARG_ISCHAT, false);
 
         setTitle(title);
 
@@ -118,7 +120,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     public static Intent getActivityIntent(Context context, VKApiDialog dialog) {
-        Intent intent = new Intent(context, ChatActivity.class);
+        Intent intent = new Intent(context, DialogActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_DIALOGID, dialog.getId());
         bundle.putBoolean(ARG_ISCHAT, dialog.isChat());

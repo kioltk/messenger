@@ -29,6 +29,13 @@
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/color_primary"
-        app:theme="@style/ToolBarStyle" />
+        app:theme="@style/toolbar"
+        app:popupTheme="@style/actionbar_popup"
+        />
+    <View
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
     
 </RelativeLayout>
