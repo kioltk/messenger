@@ -64,7 +64,7 @@ public class StartActivity extends ActionBarActivity {
             @Override
             public void run() {
                 button.setVisibility(View.VISIBLE);
-                splash.setVisibility(View.GONE);
+                //splash.setVisibility(View.GONE);
             }
         }, 1500);
     }

@@ -1,5 +1,6 @@
 package org.happysanta.messenger.main;
 
+import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity
     public void onNavigationDrawerItemSelected(int itemdId) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        getFragmentManager().beginTransaction().replace(R.id.container,new Fragment()).commit();
         switch (itemdId) {
             case (int) NavigationFragment.NAVIGATION_PROFILE_ID:
                 fragmentManager.beginTransaction()
@@ -75,7 +77,8 @@ public class MainActivity extends BaseActivity
                         .commit();
                 break;
             case (int) NavigationFragment.NAVIGATION_SETTINGS_ID:
-                fragmentManager.beginTransaction()
+                fragmentManager.beginTransaction().replace(R.id.container, new android.support.v4.app.Fragment()).commit();
+                getFragmentManager().beginTransaction()
                         .replace(R.id.container, new SettingsFragment())
                         .commit();
                 break;

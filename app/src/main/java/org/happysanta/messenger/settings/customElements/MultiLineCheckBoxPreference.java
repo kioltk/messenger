@@ -12,8 +12,21 @@ import android.widget.TextView;
  */
 public class MultiLineCheckBoxPreference extends CheckBoxPreference {
 
+
+    public MultiLineCheckBoxPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public MultiLineCheckBoxPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
     public MultiLineCheckBoxPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public MultiLineCheckBoxPreference(Context context) {
+        super(context);
     }
 
     @Override
