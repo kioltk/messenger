@@ -2,10 +2,12 @@ package org.happysanta.messenger.messages.conversations;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKError;
@@ -25,13 +26,14 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
-import org.happysanta.messenger.messages.ChatActivity;
+import org.happysanta.messenger.messages.DialogActivity;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,7 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ConversationsListFragment extends Fragment {
+public class ConversationsListFragment extends BaseFragment {
     private View rootView;
     private VKList<VKApiDialog> dialogs;
     private TextView status;
@@ -55,7 +57,7 @@ public class ConversationsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 VKApiDialog dialog = dialogs.get(position);
-                Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
+                Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
                 startActivity(intent);
             }
         });
@@ -74,7 +76,7 @@ public class ConversationsListFragment extends Fragment {
                         for (LongpollNewMessage newMessage : newMessages) {
                             for (VKApiDialog dialog : dialogs) {
                                 if(dialog.dialogId==newMessage.user_id){
-                                    dialog.body = newMessage.body;
+                                    dialog.setLastMessage(newMessage);
                                     dialogs.remove(dialog);
                                     dialogs.add(0,dialog);
                                     break;
@@ -101,6 +103,11 @@ public class ConversationsListFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_chats, menu);
+    }
 
     private class ConversationsAdapter extends BaseAdapter {
         @Override
@@ -120,15 +127,39 @@ public class ConversationsListFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View dialogView = getActivity().getLayoutInflater().inflate(R.layout.item_dialog, null);
+            View dialogView = activity.getLayoutInflater().inflate(R.layout.item_dialog, null);
+
             TextView titleView = (TextView) dialogView.findViewById(R.id.title);
             TextView bodyView = (TextView) dialogView.findViewById(R.id.body);
+            TextView dateView = (TextView) dialogView.findViewById(R.id.date);
+            ImageView onlineView = (ImageView) dialogView.findViewById(R.id.online);
             final ImageView photoView = (ImageView) dialogView.findViewById(R.id.dialog_photo);
+
+
             VKApiDialog dialog = getItem(position);
 
 
             titleView.setText(dialog.title);
-            bodyView.setText(dialog.body);
+            if(dialog.lastMessage.out) {
+                bodyView.setText(getString(R.string.conversation_body, dialog.getBody()));
+            } else {
+                bodyView.setText(dialog.getBody());
+            }
+
+            if(!dialog.lastMessage.read_state){
+                dialogView.setBackgroundColor(getResources().getColor(R.color.conversation_unread_background));
+                titleView.setTypeface(null, Typeface.BOLD);
+                bodyView.setTypeface(null, Typeface.BOLD);
+            }else{
+                dialogView.setBackgroundDrawable(null);
+                titleView.setTypeface(null);
+                bodyView.setTypeface(null);
+            }
+
+            onlineView.setVisibility(dialog.isOnline()?View.VISIBLE:View.GONE);
+
+
+            dateView.setText("" + dialog.getDate());
             ImageUtil.showFromCache(new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {

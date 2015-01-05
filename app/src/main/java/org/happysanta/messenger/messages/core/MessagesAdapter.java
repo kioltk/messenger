@@ -49,7 +49,7 @@ public class MessagesAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return messages.size()+1;
+        return messages.size() + 1;
     }
 
     @Override
@@ -65,10 +65,9 @@ public class MessagesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(position==messages.size()){
+        if (position == messages.size()) {
             return typingView;
         }
-
 
 
         View itemView = LayoutInflater.from(activity).inflate(R.layout.item_message, null);
@@ -87,33 +86,40 @@ public class MessagesAdapter extends BaseAdapter {
 
         final VKApiMessage message = getItem(position);
 
-        if(message.body!=null&&!message.body.equals("")) {
-            if(message.emoji&&message.body.length()==2){
+        if (!message.read_state) {
+            itemView.setBackgroundColor(activity.getResources().getColor(R.color.dialog_unread_background));
+        } else {
+            itemView.setBackgroundDrawable(null);
+        }
+
+
+        if (message.body != null && !message.body.equals("")) {
+            if (message.emoji && message.body.length() == 2) {
                 textView.setVisibility(View.GONE);
                 emojiView.setVisibility(View.VISIBLE);
                 bodyView = emojiView;
                 // todo set emoji?
-            }else {
+            } else {
                 textView.setText(message.body);
                 bodyView = textView;
             }
-        }else{
-            if(message.sticker!=null){
+        } else {
+            if (message.sticker != null) {
                 stickerView.setVisibility(View.VISIBLE);
                 textView.setVisibility(View.GONE);
                 bodyView = stickerView;
                 // todo sticker
             } else {
-                if(message.geo!=null){
+                if (message.geo != null) {
                     textView.setVisibility(View.GONE);
                     bodyView = mapView;
-                }else {
+                } else {
                     textView.setText("ERROR");
                     bodyView = textView;
                 }
             }
         }
-        if(message.geo!=null){
+        if (message.geo != null) {
             final VKApiGeo geo = message.geo;
             mapView.setVisibility(View.VISIBLE);
             mapView.setOnClickListener(new View.OnClickListener() {
@@ -167,39 +173,39 @@ public class MessagesAdapter extends BaseAdapter {
 
 
         LinearLayout.LayoutParams itemLayoutParams = (LinearLayout.LayoutParams) bodyView.getLayoutParams();
-        int itemDefaultPadding =  Dimen.get(R.dimen.default_message_padding);
+        int itemDefaultPadding = Dimen.get(R.dimen.default_message_padding);
         int itemLeftPadding = itemDefaultPadding;
         int itemTopPadding = itemDefaultPadding;
         int itemRightPadding = itemDefaultPadding;
         int itemBottomPadding = itemDefaultPadding;
 
-        if(message.out) {
+        if (message.out) {
             itemLayoutParams.gravity = Gravity.RIGHT;
             dateLayoutParams.gravity = Gravity.RIGHT;
             mapLayoutParams.gravity = Gravity.RIGHT;
             itemLeftPadding = itemDefaultPadding * 4;
 
-            if(position!=0 && messages.get(position-1).out){
+            if (position != 0 && messages.get(position - 1).out) {
                 itemTopPadding = itemDefaultPadding / 4;
             }
-            if(position<messages.size()-1 && messages.get(position+1).out){
-                itemBottomPadding = itemDefaultPadding /4;
+            if (position < messages.size() - 1 && messages.get(position + 1).out) {
+                itemBottomPadding = itemDefaultPadding / 4;
             }
         } else {
             itemLayoutParams.gravity = Gravity.LEFT;
             dateLayoutParams.gravity = Gravity.LEFT;
             mapLayoutParams.gravity = Gravity.LEFT;
             itemRightPadding = itemDefaultPadding * 4;
-            if(position!=0 && !messages.get(position-1).out){
+            if (position != 0 && !messages.get(position - 1).out) {
                 itemTopPadding = itemDefaultPadding / 4;
             }
-            if(position<messages.size()-1 && !messages.get(position+1).out){
-                itemBottomPadding = itemDefaultPadding /4;
+            if (position < messages.size() - 1 && !messages.get(position + 1).out) {
+                itemBottomPadding = itemDefaultPadding / 4;
             }
         }
 
 
-        itemView.setPadding(itemLeftPadding,itemTopPadding, itemRightPadding, itemBottomPadding);
+        itemView.setPadding(itemLeftPadding, itemTopPadding, itemRightPadding, itemBottomPadding);
         bodyView.setLayoutParams(itemLayoutParams);
         mapView.setLayoutParams(mapLayoutParams);
         dateView.setLayoutParams(dateLayoutParams);
@@ -230,7 +236,7 @@ public class MessagesAdapter extends BaseAdapter {
             public void run() {
                 typingView.setVisibility(View.INVISIBLE);
             }
-        },5500);
+        }, 5500);
     }
 
     public void send(final VKApiMessage message) {
