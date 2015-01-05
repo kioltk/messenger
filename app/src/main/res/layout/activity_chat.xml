@@ -30,5 +30,5 @@
         android:minHeight="?attr/actionBarSize"
         android:background="@color/color_primary"
         app:theme="@style/ToolBarStyle" />
-
+    
 </RelativeLayout>
