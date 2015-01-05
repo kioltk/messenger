@@ -8,10 +8,13 @@
         <item name="colorControlActivated">@color/color_primary</item>
         <item name="colorControlHighlight">@color/color_primary</item>
         <item name="android:windowBackground">@color/window_background</item>
-        <item name="android:textColorPrimary">#fff</item>
-        <item name="android:textColorSecondary">#fff</item>
+
+        <!--<item name="android:textColorPrimary">#fff</item>-->
+        <!--<item name="android:textColorSecondary">#fff</item>-->
+
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
+
     <style name="AppTheme" parent="AppTheme.Base">
     </style>
 
@@ -24,7 +27,7 @@
         <item name="color">@android:color/white</item>
     </style>
 
-    <style name="toolbar" parent="Theme.AppCompat">
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
         <item name="android:textColorPrimary">#fff</item>
         <item name="android:colorBackground">@color/color_primary</item>
         <item name="actionMenuTextColor">#fff</item>

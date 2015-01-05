@@ -29,5 +29,6 @@
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/color_primary"
-        app:theme="@style/toolbar" />
+        app:theme="@style/ToolBarStyle" />
+
 </RelativeLayout>

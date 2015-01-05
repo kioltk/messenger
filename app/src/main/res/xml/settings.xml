@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.happysanta.messenger.settings.customElements.StyledPreferencesCategory
+        android:title="@string/pref_category_notifications">
+
+        <CheckBoxPreference
+            android:key="@string/pref_key_notifications_enable"
+            android:title="Enable"
+            android:defaultValue="true"
+            />
+
+        <RingtonePreference
+            android:key="@string/pref_key_notify_ringtone"
+            android:title="@string/pref_title_notify_ringtone"
+            android:summary="Summary"
+            android:dependency="@string/pref_key_notifications_enable"
+            android:ringtoneType="notification"
+            android:showDefault="true"
+            android:showSilent="true"
+            android:defaultValue="content://settings/system/notification_sound"
+            />
+
+        <CheckBoxPreference
+            android:key="@string/pref_key_vibration"
+            android:title="@string/pref_title_vibration"
+            android:dependency="@string/pref_key_notifications_enable"
+            android:defaultValue="false"
+            />
+
+        <CheckBoxPreference
+            android:key="@string/pref_key_led_blink"
+            android:title="@string/pref_title_led_blink"
+            android:dependency="@string/pref_key_notifications_enable"
+            android:defaultValue="false"
+            />
+
+        <CheckBoxPreference
+            android:key="@string/pref_key_popup_notify"
+            android:title="@string/pref_title_popup_notify"
+            android:dependency="@string/pref_key_notifications_enable"
+            android:defaultValue="true"
+            />
+
+    </org.happysanta.messenger.settings.customElements.StyledPreferencesCategory>
+
+    <org.happysanta.messenger.settings.customElements.StyledPreferencesCategory
+        android:title="@string/pref_category_sync">
+
+        <org.happysanta.messenger.settings.customElements.PopupPreference
+            android:key="@string/pref_key_sync"
+            android:title="@string/pref_title_sync"
+            android:summary="Off"
+            android:dialogTitle="Synced contacts"
+            android:dialogMessage="Do you want start syncing your phone contacts with VK Messenger?"
+            android:positiveButtonText="OK"
+            android:negativeButtonText="Cancel"
+            />
+
+    </org.happysanta.messenger.settings.customElements.StyledPreferencesCategory>
+
+    <org.happysanta.messenger.settings.customElements.StyledPreferencesCategory
+        android:title="@string/pref_category_chat_heads">
+
+        <CheckBoxPreference
+            android:key="@string/pref_key_chat_heads"
+            android:title="Enable"
+            android:defaultValue="true"
+            />
+
+        <org.happysanta.messenger.settings.customElements.MultiLineCheckBoxPreference
+            android:key="@string/pref_key_chat_heads_hide_on_fullscreen"
+            android:title="@string/pref_title_chat_heads_hide_on_fullscreen"
+            android:dependency="@string/pref_key_chat_heads"
+            android:defaultValue="false"
+            />
+
+        <org.happysanta.messenger.settings.customElements.MultiLineCheckBoxPreference
+            android:key="@string/pref_key_chat_heads_start_from_tray"
+            android:title="@string/pref_title_chat_heads_start_from_tray"
+            android:dependency="@string/pref_key_chat_heads"
+            android:defaultValue="true"
+            />
+
+    </org.happysanta.messenger.settings.customElements.StyledPreferencesCategory>
+
+</PreferenceScreen>

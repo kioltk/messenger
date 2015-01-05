@@ -28,5 +28,45 @@
     <string name="map_show_cancel">Отмена</string>
     <string name="map_show_message">Открыть карту в другом приложении?</string>
     <string name="navigation_news">Новости</string>
+    <string name="pref_category_notifications">Notifications</string>
+    <string name="pref_key_notifications_enable">pref_notifications_enable</string>
+    <string name="pref_key_notify_ringtone">pref_notify_ringtone</string>
+    <string name="pref_title_notify_ringtone">Sound</string>
+    <string name="pref_summary_silent">Silent</string>
+    <string name="pref_title_vibration">Vibration</string>
+    <string name="pref_key_vibration">pref_vibration</string>
+    <string name="pref_key_led_blink">pref_led_blink</string>
+    <string name="pref_title_led_blink">Blinking LED</string>
+    <string name="pref_key_popup_notify">pref_popup_notify</string>
+    <string name="pref_title_popup_notify">Pop-up notifications</string>
+    <string name="pref_key_sync">pref_contact_sync</string>
+    <string name="pref_title_sync">Synced contacts</string>
+    <string name="pref_category_sync">Contact sync</string>
+    <string name="pref_category_chat_heads">Chat heads</string>
+    <string name="pref_key_chat_heads">pref_chat_heads</string>
+    <string name="pref_key_chat_heads_hide_on_fullscreen">
+        pref_chat_heads_hide_on_fullscreen
+    </string>
+    <string name="pref_title_chat_heads_hide_on_fullscreen">
+
+        Hide when using apps that take up the full screen
+
+    </string>
+    <string name="pref_key_chat_heads_start_from_tray">
+
+        pref_chat_heads_start_from_tray
+
+    </string>
+    <string name="pref_title_chat_heads_start_from_tray">
+
+        Start conversation from the notification tray
+
+    </string>
+    <string name="pref_msg_stop_sync">Stop syncing?</string>
+    <string name="pref_msg_start_sync">
+
+        Do you want to start syncing your phone contacts with VK Messenger?
+
+    </string>
 
 </resources>

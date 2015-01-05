@@ -16,12 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiDialog;
-import com.vk.sdk.api.model.VKApiMessage;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
@@ -31,10 +26,11 @@ import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
 public class ChatActivity extends BaseActivity {
 
-    public static final String ARG_DIALOGID = "arg_dialogid";
-    public static final java.lang.String ARG_ISCHAT = "arg_ischat";
-    private static final String ARG_TITLE = "arg_title";
-    private static final String ARG_LOGO = "arg_logo";
+    public  static final String ARG_DIALOGID   = "arg_dialogid";
+    public  static final String ARG_ISCHAT     = "arg_ischat";
+    private static final String ARG_TITLE      = "arg_title";
+    private static final String ARG_LOGO       = "arg_logo";
+
     private ConversationFragment conversationFragment;
     private String title;
     private String logo;
@@ -50,14 +46,12 @@ public class ChatActivity extends BaseActivity {
         VKUIHelper.onCreate(this);
         setContentView(R.layout.activity_chat);
 
-
-
-
         Bundle bundle = getIntent().getExtras();
-        title = bundle.getString(ARG_TITLE, "Dialog");
-        logo = bundle.getString(ARG_LOGO, null);
-        dialogId = bundle.getInt(ChatActivity.ARG_DIALOGID, 0);
-        isChat = bundle.getBoolean(ChatActivity.ARG_ISCHAT, false);
+
+        title       = bundle.getString (ARG_TITLE,   "Dialog");
+        logo        = bundle.getString (ARG_LOGO,     null);
+        dialogId    = bundle.getInt    (ARG_DIALOGID, 0);
+        isChat      = bundle.getBoolean(ARG_ISCHAT,   false);
 
         setTitle(title);
 
