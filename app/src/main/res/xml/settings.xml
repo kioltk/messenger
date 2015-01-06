@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <org.happysanta.messenger.settings.customElements.StyledPreferencesCategory
+    <org.happysanta.messenger.settings.views.StyledPreferencesCategory
         android:title="@string/pref_category_notifications">
 
         <CheckBoxPreference
@@ -42,12 +42,12 @@
             android:defaultValue="true"
             />
 
-    </org.happysanta.messenger.settings.customElements.StyledPreferencesCategory>
+    </org.happysanta.messenger.settings.views.StyledPreferencesCategory>
 
-    <org.happysanta.messenger.settings.customElements.StyledPreferencesCategory
+    <org.happysanta.messenger.settings.views.StyledPreferencesCategory
         android:title="@string/pref_category_sync">
 
-        <org.happysanta.messenger.settings.customElements.PopupPreference
+        <org.happysanta.messenger.settings.views.PopupPreference
             android:key="@string/pref_key_sync"
             android:title="@string/pref_title_sync"
             android:summary="Off"
@@ -57,9 +57,9 @@
             android:negativeButtonText="Cancel"
             />
 
-    </org.happysanta.messenger.settings.customElements.StyledPreferencesCategory>
+    </org.happysanta.messenger.settings.views.StyledPreferencesCategory>
 
-    <org.happysanta.messenger.settings.customElements.StyledPreferencesCategory
+    <org.happysanta.messenger.settings.views.StyledPreferencesCategory
         android:title="@string/pref_category_chat_heads">
 
         <CheckBoxPreference
@@ -68,20 +68,20 @@
             android:defaultValue="true"
             />
 
-        <org.happysanta.messenger.settings.customElements.MultiLineCheckBoxPreference
+        <org.happysanta.messenger.settings.views.MultiLineCheckBoxPreference
             android:key="@string/pref_key_chat_heads_hide_on_fullscreen"
             android:title="@string/pref_title_chat_heads_hide_on_fullscreen"
             android:dependency="@string/pref_key_chat_heads"
             android:defaultValue="false"
             />
 
-        <org.happysanta.messenger.settings.customElements.MultiLineCheckBoxPreference
+        <org.happysanta.messenger.settings.views.MultiLineCheckBoxPreference
             android:key="@string/pref_key_chat_heads_start_from_tray"
             android:title="@string/pref_title_chat_heads_start_from_tray"
             android:dependency="@string/pref_key_chat_heads"
             android:defaultValue="true"
             />
 
-    </org.happysanta.messenger.settings.customElements.StyledPreferencesCategory>
+    </org.happysanta.messenger.settings.views.StyledPreferencesCategory>
 
 </PreferenceScreen>

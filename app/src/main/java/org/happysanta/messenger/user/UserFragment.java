@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,6 +21,7 @@ import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollListener;
 
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class UserFragment extends Fragment implements LongpollListener {
+public class UserFragment extends BaseFragment implements LongpollListener {
     private View rootView;
     private ListView listView;
     private ArrayList<Object> updates = new ArrayList<Object>();
@@ -42,8 +45,6 @@ public class UserFragment extends Fragment implements LongpollListener {
 
         ImageView imageView = (ImageView) rootView.findViewById(R.id.user_photo);
 
-        listView = (ListView) rootView.findViewById(R.id.list_profile);
-        listView.setAdapter(new UpdatesAdapter());
         // todo это всё нужно делать заранее на экране загрузки
         new VKApiUsers().get().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -72,6 +73,12 @@ public class UserFragment extends Fragment implements LongpollListener {
 
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_profile, menu);
     }
 
     @Override

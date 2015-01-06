@@ -14,7 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.settings.customElements.PopupPreference;
+import org.happysanta.messenger.settings.views.PopupPreference;
 
 /**
  * Created by Jesus Christ. Amen.
