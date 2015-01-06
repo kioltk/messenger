@@ -30,9 +30,8 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class UserFragment extends BaseFragment implements LongpollListener {
+public class UserFragment extends BaseFragment {
     private View rootView;
-    private ListView listView;
     private ArrayList<Object> updates = new ArrayList<Object>();
 
     @Override
@@ -81,11 +80,6 @@ public class UserFragment extends BaseFragment implements LongpollListener {
         inflater.inflate(R.menu.menu_profile, menu);
     }
 
-    @Override
-    public void onLongPollUpdate(Object update) {
-        updates.add(update);
-        ((UpdatesAdapter)listView.getAdapter()).notifyDataSetChanged();
-    }
 
     private class UpdatesAdapter extends BaseAdapter {
         @Override

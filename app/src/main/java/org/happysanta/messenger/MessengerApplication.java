@@ -14,6 +14,7 @@ import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 
+import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.MapUtil;
 import org.happysanta.messenger.core.util.ProfileUtil;
@@ -41,6 +42,7 @@ public class MessengerApplication extends Application implements VKSdkListener {
                 .build();
         ImageLoader.getInstance().init(imageLoaderConfig);
         Dimen.init(this);
+        BitmapUtil.init(this);
         MapUtil.init(this);
         ProfileUtil.init(this);
         DialogUtil.init(this);

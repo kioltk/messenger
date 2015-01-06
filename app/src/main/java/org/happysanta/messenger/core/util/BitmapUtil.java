@@ -1,6 +1,8 @@
 package org.happysanta.messenger.core.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -10,11 +12,18 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import org.happysanta.messenger.MessengerApplication;
+import org.happysanta.messenger.R;
 
 /**
  * Created by d_great on 26.12.14.
  */
 public class BitmapUtil {
+    private static Context context;
+
     public static Bitmap resize(Bitmap bitmap, int newWidth, int newHeight) {
         if(bitmap==null){
             return null;
@@ -49,4 +58,29 @@ public class BitmapUtil {
         return circleBitmap;
     }
 
+    public static Bitmap circle(int resId){
+        return circle(BitmapFactory.decodeResource(context.getResources(),
+                resId));
+    }
+
+    public static Bitmap circle(Drawable drawable){
+        return circle(fromDrawable(drawable));
+    }
+
+    public static Bitmap fromDrawable(Drawable drawable){
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+
+    public static void init(MessengerApplication messengerApplication) {
+        context = messengerApplication;
+    }
 }
