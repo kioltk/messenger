@@ -1,11 +1,11 @@
 package org.happysanta.messenger.friends;
 
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,55 +18,74 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**
- * Created by Jesus Christ. Amen.
+ * Created by alex on 06/01/15.
  */
-public class FriendsAdapter extends BaseAdapter implements StickyListHeadersAdapter{
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
-    private final ArrayList<VKApiUserFull> friends;
-    private final Context context;
+    private final ArrayList<VKApiUserFull> mFriends;
 
-    public FriendsAdapter(Context context, ArrayList<VKApiUserFull> friends) {
-        this.context = context;
-        this.friends = friends;
+    private IViewHolderCallback            mListener;
 
-        sort(this.friends);
+    public FriendsAdapter(ArrayList<VKApiUserFull> friends,
+                          IViewHolderCallback viewHolderListener) {
+
+        this.mFriends   = friends;
+        this.mListener  = viewHolderListener;
+
+        setHasStableIds(true);
     }
 
-    @Override
-    public int getCount() {
-        return friends.size();
+    public static class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        public TextView            mNameView;
+        public ImageView           mPhotoView;
+        public IViewHolderCallback mHolderCallback;
+
+        public ViewHolder(View itemView, IViewHolderCallback listener) {
+            super(itemView);
+
+            this.mNameView          = (TextView)  itemView.findViewById(R.id.user_name);
+            this.mPhotoView         = (ImageView) itemView.findViewById(R.id.user_photo);
+            this.mHolderCallback    = listener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            this.mHolderCallback.onItemClick(getPosition());
+        }
     }
 
-    @Override
-    public VKApiUserFull getItem(int position) {
 
-        return friends.get(position);
+    public interface IViewHolderCallback {
+
+        public void onItemClick(int position);
     }
 
+
     @Override
-    public long getItemId(int position) {
-        return 0;
+    public FriendsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_friend, parent, false);
+
+        return new ViewHolder(itemView, mListener);
     }
 
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
 
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_friend, null);
+        final VKApiUserFull user = mFriends.get(position);
 
-        final ImageView photoView = (ImageView) itemView.findViewById(R.id.user_photo);
-        TextView nameView = (TextView) itemView.findViewById(R.id.user_name);
+        viewHolder.mNameView.setText(user.toString());
+        viewHolder.mPhotoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
 
-        VKApiUserFull user = getItem(position);
-
-
-        nameView.setText(user.toString());
         ImageUtil.showFromCache(new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -75,50 +94,30 @@ public class FriendsAdapter extends BaseAdapter implements StickyListHeadersAdap
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
+                Log.d("onLoadingFailed", "User name: " + user.toString());
             }
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+
+                viewHolder.mPhotoView.setImageBitmap(BitmapUtil.circle(loadedImage));
             }
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
 
             }
-        },user.getPhoto());
+        }, user.getPhoto());
+    }
 
-        return itemView;
+
+    @Override
+    public int getItemCount() {
+        return mFriends.size();
     }
 
     @Override
-    public View getHeaderView(int position, View view, ViewGroup viewGroup) {
-
-        View headerView = LayoutInflater.from(context).inflate(R.layout.header_friends, null);
-
-        TextView headerText = (TextView) headerView.findViewById(R.id.header_text);
-
-        VKApiUserFull user  = getItem(position);
-
-        headerText.setText(user.toString().subSequence(0, 1));
-
-        return headerView;
-    }
-
-    @Override
-    public long getHeaderId(int i) {
-
-        return getItem(i).toString().subSequence(0, 1).charAt(0);
-    }
-
-    private void sort(List<VKApiUserFull> userList) {
-
-        Collections.sort(userList, new Comparator<VKApiUserFull>() {
-            @Override
-            public int compare(VKApiUserFull lhs, VKApiUserFull rhs) {
-                return lhs.first_name.compareTo(rhs.first_name);
-            }
-        });
+    public long getItemId(int position) {
+        return mFriends.get(position).hashCode();
     }
 }
