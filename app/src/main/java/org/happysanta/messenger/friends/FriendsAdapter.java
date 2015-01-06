@@ -9,11 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
@@ -21,11 +18,16 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**
  * Created by Jesus Christ. Amen.
  */
-public class FriendsAdapter extends BaseAdapter {
+public class FriendsAdapter extends BaseAdapter implements StickyListHeadersAdapter{
 
     private final ArrayList<VKApiUserFull> friends;
     private final Context context;
@@ -33,6 +35,8 @@ public class FriendsAdapter extends BaseAdapter {
     public FriendsAdapter(Context context, ArrayList<VKApiUserFull> friends) {
         this.context = context;
         this.friends = friends;
+
+        sort(this.friends);
     }
 
     @Override
@@ -86,5 +90,35 @@ public class FriendsAdapter extends BaseAdapter {
         },user.getPhoto());
 
         return itemView;
+    }
+
+    @Override
+    public View getHeaderView(int position, View view, ViewGroup viewGroup) {
+
+        View headerView = LayoutInflater.from(context).inflate(R.layout.header_friends, null);
+
+        TextView headerText = (TextView) headerView.findViewById(R.id.header_text);
+
+        VKApiUserFull user  = getItem(position);
+
+        headerText.setText(user.toString().subSequence(0, 1));
+
+        return headerView;
+    }
+
+    @Override
+    public long getHeaderId(int i) {
+
+        return getItem(i).toString().subSequence(0, 1).charAt(0);
+    }
+
+    private void sort(List<VKApiUserFull> userList) {
+
+        Collections.sort(userList, new Comparator<VKApiUserFull>() {
+            @Override
+            public int compare(VKApiUserFull lhs, VKApiUserFull rhs) {
+                return lhs.first_name.compareTo(rhs.first_name);
+            }
+        });
     }
 }
