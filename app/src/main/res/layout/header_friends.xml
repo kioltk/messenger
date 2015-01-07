@@ -10,24 +10,26 @@
 
     <ImageView
         android:id="@+id/star_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:gravity="center"
+        android:scaleType="centerInside"
         android:src="@drawable/ic_header_important"/>
 
 
     <!--Тут без отступа буква будет не под звёздочкой, не знаю как пофиксить-->
     <TextView
         android:id="@+id/letter_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
+        android:gravity="center"
+        android:text="A"
         android:textColor="@color/black_400"
         android:textStyle="bold"
         android:textSize="20sp"/>
