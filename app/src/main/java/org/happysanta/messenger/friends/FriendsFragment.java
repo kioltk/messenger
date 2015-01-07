@@ -67,29 +67,43 @@ public class FriendsFragment extends Fragment implements FriendsAdapter.IViewHol
             @Override
             public void onComplete(VKResponse response) {
 
-                mFriends        = (VKUsersArray) response.parsedModel;
-                sort(mFriends);
-
-                mFriendsList    = mFriends.toArrayList();
-
-                mFriendsListAdapter = new FriendsAdapter(mFriendsList, FriendsFragment.this);
-
-                mLetterStickyHeader = new StickyHeadersBuilder()
-                        .setAdapter(mFriendsListAdapter)
-                        .setRecyclerView(mFriendsView)
-                        .setStickyHeadersAdapter(new LetterHeaderAdapter(mFriendsList), true)
-                        .build();
-
-
-                mFriendsView.setAdapter(mFriendsListAdapter);
-                mFriendsView.addItemDecoration(mLetterStickyHeader);
-
-                mProgressBar.setVisibility(View.GONE);
+                mFriends = (VKUsersArray) response.parsedModel;
 
                 if (mFriends.isEmpty()) {
 
                     mStatusView.setVisibility(View.VISIBLE);
+
+                } else if (mFriends.size() < 10) {
+
+                    sort(mFriends);
+
+                    mFriendsList        = mFriends.toArrayList();
+
+                    mFriendsListAdapter = new FriendsAdapter(mFriendsList, FriendsFragment.this);
+                    mFriendsView.setAdapter(mFriendsListAdapter);
+
+                } else {
+
+                    sort(mFriends.subList(5, mFriends.size()));
+
+                    mFriendsList        = mFriends.toArrayList();
+
+                    mFriendsListAdapter = new FriendsAdapter(mFriendsList, FriendsFragment.this);
+
+                    mLetterStickyHeader = new StickyHeadersBuilder()
+                            .setAdapter(mFriendsListAdapter)
+                            .setRecyclerView(mFriendsView)
+                            .setStickyHeadersAdapter(new LetterHeaderAdapter(mFriendsList), true)
+                            .build();
+
+
+                    mFriendsView.setAdapter(mFriendsListAdapter);
+                    mFriendsView.addItemDecoration(mLetterStickyHeader);
+
                 }
+
+                mProgressBar.setVisibility(View.GONE);
+
             }
 
             @Override
