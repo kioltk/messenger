@@ -14,7 +14,7 @@ public class VKApiFriends extends VKApiBase {
         return prepareRequest("get",
                 new VKParameters() {{
                     put("fields", "name,last_name,age,photo_200");
-                    put("order","hint");
+                    put("order","hints");
                 }},
                 VKRequest.HttpMethod.GET, VKUsersArray.class);
     }
