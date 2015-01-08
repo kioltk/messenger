@@ -13,10 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -50,6 +47,8 @@ public class ConversationsListFragment extends BaseFragment {
     private TextView status;
     private boolean chatsShowed = false;
     private RecyclerView recycler;
+    private TextView debugView;
+    private LinearLayoutManager recyclerLayoutManager;
 
     @Nullable
     @Override
@@ -57,8 +56,10 @@ public class ConversationsListFragment extends BaseFragment {
         rootView = inflater.inflate(R.layout.fragment_conversations_list, container, false);
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         status = (TextView) rootView.findViewById(R.id.status);
+        debugView = (TextView) rootView.findViewById(R.id.debug);
 
-        recycler.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerLayoutManager = new LinearLayoutManager(activity);
+        recycler.setLayoutManager(recyclerLayoutManager);
         recycler.setHasFixedSize(true);
 
         new VKApiMessages().getDialogs().executeWithListener(new VKRequest.VKRequestListener() {
@@ -77,13 +78,12 @@ public class ConversationsListFragment extends BaseFragment {
                                 if(!dialog.isChat())
                                     if(dialog.dialogId==newMessage.user_id){
                                         dialog.setLastMessage(newMessage);
-                                        dialogs.remove(dialog);
-                                        dialogs.add(0,dialog);
+                                        moveToTop(dialog);
                                         break;
                                     }
                             }
                         }
-                        (recycler.getAdapter()).notifyDataSetChanged();
+                        //(recycler.getAdapter()).notifyDataSetChanged();
                     }
 
                     @Override
@@ -99,14 +99,12 @@ public class ConversationsListFragment extends BaseFragment {
                                 if(dialog.isChat())
                                     if(dialog.dialogId==newMessage.chat_id){
                                         dialog.setLastMessage(newMessage);
-                                        dialogs.remove(dialog);
-                                        dialogs.add(0,dialog);
-                                        //recycler.getAdapter().notifyItemMoved();
+                                        moveToTop(dialog);
                                         break;
                                     }
                             }
                         }
-                        recycler.getAdapter().notifyDataSetChanged();
+                        //recycler.getAdapter().notifyDataSetChanged();
                     }
 
                     @Override
@@ -116,6 +114,7 @@ public class ConversationsListFragment extends BaseFragment {
                 });
             }
 
+
             @Override
             public void onError(VKError error) {
                 status.setText(error.toString());
@@ -124,6 +123,17 @@ public class ConversationsListFragment extends BaseFragment {
 
 
         return rootView;
+    }
+
+    private void moveToTop(VKApiDialog dialog) {
+        int dialogIndex = dialogs.indexOf(dialog);
+        if(dialogIndex!=0) {
+            dialogs.remove(dialogIndex);
+            dialogs.add(0, dialog);
+            recycler.getAdapter().notifyItemMoved(dialogIndex, 0);
+        }
+        recycler.getAdapter().notifyItemChanged(0);
+        recyclerLayoutManager.scrollToPositionWithOffset(0, 0);
     }
 
     @Override
@@ -196,56 +206,60 @@ public class ConversationsListFragment extends BaseFragment {
         }
 
         public void bindContent(final VKApiDialog dialog) {
+            try {
+                titleView.setText(dialog.title);
+                if (dialog.lastMessage.out) {
+                    bodyView.setText(getString(R.string.conversation_body, dialog.getBody()));
+                } else {
+                    bodyView.setText(dialog.getBody());
+                }
 
-            titleView.setText(dialog.title);
-            if(dialog.lastMessage.out) {
-                bodyView.setText(getString(R.string.conversation_body, dialog.getBody()));
-            } else {
-                bodyView.setText(dialog.getBody());
+                if (!dialog.lastMessage.read_state) {
+                    itemView.setBackgroundColor(getResources().getColor(R.color.conversation_unread_background));
+                    titleView.setTypeface(null, Typeface.BOLD);
+                    bodyView.setTypeface(null, Typeface.BOLD);
+                } else {
+                    itemView.setBackgroundDrawable(null);
+                    titleView.setTypeface(null);
+                    bodyView.setTypeface(null);
+                }
+
+                onlineView.setVisibility(dialog.isOnline() ? View.VISIBLE : View.GONE);
+
+
+                dateView.setText("" + dialog.getDate());
+                photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
+                ImageUtil.showFromCache(dialog.getPhoto(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                    }
+                });
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
+                        startActivity(intent);
+                    }
+                });
+            }catch (Exception exp){
+                bodyView.setText("ERROR");
             }
-
-            if(!dialog.lastMessage.read_state){
-                itemView.setBackgroundColor(getResources().getColor(R.color.conversation_unread_background));
-                titleView.setTypeface(null, Typeface.BOLD);
-                bodyView.setTypeface(null, Typeface.BOLD);
-            }else{
-                itemView.setBackgroundDrawable(null);
-                titleView.setTypeface(null);
-                bodyView.setTypeface(null);
-            }
-
-            onlineView.setVisibility(dialog.isOnline()?View.VISIBLE:View.GONE);
-
-
-            dateView.setText("" + dialog.getDate());
-            ImageUtil.showFromCache(dialog.getPhoto(), new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
-                }
-            });
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
-                    startActivity(intent);
-                }
-            });
         }
     }
 }
