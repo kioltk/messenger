@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/user_photo"
-        android:src="@drawable/cat"
+        android:src="@drawable/user_placeholder"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="64dp"

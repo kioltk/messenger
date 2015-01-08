@@ -3,7 +3,6 @@ package org.happysanta.messenger.main;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +125,7 @@ public class NavigationAdapter extends BaseAdapter {
                 View searchButton = itemView.findViewById(R.id.search);
 
 
-                ImageUtil.showFromCache(new ImageLoadingListener() {
+                ImageUtil.showFromCache(ProfileUtil.getUserPhoto(), new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
 
@@ -147,7 +146,7 @@ public class NavigationAdapter extends BaseAdapter {
                     public void onLoadingCancelled(String imageUri, View view) {
 
                     }
-                }, ProfileUtil.getUserPhoto());
+                });
                 userName.setText(ProfileUtil.getUserName());
                 userStatus.setText(ProfileUtil.getUserStatus());
                 int paddingBottom = itemView.getPaddingBottom();
@@ -163,7 +162,7 @@ public class NavigationAdapter extends BaseAdapter {
 
                 break;
             case NavigationFragment.NAVIGATION_NEWS_ID:
-                    textView.setText(R.string.navigation_news);
+                textView.setText(R.string.navigation_news);
                 break;
             case NavigationFragment.NAVIGATION_MESSAGES_ID:
                 textView.setText(R.string.navigation_messages);

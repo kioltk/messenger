@@ -86,7 +86,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         viewHolder.mNameView.setText(user.toString());
         viewHolder.mPhotoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
 
-        ImageUtil.showFromCache(new ImageLoadingListener() {
+        ImageUtil.showFromCache(user.getPhoto(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -107,7 +107,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             public void onLoadingCancelled(String imageUri, View view) {
 
             }
-        }, user.getPhoto());
+        });
     }
 
 

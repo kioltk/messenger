@@ -1,4 +1,4 @@
-package org.happysanta.messenger;
+package org.happysanta.messenger.core.util;
 
 import android.app.Activity;
 import android.content.Context;

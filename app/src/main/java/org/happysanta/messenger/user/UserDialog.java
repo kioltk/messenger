@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKParameters;
@@ -19,7 +18,6 @@ import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 
@@ -93,7 +91,7 @@ public class UserDialog {
 
     private void setPhoto(String photo) {
         final ImageView photoView = (ImageView) dialogView.findViewById(R.id.user_photo);
-        ImageUtil.showFromCache(new ImageLoadingListener() {
+        ImageUtil.showFromCache(photo, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -113,7 +111,7 @@ public class UserDialog {
             public void onLoadingCancelled(String imageUri, View view) {
 
             }
-        }, photo);
+        });
     }
 
     public void setUserName(String userName) {

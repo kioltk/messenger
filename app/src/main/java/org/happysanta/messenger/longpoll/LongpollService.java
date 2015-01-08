@@ -160,7 +160,8 @@ public class LongpollService extends Service {
             // todo implement global conversation listener
         }
     };
-    HashMap<Integer, LongpollDialogListener> chatListeners = new HashMap<Integer,LongpollDialogListener>();
+    static HashMap<Integer, LongpollDialogListener> chatListeners = new HashMap<Integer,LongpollDialogListener>(); // chatid, chat listener
+    static HashMap<Integer, LongpollDialogListener> globalChatListeners = new HashMap<Integer,LongpollDialogListener>();
     private LongpollDialogListener globalChatListener = new LongpollDialogListener(0) {
         @Override
         public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
@@ -282,7 +283,8 @@ public class LongpollService extends Service {
             if (chatListeners.containsKey(chatid)) {
                 LongpollDialogListener chatListener = chatListeners.get(chatid);
                 chatListener.onNewMessages(chatPackMessages);
-            } else {
+            }
+            for (LongpollDialogListener globalChatListener : globalChatListeners.values()) {
                 globalChatListener.onNewMessages(chatPackMessages);
             }
         }
@@ -317,5 +319,12 @@ public class LongpollService extends Service {
 
     public static void addGlobalConversationListener(LongpollDialogListener listener) {
         globalConversationListeners.put(listener.getId(),listener);
+    }
+
+    public static void addChatListener(LongpollDialogListener chatListener){
+        chatListeners.put(chatListener.getId(),chatListener);
+    }
+    public static void addGlobalChatListener(LongpollDialogListener longpollDialogListener) {
+        globalChatListeners.put(longpollDialogListener.getId(),longpollDialogListener);
     }
 }

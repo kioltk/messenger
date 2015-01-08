@@ -28,6 +28,7 @@ import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.DialogActivity;
+import org.happysanta.messenger.messages.chats.ChatDialog;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.UserDialog;
@@ -182,10 +183,14 @@ public class ConversationFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_profile:
+            case R.id.action_profile: {
                 UserDialog profileDialog = new UserDialog(activity, dialogId);
                 profileDialog.show();
-                break;
+            }break;
+            case R.id.action_chat_participants: {
+                ChatDialog chatDialog = new ChatDialog(activity, dialogId);
+                chatDialog.show();
+            }break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -93,13 +93,14 @@ public class VKApiMessages extends VKApiBase {
             }
         });
     }
-    private VKList<VKApiDialog> parseDialogs(JSONObject object, boolean isChats){
+    private VKList<VKApiDialog> parseDialogs(JSONObject object, Boolean isChats){
         VKList<VKApiDialog> dialogs = new VKList<VKApiDialog>();
         try {
             JSONObject response = object.getJSONObject("response");
             VKList<VKApiUserFull> users = new VKList(response.getJSONObject("users"), VKApiUserFull.class);
             VKList<VKApiMessage> messages = new VKList<VKApiMessage>(response.getJSONObject("messages"), VKApiMessage.class);
             for (final VKApiMessage dialogMessage : messages) {
+
                 if(isChats) {
                     if (dialogMessage.isChat()) {
                         VKApiUserFull chatOwner = users.getById(dialogMessage.admin_id);
@@ -110,6 +111,10 @@ public class VKApiMessages extends VKApiBase {
                     if (!dialogMessage.isChat()) {
                         VKApiUserFull dialogOwner = users.getById(dialogMessage.user_id);
                         dialogs.add(new VKApiDialog(dialogMessage, dialogOwner));
+                    } else {
+                        VKApiUserFull chatOwner = users.getById(dialogMessage.admin_id);
+                        VKList<VKApiUserFull> chatUsers = users.getById(dialogMessage.chat_active);
+                        dialogs.add(new VKApiDialog(dialogMessage, chatOwner, chatUsers));
                     }
                 }
             }

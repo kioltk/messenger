@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/dialog_photo"
         android:padding="5dp"
-        android:src="@drawable/cat"
+        android:src="@drawable/user_placeholder"
         android:layout_width="80dp"
         android:layout_height="80dp" />
     <ImageView

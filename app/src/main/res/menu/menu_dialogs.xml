@@ -3,9 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.happysanta.messenger.main.MainActivity">
 
+    <item android:id="@+id/action_dialogs_showchats"
+        android:title="@string/action_dialogs_showchats"
+        android:checkable="true"
+        android:checked="false"
+        android:orderInCategory="1"
+        app:showAsAction="never"
+        />
     <item
         android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:title="@string/action_chat_participants"
         android:orderInCategory="100"
         app:showAsAction="never" />
 

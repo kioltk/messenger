@@ -16,7 +16,7 @@ import java.io.File;
  */
 public class ImageUtil {
 
-    public static void showFromCache(final ImageLoadingListener imageLoadingListener, String imageUrl) {
+    public static void showFromCache(String imageUrl, final ImageLoadingListener imageLoadingListener) {
         if(imageUrl==null){
             return;
         }

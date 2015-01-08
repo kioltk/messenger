@@ -13,7 +13,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="30dp"
             android:id="@+id/icon"
-            android:src="@drawable/cat"
+            android:src="@drawable/user_placeholder"
             android:layout_width="20dp"
             android:layout_height="wrap_content" />
         <TextView

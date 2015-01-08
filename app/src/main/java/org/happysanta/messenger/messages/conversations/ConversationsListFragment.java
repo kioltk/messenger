@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,29 +48,25 @@ public class ConversationsListFragment extends BaseFragment {
     private View rootView;
     private VKList<VKApiDialog> dialogs;
     private TextView status;
+    private boolean chatsShowed = false;
+    private RecyclerView recycler;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_conversations_list, container, false);
-        final ListView list = (ListView) rootView.findViewById(R.id.list);
+        recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         status = (TextView) rootView.findViewById(R.id.status);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                VKApiDialog dialog = dialogs.get(position);
-                Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
-                startActivity(intent);
-            }
-        });
+        recycler.setLayoutManager(new LinearLayoutManager(activity));
+        recycler.setHasFixedSize(true);
 
         new VKApiMessages().getDialogs().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 VKList<VKApiDialog> messages = (VKList<VKApiDialog>) response.parsedModel;
                 dialogs = messages;
-                list.setAdapter(new ConversationsAdapter());
+                recycler.setAdapter(new ConversationsAdapter());
                 status.setVisibility(View.GONE);
 
                 LongpollService.addGlobalConversationListener(new LongpollDialogListener(0) {
@@ -75,15 +74,39 @@ public class ConversationsListFragment extends BaseFragment {
                     public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
                         for (LongpollNewMessage newMessage : newMessages) {
                             for (VKApiDialog dialog : dialogs) {
-                                if(dialog.dialogId==newMessage.user_id){
-                                    dialog.setLastMessage(newMessage);
-                                    dialogs.remove(dialog);
-                                    dialogs.add(0,dialog);
-                                    break;
-                                }
+                                if(!dialog.isChat())
+                                    if(dialog.dialogId==newMessage.user_id){
+                                        dialog.setLastMessage(newMessage);
+                                        dialogs.remove(dialog);
+                                        dialogs.add(0,dialog);
+                                        break;
+                                    }
                             }
                         }
-                        ((BaseAdapter)list.getAdapter()).notifyDataSetChanged();
+                        (recycler.getAdapter()).notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onTyping(ArrayList<LongpollTyping> typing) {
+
+                    }
+                });
+                LongpollService.addGlobalChatListener(new LongpollDialogListener(0) {
+                    @Override
+                    public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
+                        for (LongpollNewMessage newMessage : newMessages) {
+                            for (VKApiDialog dialog : dialogs) {
+                                if(dialog.isChat())
+                                    if(dialog.dialogId==newMessage.chat_id){
+                                        dialog.setLastMessage(newMessage);
+                                        dialogs.remove(dialog);
+                                        dialogs.add(0,dialog);
+                                        //recycler.getAdapter().notifyItemMoved();
+                                        break;
+                                    }
+                            }
+                        }
+                        recycler.getAdapter().notifyDataSetChanged();
                     }
 
                     @Override
@@ -106,38 +129,73 @@ public class ConversationsListFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        inflater.inflate(R.menu.menu_chats, menu);
+        inflater.inflate(R.menu.menu_dialogs, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            switch (item.getItemId()) {
+                case R.id.action_dialogs_showchats:{
+                    item.setChecked(chatsShowed);
+                    // tod show and hide?
+
+                }break;
+            }
+        }
     }
 
-    private class ConversationsAdapter extends BaseAdapter {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_dialogs_showchats: {
+                //ыц
+                chatsShowed = !item.isChecked();
+                item.setChecked(chatsShowed);
+            }
+            break;
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private class ConversationsAdapter extends RecyclerView.Adapter<ConversationViewHolder> {
         @Override
-        public int getCount() {
+        public ConversationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            return new ConversationViewHolder(View.inflate(activity,R.layout.item_dialog, null));
+        }
+
+        @Override
+        public void onBindViewHolder(ConversationViewHolder conversationViewHolder, int i) {
+            conversationViewHolder.bindContent(dialogs.get(i));
+        }
+
+        @Override
+        public int getItemCount() {
             return dialogs.size();
         }
 
-        @Override
-        public VKApiDialog getItem(int position) {
-            return dialogs.get(position);
+
+    }
+
+    private class ConversationViewHolder extends RecyclerView.ViewHolder{
+        private final TextView titleView;
+        private final TextView bodyView;
+        private final TextView dateView;
+        private final ImageView onlineView;
+        private final ImageView photoView;
+
+        public ConversationViewHolder(View itemView) {
+            super(itemView);
+
+            titleView = (TextView) itemView.findViewById(R.id.title);
+            bodyView = (TextView) itemView.findViewById(R.id.body);
+            dateView = (TextView) itemView.findViewById(R.id.date);
+            onlineView = (ImageView) itemView.findViewById(R.id.online);
+            photoView = (ImageView) itemView.findViewById(R.id.dialog_photo);
         }
 
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View dialogView = activity.getLayoutInflater().inflate(R.layout.item_dialog, null);
-
-            TextView titleView = (TextView) dialogView.findViewById(R.id.title);
-            TextView bodyView = (TextView) dialogView.findViewById(R.id.body);
-            TextView dateView = (TextView) dialogView.findViewById(R.id.date);
-            ImageView onlineView = (ImageView) dialogView.findViewById(R.id.online);
-            final ImageView photoView = (ImageView) dialogView.findViewById(R.id.dialog_photo);
-
-
-            VKApiDialog dialog = getItem(position);
-
+        public void bindContent(final VKApiDialog dialog) {
 
             titleView.setText(dialog.title);
             if(dialog.lastMessage.out) {
@@ -147,11 +205,11 @@ public class ConversationsListFragment extends BaseFragment {
             }
 
             if(!dialog.lastMessage.read_state){
-                dialogView.setBackgroundColor(getResources().getColor(R.color.conversation_unread_background));
+                itemView.setBackgroundColor(getResources().getColor(R.color.conversation_unread_background));
                 titleView.setTypeface(null, Typeface.BOLD);
                 bodyView.setTypeface(null, Typeface.BOLD);
             }else{
-                dialogView.setBackgroundDrawable(null);
+                itemView.setBackgroundDrawable(null);
                 titleView.setTypeface(null);
                 bodyView.setTypeface(null);
             }
@@ -160,7 +218,7 @@ public class ConversationsListFragment extends BaseFragment {
 
 
             dateView.setText("" + dialog.getDate());
-            ImageUtil.showFromCache(new ImageLoadingListener() {
+            ImageUtil.showFromCache(dialog.getPhoto(), new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
 
@@ -180,9 +238,14 @@ public class ConversationsListFragment extends BaseFragment {
                 public void onLoadingCancelled(String imageUri, View view) {
 
                 }
-            }, dialog.getPhoto());
-
-            return dialogView;
+            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
+                    startActivity(intent);
+                }
+            });
         }
     }
 }

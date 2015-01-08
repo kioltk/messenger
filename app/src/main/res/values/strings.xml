@@ -3,7 +3,7 @@
 
     <string name="app_name">Messenger</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_chat_participants">Участники</string>
     <string name="action_log_out">Log out</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_start">@string/app_name</string>
@@ -72,5 +72,6 @@
         Do you want to start syncing your phone contacts with VK Messenger?
 
     </string>
+    <string name="action_dialogs_showchats">Групповые чаты</string>
 
 </resources>

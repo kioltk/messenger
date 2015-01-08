@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/cat"
+                android:src="@drawable/user_placeholder"
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:id="@+id/user_photo" 
