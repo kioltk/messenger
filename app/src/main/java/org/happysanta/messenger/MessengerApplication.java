@@ -1,9 +1,9 @@
 package org.happysanta.messenger;
 
 import android.app.Application;
-import android.content.Intent;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -11,16 +11,13 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.MapUtil;
 import org.happysanta.messenger.core.util.ProfileUtil;
-import org.happysanta.messenger.main.MainActivity;
 import org.happysanta.messenger.messages.core.DialogUtil;
-import org.happysanta.messenger.start.StartActivity;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -31,6 +28,9 @@ public class MessengerApplication extends Application implements VKSdkListener {
     public void onCreate() {
         super.onCreate();
         VKSdk.initialize(this, "4486133");
+
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        analytics.newTracker(R.xml.global_tracker);
         ImageLoaderConfiguration imageLoaderConfig= new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.MAX_PRIORITY)
                 .memoryCache(new LruMemoryCache(5 * 1024 * 1024))
