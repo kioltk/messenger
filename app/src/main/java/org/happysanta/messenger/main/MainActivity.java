@@ -1,8 +1,8 @@
 package org.happysanta.messenger.main;
 
 import android.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 
 import org.happysanta.messenger.R;
@@ -13,8 +13,8 @@ import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.messages.chats.ChatsListFragment;
 import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
 import org.happysanta.messenger.news.NewsListFragment;
-import org.happysanta.messenger.user.UserFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
+import org.happysanta.messenger.user.UserFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationFragment.NavigationDrawerCallbacks {

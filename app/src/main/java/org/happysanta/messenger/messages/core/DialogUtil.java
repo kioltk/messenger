@@ -35,4 +35,15 @@ public class DialogUtil {
     public String getBody(){
         return getBody(isChat, dialogId);
     }
+
+    public static void setChatsShowed(boolean chatsShowed) {
+        context.getSharedPreferences("dialogs_list",Context.MODE_MULTI_PROCESS)
+                .edit()
+                .putBoolean("chats_showed",chatsShowed)
+                .apply();
+    }
+    public static boolean isChatsShowed(){
+        return context.getSharedPreferences("dialogs_list",Context.MODE_MULTI_PROCESS)
+                .getBoolean("chats_showed",false);
+    }
 }

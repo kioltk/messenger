@@ -80,7 +80,7 @@ public class VKApiMessages extends VKApiBase {
         return prepareRequest("getChats","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
-                return parseDialogs(object, true);
+                return parseDialogs(object, true, false);
             }
         });
     }
@@ -89,11 +89,11 @@ public class VKApiMessages extends VKApiBase {
         return prepareRequest("getDialogs","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
-                return parseDialogs(object, false);
+                return parseDialogs(object, true, true);
             }
         });
     }
-    private VKList<VKApiDialog> parseDialogs(JSONObject object, Boolean isChats){
+    private VKList<VKApiDialog> parseDialogs(JSONObject object, boolean includeChats, boolean includeConversations){
         VKList<VKApiDialog> dialogs = new VKList<VKApiDialog>();
         try {
             JSONObject response = object.getJSONObject("response");
@@ -101,22 +101,20 @@ public class VKApiMessages extends VKApiBase {
             VKList<VKApiMessage> messages = new VKList<VKApiMessage>(response.getJSONObject("messages"), VKApiMessage.class);
             for (final VKApiMessage dialogMessage : messages) {
 
-                if(isChats) {
-                    if (dialogMessage.isChat()) {
+                if(dialogMessage.isChat()) {
+                    if (includeChats) {
                         VKApiUserFull chatOwner = users.getById(dialogMessage.admin_id);
                         VKList<VKApiUserFull> chatUsers = users.getById(dialogMessage.chat_active);
                         dialogs.add(new VKApiDialog(dialogMessage, chatOwner, chatUsers));
+                        continue;
                     }
                 }else{
-                    if (!dialogMessage.isChat()) {
+                    if(includeConversations){
                         VKApiUserFull dialogOwner = users.getById(dialogMessage.user_id);
                         dialogs.add(new VKApiDialog(dialogMessage, dialogOwner));
-                    } else {
-                        VKApiUserFull chatOwner = users.getById(dialogMessage.admin_id);
-                        VKList<VKApiUserFull> chatUsers = users.getById(dialogMessage.chat_active);
-                        dialogs.add(new VKApiDialog(dialogMessage, chatOwner, chatUsers));
                     }
                 }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();

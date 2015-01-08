@@ -9,7 +9,7 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
 
     private final boolean isChat;
     private final VKApiUserFull dialogOwner;
-    private final VKList<VKApiUserFull> chatUsers;
+    private final VKList<VKApiUserFull> participants;
     public int usersCount = 1;
     //public int id;
     public int unread = 0;
@@ -26,7 +26,7 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
         this.photo_200 = dialogOwner.photo_200;
         this.lastMessage = dialogMessage;
         this.dialogOwner = dialogOwner;
-        chatUsers = null;
+        participants = null;
     }
 
     public VKApiDialog(VKApiMessage dialogMessage, VKApiUserFull chatOwner, VKList<VKApiUserFull> chatUsers) {
@@ -37,9 +37,12 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
         this.usersCount = chatUsers.size();
         this.lastMessage = dialogMessage;
         this.dialogOwner = chatOwner;
-        this.chatUsers = chatUsers;
+        this.participants = chatUsers;
     }
 
+    public VKApiUserFull getParticipant(int userId){
+        return participants.getById(userId);
+    }
 
     @Override
     public int describeContents() {
