@@ -126,6 +126,13 @@ public class ConversationsListFragment extends BaseFragment {
     }
 
     private void moveToTop(VKApiDialog dialog) {
+        RecyclerView.ViewHolder firstHolder = recycler.findViewHolderForPosition(0);
+        int top = 0;
+        if(firstHolder!=null) {
+            top = (int) firstHolder.itemView.getTop();
+        } else {
+            top = 1;
+        }
         int dialogIndex = dialogs.indexOf(dialog);
         if(dialogIndex!=0) {
             dialogs.remove(dialogIndex);
@@ -133,7 +140,10 @@ public class ConversationsListFragment extends BaseFragment {
             recycler.getAdapter().notifyItemMoved(dialogIndex, 0);
         }
         recycler.getAdapter().notifyItemChanged(0);
-        recyclerLayoutManager.scrollToPositionWithOffset(0, 0);
+        if(top==0){
+            recyclerLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
+
     }
 
     @Override
