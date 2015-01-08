@@ -254,25 +254,27 @@ public class LongpollService extends Service {
         }
 
         // бросаем пачки тайпингов по чатам
-        for (Map.Entry<Integer, ArrayList<LongpollTyping>> chatMessagesPackEntry : chatTypingsPacks.entrySet()) {
-            Integer chatid = chatMessagesPackEntry.getKey();
-            ArrayList<LongpollTyping> chatMessagesPack = chatMessagesPackEntry.getValue();
+        for (Map.Entry<Integer, ArrayList<LongpollTyping>> chatTypingsPackEntry : chatTypingsPacks.entrySet()) {
+            Integer chatid = chatTypingsPackEntry.getKey();
+            ArrayList<LongpollTyping> chatTypingsPack = chatTypingsPackEntry.getValue();
             if (chatListeners.containsKey(chatid)) {
                 LongpollDialogListener chatListener = chatListeners.get(chatid);
-                chatListener.onTyping(chatMessagesPack);
-            } else {
-                globalChatListener.onTyping(chatMessagesPack);
+                chatListener.onTyping(chatTypingsPack);
+            }
+            for (LongpollDialogListener globalChatListener : globalChatListeners.values()) {
+                globalChatListener.onTyping(chatTypingsPack);
             }
         }
         // бросаем пачки тайпингов по диалогам
-        for (Map.Entry<Integer, ArrayList<LongpollTyping>> conversationPackEntry : conversationTypingsPacks.entrySet()) {
-            Integer conversationId = conversationPackEntry.getKey();
-            ArrayList<LongpollTyping> conversationPackMessages = conversationPackEntry.getValue();
+        for (Map.Entry<Integer, ArrayList<LongpollTyping>> conversationTypingEntry : conversationTypingsPacks.entrySet()) {
+            Integer conversationId = conversationTypingEntry.getKey();
+            ArrayList<LongpollTyping> conversationTypingsPack = conversationTypingEntry.getValue();
             if (conversationListeners.containsKey(conversationId)) {
                 LongpollDialogListener conversationListener = conversationListeners.get(conversationId);
-                conversationListener.onTyping(conversationPackMessages);
-            } else {
-                globalConversationListener.onTyping(conversationPackMessages);
+                conversationListener.onTyping(conversationTypingsPack);
+            }
+            for (LongpollDialogListener globalConversationListener : globalConversationListeners.values()) {
+                globalConversationListener.onTyping(conversationTypingsPack);
             }
         }
 

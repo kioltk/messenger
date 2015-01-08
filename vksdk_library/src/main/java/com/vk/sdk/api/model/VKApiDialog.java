@@ -13,7 +13,7 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
     public int usersCount = 1;
     //public int id;
     public int unread = 0;
-    public int dialogId;
+    public int dialogId;// chat id or user id
     public String title;
     public String photo_200;
 

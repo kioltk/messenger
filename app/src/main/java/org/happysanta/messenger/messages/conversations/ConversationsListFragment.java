@@ -1,5 +1,6 @@
 package org.happysanta.messenger.messages.conversations;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -49,6 +50,7 @@ public class ConversationsListFragment extends BaseFragment {
     private RecyclerView recycler;
     private TextView debugView;
     private LinearLayoutManager recyclerLayoutManager;
+    private ConversationsAdapter recyclerAdapter;
 
     @Nullable
     @Override
@@ -67,7 +69,9 @@ public class ConversationsListFragment extends BaseFragment {
             public void onComplete(VKResponse response) {
                 VKList<VKApiDialog> messages = (VKList<VKApiDialog>) response.parsedModel;
                 dialogs = messages;
-                recycler.setAdapter(new ConversationsAdapter());
+                recyclerAdapter = new ConversationsAdapter();
+                recyclerAdapter.setHasStableIds(true);
+                recycler.setAdapter(recyclerAdapter);
                 status.setVisibility(View.GONE);
 
                 LongpollService.addGlobalConversationListener(new LongpollDialogListener(0) {
@@ -87,8 +91,16 @@ public class ConversationsListFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onTyping(ArrayList<LongpollTyping> typing) {
-
+                    public void onTyping(ArrayList<LongpollTyping> typings) {
+                        for (LongpollTyping typing : typings) {
+                            for (VKApiDialog dialog : dialogs) {
+                                if(!dialog.isChat())
+                                    if(dialog.dialogId==typing.dialogId){
+                                        showTyping(dialog);
+                                        break;
+                                    }
+                            }
+                        }
                     }
                 });
                 LongpollService.addGlobalChatListener(new LongpollDialogListener(0) {
@@ -108,8 +120,16 @@ public class ConversationsListFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onTyping(ArrayList<LongpollTyping> typing) {
-
+                    public void onTyping(ArrayList<LongpollTyping> typings) {
+                        for (LongpollTyping typing : typings) {
+                            for (VKApiDialog dialog : dialogs) {
+                                if(!dialog.isChat())
+                                    if(dialog.dialogId==typing.dialogId){
+                                        showTyping(dialog);
+                                        break;
+                                    }
+                            }
+                        }
                     }
                 });
             }
@@ -123,6 +143,12 @@ public class ConversationsListFragment extends BaseFragment {
 
 
         return rootView;
+    }
+
+    private void showTyping(VKApiDialog dialog) {
+        ConversationViewHolder viewHolder = (ConversationViewHolder) recycler.findViewHolderForItemId(dialog.isChat() ? -dialog.getId() : dialog.getId());
+        if(viewHolder!=null)
+            viewHolder.showTyping();
     }
 
     private void moveToTop(VKApiDialog dialog) {
@@ -180,6 +206,8 @@ public class ConversationsListFragment extends BaseFragment {
     }
 
     private class ConversationsAdapter extends RecyclerView.Adapter<ConversationViewHolder> {
+
+
         @Override
         public ConversationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new ConversationViewHolder(View.inflate(activity,R.layout.item_dialog, null));
@@ -195,6 +223,11 @@ public class ConversationsListFragment extends BaseFragment {
             return dialogs.size();
         }
 
+        @Override
+        public long getItemId(int position) {
+            VKApiDialog dialog = dialogs.get(position);
+            return dialog.isChat()? -dialog.getId():dialog.getId();
+        }
 
     }
 
@@ -204,12 +237,14 @@ public class ConversationsListFragment extends BaseFragment {
         private final TextView dateView;
         private final ImageView onlineView;
         private final ImageView photoView;
+        private final TextView typingView;
 
         public ConversationViewHolder(View itemView) {
             super(itemView);
 
             titleView = (TextView) itemView.findViewById(R.id.title);
             bodyView = (TextView) itemView.findViewById(R.id.body);
+            typingView = (TextView) itemView.findViewById(R.id.typing);
             dateView = (TextView) itemView.findViewById(R.id.date);
             onlineView = (ImageView) itemView.findViewById(R.id.online);
             photoView = (ImageView) itemView.findViewById(R.id.dialog_photo);
@@ -218,6 +253,10 @@ public class ConversationsListFragment extends BaseFragment {
         public void bindContent(final VKApiDialog dialog) {
             try {
                 titleView.setText(dialog.title);
+                bodyView.clearAnimation();
+                typingView.clearAnimation();
+                bodyView.setAlpha(1);
+                typingView.setAlpha(0);
                 if (dialog.lastMessage.out) {
                     bodyView.setText(getString(R.string.conversation_body, dialog.getBody()));
                 } else {
@@ -270,6 +309,51 @@ public class ConversationsListFragment extends BaseFragment {
             }catch (Exception exp){
                 bodyView.setText("ERROR");
             }
+        }
+
+        public void showTyping() {
+            bodyView.animate().alpha(0).setDuration(500).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    bodyView.animate().alpha(1).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    bodyView.animate().alpha(1).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
+            typingView.animate().alpha(1).setDuration(500).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    typingView.animate().alpha(0).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    typingView.animate().alpha(0).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
         }
     }
 }

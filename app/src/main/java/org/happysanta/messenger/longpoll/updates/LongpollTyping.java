@@ -9,7 +9,7 @@ import org.json.JSONException;
 public class LongpollTyping {
     public final int dialogId;
     public final boolean isChat;
-    private final int userId;
+    public final int userId;
 
     public LongpollTyping(int dialogId) {
         this.dialogId = dialogId;

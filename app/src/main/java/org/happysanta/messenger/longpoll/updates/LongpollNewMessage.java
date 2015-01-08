@@ -34,8 +34,9 @@ public class LongpollNewMessage extends VKApiMessage {
         id = jsonUpdate.getInt(1);
         int flags = jsonUpdate.getInt(2);
 
-        read_state = (flags & FLAG_UNREAD) == FLAG_UNREAD;
         out = (flags & FLAG_OUTBOX) == FLAG_OUTBOX;
+        if(!out)
+            read_state = (flags & FLAG_UNREAD) == FLAG_UNREAD;
         isChat = (flags & FLAG_CHAT) == FLAG_CHAT;
         JSONObject extras = jsonUpdate.getJSONObject(7);
         if ((flags & FLAG_MEDIA) == FLAG_MEDIA) {
