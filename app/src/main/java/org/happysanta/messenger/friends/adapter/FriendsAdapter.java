@@ -1,4 +1,4 @@
-package org.happysanta.messenger.friends;
+package org.happysanta.messenger.friends.adapter;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +49,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             this.mNameView          = (TextView)  itemView.findViewById(R.id.user_name);
             this.mPhotoView         = (ImageView) itemView.findViewById(R.id.user_photo);
+
             this.mHolderCallback    = listener;
 
             itemView.setOnClickListener(this);
@@ -109,7 +110,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             }
         });
     }
-
 
     @Override
     public int getItemCount() {

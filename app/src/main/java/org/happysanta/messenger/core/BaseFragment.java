@@ -3,7 +3,6 @@ package org.happysanta.messenger.core;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -12,9 +11,10 @@ import android.view.View;
  */
 public class BaseFragment extends Fragment {
 
-    protected View rootView;
-    protected BaseActivity activity;
-    protected Toolbar toolbar;
+    protected View          rootView;
+    protected BaseActivity  activity;
+    protected Toolbar       toolbar;
+    protected View          toolbarShadow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,10 @@ public class BaseFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (BaseActivity) activity;
-        toolbar = this.activity.getToolbar();
-    }
 
+        this.activity   = (BaseActivity) activity;
+
+        toolbar         = this.activity.getToolbar();
+        toolbarShadow   = this.activity.getToolBarShadow();
+    }
 }
