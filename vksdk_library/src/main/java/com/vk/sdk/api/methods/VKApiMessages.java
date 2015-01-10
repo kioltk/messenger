@@ -77,7 +77,7 @@ public class VKApiMessages extends VKApiBase {
         });
     }
     public VKRequest getChats() {
-        return prepareRequest("getChats","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
+        return prepareRequest("execute", "getChats", null, VKRequest.HttpMethod.GET, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
                 return parseDialogs(object, true, false);
@@ -86,7 +86,7 @@ public class VKApiMessages extends VKApiBase {
     }
 
     public VKRequest getDialogs() {
-        return prepareRequest("getDialogs","execute", VKRequest.HttpMethod.GET, null, new VKParser() {
+        return prepareRequest("execute", "getDialogs", null, VKRequest.HttpMethod.GET, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
                 return parseDialogs(object, true, true);

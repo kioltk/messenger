@@ -55,5 +55,6 @@ public class ProfileUtil {
         setUserName(currentUser.toString());
         setUserId(String.valueOf(currentUser.id));
         setUserStatus(currentUser.activity);
+        // todo listeners?
     }
 }
