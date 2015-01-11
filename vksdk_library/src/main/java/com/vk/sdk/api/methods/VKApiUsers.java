@@ -54,6 +54,7 @@ public class VKApiUsers extends VKApiBase {
                 try {
                     return new VKApiUserFull(object.getJSONObject("response"));
                 } catch (JSONException e) {
+                    e.printStackTrace();
                     return null;
                 }
             }

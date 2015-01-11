@@ -1,7 +1,6 @@
 package org.happysanta.messenger.friends;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,11 @@ import android.widget.TextView;
 
 import com.eowise.recyclerview.stickyheaders.StickyHeadersBuilder;
 import com.eowise.recyclerview.stickyheaders.StickyHeadersItemDecoration;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiFriends;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
@@ -29,10 +33,11 @@ public class FriendsListFragment extends BaseFragment implements
         FriendsAdapter.IViewHolderCallback,
         FriendListHelper.IFriendListCallback {
 
+    private static final String ARG_ONLINE_ONLY = "online_only";
     private ArrayList<VKApiUserFull>        mFriendsList;
     private FriendsAdapter                  mFriendsListAdapter;
     private IFragmentTitleCallback          mCountListener;
-    private boolean                         mOnline;
+    private boolean mOnlinesOnly;
 
     private RecyclerView.LayoutManager      mLayoutManager;
     private StickyHeadersItemDecoration     mLetterStickyHeader;
@@ -48,7 +53,7 @@ public class FriendsListFragment extends BaseFragment implements
         Bundle              bundle          = new Bundle();
 
 
-        bundle      .putBoolean("OnlineOnly", onlineOnly);
+        bundle      .putBoolean(ARG_ONLINE_ONLY, onlineOnly);
 
         newFragment .setArguments(bundle);
         newFragment .setListener (listener);
@@ -63,7 +68,7 @@ public class FriendsListFragment extends BaseFragment implements
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mStatusView     = (TextView)        view.findViewById(R.id.status);
@@ -75,11 +80,28 @@ public class FriendsListFragment extends BaseFragment implements
 
         mFriendsView.setLayoutManager(mLayoutManager);
 
-        mOnline = getArguments().getBoolean("OnlineOnly");
+        mOnlinesOnly = getArguments().getBoolean(ARG_ONLINE_ONLY);
 
-        FriendListHelper helper = new FriendListHelper(mOnline, this);
+        // FriendListHelper helper = new FriendListHelper(mOnlinesOnly, this);
+        // helper.doRequest();
+        VKParameters params = new VKParameters() {{
+            put("fields", "name,last_name,age,photo_200");
+            put("order", "hints");
+        }};
+        VKRequest request = mOnlinesOnly ? new VKApiFriends().getOnline(params) : new VKApiFriends().get(params);
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                FriendsListFragment.this.onResult((ArrayList<VKApiUserFull>) response.parsedModel);
+            }
 
-        helper.doRequest();
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                FriendsListFragment.this.onError(error.errorMessage);
+            }
+        });
     }
 
     @Override
@@ -99,12 +121,12 @@ public class FriendsListFragment extends BaseFragment implements
         mFriendsList = friends;
 
         if (mCountListener != null)
-            mCountListener.setFriendsCountTitle(mFriendsList.size(), (mOnline ? 1 : 0));
+            mCountListener.setFriendsCountTitle(mFriendsList.size(), (mOnlinesOnly ? 1 : 0));
 
         mFriendsListAdapter = new FriendsAdapter(mFriendsList,
                 FriendsListFragment.this);
 
-        if (mFriendsList.size() > 10 && !mOnline) {
+        if (mFriendsList.size() > 10 && !mOnlinesOnly) {
 
             mLetterStickyHeader = new StickyHeadersBuilder()
                     .setAdapter(mFriendsListAdapter)
@@ -123,7 +145,11 @@ public class FriendsListFragment extends BaseFragment implements
 
     @Override
     public void onEmptyList(boolean online) {
-
+        if (mOnlinesOnly) {
+            mStatusView.setText(R.string.friends_onlines_none);
+        } else {
+            mStatusView.setText(R.string.friends_empty);
+        }
         mStatusView .setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }

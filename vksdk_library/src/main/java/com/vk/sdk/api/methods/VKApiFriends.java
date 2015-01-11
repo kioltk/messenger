@@ -1,8 +1,12 @@
 package com.vk.sdk.api.methods;
 
 import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKParser;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.model.VKUsersArray;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Section friends
@@ -28,8 +32,18 @@ public class VKApiFriends extends VKApiBase {
     }
 
     public VKRequest getOnline(VKParameters params) {
-        if (params.get("fields") != null) {
-            return prepareRequest("getOnline", params, VKRequest.HttpMethod.GET, VKUsersArray.class);
+        if (params.containsKey("fields")) {
+            return prepareRequest("execute","getOnline", params, VKRequest.HttpMethod.GET, new VKParser() {
+                @Override
+                public Object createModel(JSONObject object) {
+                    try {
+                        return new VKUsersArray().parse(object);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            });
         } else {
             return prepareRequest("getOnline", params);
         }

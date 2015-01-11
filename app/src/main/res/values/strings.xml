@@ -73,5 +73,7 @@
 
     </string>
     <string name="action_dialogs_showchats">Групповые чаты</string>
+    <string name="friends_onlines_none">None is online</string>
+    <string name="friends_empty">No friends</string>
 
 </resources>
