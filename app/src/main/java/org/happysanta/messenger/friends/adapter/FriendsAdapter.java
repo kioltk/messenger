@@ -12,23 +12,22 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
-
-import java.util.ArrayList;
 
 /**
  * Created by alex on 06/01/15.
  */
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
-    private final ArrayList<VKApiUserFull> mFriends;
+    private final VKList<VKApiUserFull> mFriends;
 
     private IViewHolderCallback            mListener;
 
-    public FriendsAdapter(ArrayList<VKApiUserFull> friends,
+    public FriendsAdapter(VKList<VKApiUserFull> friends,
                           IViewHolderCallback viewHolderListener) {
 
         this.mFriends   = friends;

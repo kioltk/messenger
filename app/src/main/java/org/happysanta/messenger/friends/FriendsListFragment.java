@@ -17,6 +17,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiFriends;
 import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
@@ -24,17 +25,18 @@ import org.happysanta.messenger.friends.adapter.FriendsAdapter;
 import org.happysanta.messenger.friends.adapter.LetterHeaderAdapter;
 import org.happysanta.messenger.user.UserDialog;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Jesus Christ. Amen.
  */
 public class FriendsListFragment extends BaseFragment implements
-        FriendsAdapter.IViewHolderCallback,
-        FriendListHelper.IFriendListCallback {
+        FriendsAdapter.IViewHolderCallback {
 
     private static final String ARG_ONLINE_ONLY = "online_only";
-    private ArrayList<VKApiUserFull>        mFriendsList;
+    private VKList<VKApiUserFull>        mFriendsList;
     private FriendsAdapter                  mFriendsListAdapter;
     private IFragmentTitleCallback          mCountListener;
     private boolean mOnlinesOnly;
@@ -92,14 +94,51 @@ public class FriendsListFragment extends BaseFragment implements
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                FriendsListFragment.this.onResult((ArrayList<VKApiUserFull>) response.parsedModel);
+                mFriendsList = (VKList<VKApiUserFull>) response.parsedModel;
+
+                if(mFriendsList.isEmpty()){
+
+                    if (mOnlinesOnly) {
+                        mStatusView.setText(R.string.friends_onlines_none);
+                    } else {
+                        mStatusView.setText(R.string.friends_empty);
+                    }
+                    mStatusView .setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
+
+                }else {
+                    sort(mFriendsList);
+                    if (mCountListener != null)
+                        mCountListener.setFriendsCountTitle(mFriendsList.size(), (mOnlinesOnly ? 1 : 0));
+
+                    mFriendsListAdapter = new FriendsAdapter(mFriendsList,
+                            FriendsListFragment.this);
+
+                    if (mFriendsList.size() > 10) {
+
+                        mLetterStickyHeader = new StickyHeadersBuilder()
+                                .setAdapter(mFriendsListAdapter)
+                                .setRecyclerView(mFriendsView)
+                                .setStickyHeadersAdapter(
+                                        new LetterHeaderAdapter(mFriendsList), true)
+                                .build();
+
+                        mFriendsView.addItemDecoration(mLetterStickyHeader);
+                    }
+
+                    mFriendsView.setAdapter(mFriendsListAdapter);
+
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
-                FriendsListFragment.this.onError(error.errorMessage);
+
+
+                mStatusView .setText        (error.errorMessage);
+                mProgressBar.setVisibility  (View.GONE);
             }
         });
     }
@@ -114,51 +153,16 @@ public class FriendsListFragment extends BaseFragment implements
         mCountListener = countListener;
     }
 
-    //region Helper callback
-    @Override
-    public void onResult(ArrayList<VKApiUserFull> friends) {
-
-        mFriendsList = friends;
-
-        if (mCountListener != null)
-            mCountListener.setFriendsCountTitle(mFriendsList.size(), (mOnlinesOnly ? 1 : 0));
-
-        mFriendsListAdapter = new FriendsAdapter(mFriendsList,
-                FriendsListFragment.this);
-
-        if (mFriendsList.size() > 10 && !mOnlinesOnly) {
-
-            mLetterStickyHeader = new StickyHeadersBuilder()
-                    .setAdapter(mFriendsListAdapter)
-                    .setRecyclerView(mFriendsView)
-                    .setStickyHeadersAdapter(
-                            new LetterHeaderAdapter(mFriendsList), true)
-                    .build();
-
-            mFriendsView.addItemDecoration(mLetterStickyHeader);
-        }
-
-        mFriendsView.setAdapter(mFriendsListAdapter);
-
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onEmptyList(boolean online) {
-        if (mOnlinesOnly) {
-            mStatusView.setText(R.string.friends_onlines_none);
-        } else {
-            mStatusView.setText(R.string.friends_empty);
-        }
-        mStatusView .setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onError(String error) {
-
-        mStatusView .setText        (error);
-        mProgressBar.setVisibility  (View.GONE);
+    void sort(List<VKApiUserFull> list) {
+        if (null == list)       return;
+        if (list.size() <= 10)    return;
+        if (list.size() > 10)   list = list.subList(5, list.size());
+        Collections.sort(list, new Comparator<VKApiUserFull>() {
+            @Override
+            public int compare(VKApiUserFull lhs, VKApiUserFull rhs) {
+                return lhs.first_name.compareTo(rhs.first_name);
+            }
+        });
     }
     //endregion
 

@@ -9,19 +9,18 @@ import android.widget.TextView;
 
 import com.eowise.recyclerview.stickyheaders.StickyHeadersAdapter;
 import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
-
-import java.util.ArrayList;
 
 /**
  * Created by alex on 07/01/15.
  */
 public class LetterHeaderAdapter implements StickyHeadersAdapter<LetterHeaderAdapter.ViewHolder> {
 
-    private ArrayList<VKApiUserFull> items;
+    private VKList<VKApiUserFull> items;
 
-    public LetterHeaderAdapter(ArrayList<VKApiUserFull> items) {
+    public LetterHeaderAdapter(VKList<VKApiUserFull> items) {
 
         this.items = items;
     }
