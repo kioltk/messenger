@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKList;
 
@@ -31,7 +29,7 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return newsList.size()+5;
+        return newsList.size();
     }
 
     @Override
@@ -57,7 +55,8 @@ public class NewsAdapter extends BaseAdapter {
 
         final VKApiPost post = (VKApiPost) getItem(position);
 
-
+        nameView.setText(""+post.from_id);
+        textView.setText(post.text);
         dateView.setText("" + post.date);
 
         return itemView;
