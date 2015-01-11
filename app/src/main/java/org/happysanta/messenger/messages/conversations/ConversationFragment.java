@@ -26,6 +26,7 @@ import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
+import org.happysanta.messenger.core.util.KeyboardUtil;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
@@ -185,6 +186,7 @@ public class ConversationFragment extends BaseFragment implements AttachListener
             attachFragment = AttachFragment.getInstance();
             attachFragment.setAttachListener(this);
             getChildFragmentManager().beginTransaction().replace(R.id.attach_window, attachFragment).commit();
+            KeyboardUtil.hide(editMessageText, activity);
         } else {
             // closing
             attachButton.setImageResource(R.drawable.ic_drawer);

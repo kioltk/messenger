@@ -11,8 +11,12 @@ import android.view.inputmethod.InputMethodManager;
  */
 public class KeyboardUtil {
     public static void hide(View probablyFocusedView, Activity activity) {
-        if (probablyFocusedView != null)
+        if (probablyFocusedView != null) {
             probablyFocusedView.clearFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(probablyFocusedView.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
+
         if (activity != null) {
             activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             View focusedView = activity.getCurrentFocus();
