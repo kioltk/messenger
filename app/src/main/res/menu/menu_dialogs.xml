@@ -2,7 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.happysanta.messenger.main.MainActivity">
-
+    <item
+        android:id="@+id/action_dialogs_search"
+        android:title="@string/action_dialogs_search"
+        android:orderInCategory="0"
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        app:showAsAction="ifRoom"
+        />
     <item android:id="@+id/action_dialogs_showchats"
         android:title="@string/action_dialogs_showchats"
         android:checkable="true"
@@ -11,8 +17,8 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_chat_participants"
+        android:id="@+id/action_dialogs_starred"
+        android:title="@string/action_dialogs_starred"
         android:orderInCategory="100"
         app:showAsAction="never" />
 

@@ -15,7 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-
+    <FrameLayout
+        android:id="@+id/attach_window"
+        android:layout_above="@+id/new_message_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <TextView
         android:id="@+id/status"
         android:gravity="center"
@@ -31,7 +35,12 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <ImageView
+            android:id="@+id/attach"
+            android:src="@drawable/ic_header_important"
+            android:scaleType="center"
+            android:layout_width="56dp"
+            android:layout_height="56dp" />
         <EditText
             android:background="#fff"
             android:paddingLeft="8dp"
@@ -44,6 +53,7 @@
             android:textColorHint="#949494"
             android:textColor="#444"
             android:layout_margin="0dp"
+            android:layout_toRightOf="@+id/attach"
             android:layout_toLeftOf="@+id/send_button"
             />
         <ImageButton

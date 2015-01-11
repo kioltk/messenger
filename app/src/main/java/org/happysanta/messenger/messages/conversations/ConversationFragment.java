@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.DialogActivity;
 import org.happysanta.messenger.messages.chats.ChatDialog;
+import org.happysanta.messenger.messages.core.AttachFragment;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.UserDialog;
@@ -43,15 +45,21 @@ public class ConversationFragment extends BaseFragment {
 
     // core
     private VKList<VKApiMessage> messages;
+    private MessagesAdapter messagesAdapter;
+    private DialogUtil dialogUtil;
+    private int dialogId;
+    private boolean isChat;
 
     // ui
     private ListView messagesList;
     private View sendButton;
     private EditText editMessageText;
-    private int dialogId;
-    private boolean isChat;
-    private MessagesAdapter messagesAdapter;
-    private DialogUtil dialogUtil;
+    private TextView statusView;
+    private ImageView attachButton;
+
+    // attach
+    private boolean attachWindowOpened;
+    private AttachFragment attachFragment;
 
     public ConversationFragment() {
     }
@@ -61,7 +69,8 @@ public class ConversationFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         messagesList = (ListView) findViewById(R.id.messages_list);
-        final TextView statusView = (TextView) findViewById(R.id.status);
+        statusView = (TextView) findViewById(R.id.status);
+        attachButton = (ImageView) findViewById(R.id.attach);
         sendButton = findViewById(R.id.send_button);
         editMessageText = (EditText) findViewById(R.id.message_box);
         dialogId = getArguments().getInt(DialogActivity.ARG_DIALOGID, 0);
@@ -82,7 +91,7 @@ public class ConversationFragment extends BaseFragment {
                             messagesSort.add(0, message);
                             messages = messagesSort;
                         }
-                        messagesAdapter = new MessagesAdapter(getActivity(), messages);
+                        messagesAdapter = new MessagesAdapter(activity, messages);
                         messagesList.setAdapter(messagesAdapter);
                         if (messages.isEmpty()) {
                             statusView.setText("Start the conversation");
@@ -151,7 +160,28 @@ public class ConversationFragment extends BaseFragment {
             }
         });
 
+        attachButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleAttach();
+            }
+        });
+
         return rootView;
+    }
+
+    private void toggleAttach() {
+        if(attachWindowOpened) {
+            // closing
+            attachButton.setImageResource(R.drawable.ic_header_important);
+            attachFragment = attachFragment.getInstance();
+            getChildFragmentManager().beginTransaction().replace(R.id.attach_window, attachFragment).commit();
+        } else {
+            // opening
+            attachButton.setImageResource(R.drawable.ic_ab_done);
+            getChildFragmentManager().beginTransaction().remove(attachFragment);
+        }
+        attachWindowOpened = !attachWindowOpened;
     }
 
     public void sendMessage(VKApiMessage message) {

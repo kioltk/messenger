@@ -75,5 +75,7 @@
     <string name="action_dialogs_showchats">Групповые чаты</string>
     <string name="friends_onlines_none">None is online</string>
     <string name="friends_empty">No friends</string>
+    <string name="action_dialogs_starred">Звездочка</string>
+    <string name="action_dialogs_search">Поиск</string>
 
 </resources>
