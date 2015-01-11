@@ -37,7 +37,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/attach"
-            android:src="@drawable/ic_header_important"
+            android:src="@drawable/ic_drawer"
             android:scaleType="center"
             android:layout_width="56dp"
             android:layout_height="56dp" />

@@ -91,7 +91,7 @@ public class DialogActivity extends BaseActivity {
 
                 }
             });
-            toolbar.setSubtitle("offline");
+            toolbar.setSubtitle("subtitle");
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,10 +108,16 @@ public class DialogActivity extends BaseActivity {
         if (savedInstanceState == null) {
             conversationFragment = ConversationFragment.getInstance(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, conversationFragment)
+                    .replace(R.id.container, conversationFragment)
                     .commit();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(conversationFragment.onBackPressed())
+            super.onBackPressed();
     }
 
     @Override
@@ -124,6 +130,7 @@ public class DialogActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_DIALOGID, dialog.getId());
         bundle.putBoolean(ARG_ISCHAT, dialog.isChat());
+        bundle.putString(ARG_TITLE, dialog.title);
         bundle.putString(ARG_TITLE, dialog.title);
         bundle.putString(ARG_LOGO, dialog.photo_200);
         intent.putExtras(bundle);

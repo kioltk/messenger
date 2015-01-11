@@ -152,7 +152,7 @@ public class ConversationsListFragment extends BaseFragment {
                     public void onTyping(ArrayList<LongpollTyping> typings) {
                         for (LongpollTyping typing : typings) {
                             for (VKApiDialog dialog : showingDialogs) {
-                                if(!dialog.isChat())
+                                if(dialog.isChat())
                                     if(dialog.dialogId==typing.dialogId){
                                         showTyping(dialog, typing);
                                         break;
@@ -364,52 +364,56 @@ public class ConversationsListFragment extends BaseFragment {
                 bodyView.setText("ERROR");
             }
         }
-
+        ArrayList<VKApiUserFull> typingUsers = new ArrayList<>();
         public void showTyping(final LongpollTyping typing) {
             if (typing.isChat) {
                 // few typings at the same time?
                 VKApiUserFull user = dialog.getParticipant(typing.userId);
-                typingView.setText(user.toString() + " is typing.");
+                if(typingUsers.size()==1){
+
+                } else {
+                    typingView.setText(typingUsers.toString() + " are typing.");
+                }
             }
-                bodyView.animate().alpha(0).setDuration(500).setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
+            bodyView.animate().alpha(0).setDuration(500).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-                    }
+                }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        bodyView.animate().alpha(1).setDuration(500).setStartDelay(5500).setListener(null).start();
-                    }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    bodyView.animate().alpha(1).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        bodyView.animate().alpha(1).setDuration(500).setStartDelay(5500).setListener(null).start();
-                    }
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    bodyView.animate().alpha(1).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-                    }
-                }).start();
-                typingView.animate().alpha(1).setDuration(500).setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
+                }
+            }).start();
+            typingView.animate().alpha(1).setDuration(500).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-                    }
+                }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        typingView.animate().alpha(0).setDuration(500).setStartDelay(5500).setListener(null).start();
-                    }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    typingView.animate().alpha(0).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        typingView.animate().alpha(0).setDuration(500).setStartDelay(5500).setListener(null).start();
-                    }
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    typingView.animate().alpha(0).setDuration(500).setStartDelay(5500).setListener(null).start();
+                }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
                 }
             }).start();

@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKAttachments;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
@@ -31,20 +33,23 @@ import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.DialogActivity;
 import org.happysanta.messenger.messages.chats.ChatDialog;
 import org.happysanta.messenger.messages.core.AttachFragment;
+import org.happysanta.messenger.messages.core.AttachListener;
 import org.happysanta.messenger.messages.core.DialogUtil;
+import org.happysanta.messenger.messages.core.GeoCompat;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.UserDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ConversationFragment extends BaseFragment {
+public class ConversationFragment extends BaseFragment implements AttachListener {
 
     // core
-    private VKList<VKApiMessage> messages;
+    private VKList<VKApiMessage> messages = new VKList<>();
     private MessagesAdapter messagesAdapter;
     private DialogUtil dialogUtil;
     private int dialogId;
@@ -58,8 +63,9 @@ public class ConversationFragment extends BaseFragment {
     private ImageView attachButton;
 
     // attach
-    private boolean attachWindowOpened;
+    private boolean attachWindowOpened = false;
     private AttachFragment attachFragment;
+    private ArrayList<VKAttachments.VKApiAttachment> attaches = new ArrayList<>(10);
 
     public ConversationFragment() {
     }
@@ -80,18 +86,20 @@ public class ConversationFragment extends BaseFragment {
 
         statusView.setText("loading");
         editMessageText.setText(dialogUtil.getBody());
+        messagesAdapter = new MessagesAdapter(activity, messages);
 
         VKRequest request = isChat? new VKApiMessages().getChatHistory(dialogId):new VKApiMessages().getHistory(dialogId);
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
-                        messages = (VKList<VKApiMessage>) response.parsedModel;
+                        messages.addAll((VKList<VKApiMessage>) response.parsedModel);
+                        messagesAdapter.notifyDataSetChanged();
+                        tryScrollToBottom();
                         VKList<VKApiMessage> messagesSort = new VKList();
                         for (VKApiMessage message : messages) {
                             messagesSort.add(0, message);
                             messages = messagesSort;
                         }
-                        messagesAdapter = new MessagesAdapter(activity, messages);
                         messagesList.setAdapter(messagesAdapter);
                         if (messages.isEmpty()) {
                             statusView.setText("Start the conversation");
@@ -172,17 +180,22 @@ public class ConversationFragment extends BaseFragment {
 
     private void toggleAttach() {
         if(!attachWindowOpened) {
-            // closing
+            // opening
             attachButton.setImageResource(R.drawable.ic_header_important);
             attachFragment = AttachFragment.getInstance();
+            attachFragment.setAttachListener(this);
             getChildFragmentManager().beginTransaction().replace(R.id.attach_window, attachFragment).commit();
         } else {
-            // opening
+            // closing
             attachButton.setImageResource(R.drawable.ic_drawer);
             getChildFragmentManager().beginTransaction().remove(attachFragment).commit();
+            attachFragment.setAttachListener(null);
+            attachFragment = null;
         }
         attachWindowOpened = !attachWindowOpened;
     }
+
+
 
     public void sendMessage(VKApiMessage message) {
         messagesAdapter.send(message);
@@ -234,5 +247,40 @@ public class ConversationFragment extends BaseFragment {
         ConversationFragment fragment = new ConversationFragment();
         fragment.setArguments(extras);
         return fragment;
+    }
+
+    // todo attaches
+
+    @Override
+    public void onFileAttached(File file) {
+        Toast.makeText(activity, file.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPictureAttached(File pictureFile) {
+        Toast.makeText(activity, pictureFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onVideoAttached(File videoFile) {
+        Toast.makeText(activity, videoFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAudioAttached(File audioFile) {
+        Toast.makeText(activity, audioFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGeoAttached(GeoCompat geo) {
+        Toast.makeText(activity, geo.title,Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean onBackPressed() {
+        if(attachFragment != null){
+            toggleAttach();
+            return false;
+        }
+        return true;
     }
 }
