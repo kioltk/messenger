@@ -14,7 +14,7 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
     //public int id;
     public int unread = 0;
     public int dialogId;// chat id or user id
-    public String title;
+    private String title;
     public String photo_200;
 
     public VKApiMessage lastMessage;
@@ -79,6 +79,20 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
 
     public boolean isOnline(){
         return dialogOwner.online;
+    }
+
+    public String getTitle() {
+        if (!isChat) {
+            return dialogOwner.toString();
+        }
+        return title;
+    }
+
+    public String getSubtitle(){
+        if (!isChat) {
+            return dialogOwner.online ? (dialogOwner.online_mobile?"online":"mobile"):(""+dialogOwner.last_seen);
+        }
+        return participants.size()+" users";
     }
 
 }

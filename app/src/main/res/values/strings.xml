@@ -77,5 +77,7 @@
     <string name="friends_empty">No friends</string>
     <string name="action_dialogs_starred">Звездочка</string>
     <string name="action_dialogs_search">Поиск</string>
+    <string name="action_dialog_attachments">Attachments</string>
+    <string name="action_dialog_search">Поиск</string>
 
 </resources>

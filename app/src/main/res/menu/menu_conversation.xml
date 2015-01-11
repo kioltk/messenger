@@ -5,6 +5,18 @@
     <item
         android:id="@+id/action_profile"
         android:title="@string/conversation_action_profile"
-        android:orderInCategory="100"
+        android:orderInCategory="0"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dialog_attachments"
+        android:title="@string/action_dialog_attachments"
+        android:orderInCategory="1"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_dialog_search"
+        android:title="@string/action_dialog_search"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        />
 </menu>

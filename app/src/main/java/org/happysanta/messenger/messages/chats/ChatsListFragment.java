@@ -97,7 +97,7 @@ public class ChatsListFragment extends Fragment {
             VKApiDialog dialog = getItem(position);
 
 
-            titleView.setText(dialog.title);
+            titleView.setText(dialog.getTitle());
             bodyView.setText(dialog.usersCount+ " в чате");
             photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
             // todo group placeholder

@@ -306,7 +306,7 @@ public class ConversationsListFragment extends BaseFragment {
         public void bindContent(final VKApiDialog dialog) {
             this.dialog = dialog;
             try {
-                titleView.setText(dialog.title);
+                titleView.setText(dialog.getTitle());
                 bodyView.clearAnimation();
                 typingView.clearAnimation();
                 bodyView.setAlpha(1);

@@ -24,15 +24,17 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
-public class DialogActivity extends BaseActivity {
+public class DialogActivity extends BaseActivity  {
 
     public  static final String ARG_DIALOGID    = "arg_dialogid";
     public  static final String ARG_ISCHAT      = "arg_ischat";
     private static final String ARG_TITLE       = "arg_title";
     private static final String ARG_LOGO        = "arg_logo";
+    private static final String ARG_SUBTITLE = "arg_subtitle";
 
     private ConversationFragment conversationFragment;
     private String title;
+    private String subtitle;
     private String logo;
     private boolean isChat;
     private int dialogId;
@@ -51,6 +53,7 @@ public class DialogActivity extends BaseActivity {
 
         Bundle bundle = getIntent().getExtras();
         title = bundle.getString(ARG_TITLE, "Dialog");
+        subtitle = bundle.getString(ARG_SUBTITLE,null);
         logo = bundle.getString(ARG_LOGO, null);
         dialogId = bundle.getInt(DialogActivity.ARG_DIALOGID, 0);
         isChat = bundle.getBoolean(DialogActivity.ARG_ISCHAT, false);
@@ -91,7 +94,7 @@ public class DialogActivity extends BaseActivity {
 
                 }
             });
-            toolbar.setSubtitle("subtitle");
+            toolbar.setSubtitle(subtitle);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -99,10 +102,6 @@ public class DialogActivity extends BaseActivity {
                 }
             });
         }
-
-
-
-
 
 
         if (savedInstanceState == null) {
@@ -130,10 +129,12 @@ public class DialogActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_DIALOGID, dialog.getId());
         bundle.putBoolean(ARG_ISCHAT, dialog.isChat());
-        bundle.putString(ARG_TITLE, dialog.title);
-        bundle.putString(ARG_TITLE, dialog.title);
+        bundle.putString(ARG_TITLE, dialog.getTitle());
+        bundle.putString(ARG_SUBTITLE, dialog.getSubtitle());
         bundle.putString(ARG_LOGO, dialog.photo_200);
         intent.putExtras(bundle);
         return intent;
     }
+
+
 }
