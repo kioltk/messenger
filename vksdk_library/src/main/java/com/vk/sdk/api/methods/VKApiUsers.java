@@ -25,10 +25,12 @@ import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKParser;
 import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKUsersArray;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -40,6 +42,24 @@ public class VKApiUsers extends VKApiBase {
      *
      * @return Request for load
      */
+
+    public VKRequest access(){
+        VKParameters params = new VKParameters() {{
+            put("fields", "photo_200,activity");
+        }};
+
+        return prepareRequest("execute", "access", params, VKRequest.HttpMethod.GET, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                try {
+                    return new VKApiUserFull(object.getJSONObject("response"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        });
+    }
     public VKRequest get() {
         return get(null);
     }

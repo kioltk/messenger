@@ -1,135 +1,132 @@
 package org.happysanta.messenger.friends;
 
+
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.eowise.recyclerview.stickyheaders.StickyHeadersBuilder;
-import com.eowise.recyclerview.stickyheaders.StickyHeadersItemDecoration;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.methods.VKApiFriends;
-import com.vk.sdk.api.model.VKApiUserFull;
-import com.vk.sdk.api.model.VKUsersArray;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.user.UserDialog;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import org.happysanta.messenger.core.BaseFragment;
+import org.happysanta.messenger.friends.views.SlidingTabLayout;
 
 /**
- * Created by Jesus Christ. Amen.
+ * Created by alex on 09/01/15.
  */
-public class FriendsFragment extends Fragment implements FriendsAdapter.IViewHolderCallback{
+public class FriendsFragment extends BaseFragment {
 
-    private VKUsersArray                    mFriends;
-    private ArrayList<VKApiUserFull>        mFriendsList;
+    private static final int FRIENDS_ALL            = 0;
+    private static final int FRIENDS_ONLY_ONLINE    = 1;
 
-    private RecyclerView                    mFriendsView;
-    private FriendsAdapter mFriendsListAdapter;
-    private RecyclerView.LayoutManager      mLayoutManager;
-    private StickyHeadersItemDecoration     mLetterStickyHeader;
+//    this one is yet to be implemented
+//    private static final int FRIENDS_REQUESTS       = 2;
 
-    private TextView                        mStatusView;
-    private ProgressBar                     mProgressBar;
+    private SlidingTabLayout    mFriendsTabs;
+    private ViewPager           mViewPager;
+    private View                mShadowView;
 
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_friends, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mFriendsView    = (RecyclerView)    view.findViewById(R.id.friends_list);
-        mStatusView     = (TextView)        view.findViewById(R.id.status);
-        mProgressBar    = (ProgressBar)     view.findViewById(R.id.progress);
+        toolbarShadow.setVisibility(View.GONE);
 
-        mLayoutManager = new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.VERTICAL, false);
+        mShadowView                        = view.findViewById(R.id.tab_shadow);
+        mViewPager      = (ViewPager)        view.findViewById(R.id.friends_viewpager);
+        mFriendsTabs    = (SlidingTabLayout) view.findViewById(R.id.friends_tabs);
 
-        mFriendsView.setLayoutManager(mLayoutManager);
+        if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)) {
 
-        new VKApiFriends().get().executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
+            mShadowView.setVisibility(View.VISIBLE);
+        }
 
-                mFriends = (VKUsersArray) response.parsedModel;
+        mViewPager  .setAdapter(new TabPagerAdapter(getChildFragmentManager()));
 
-                if (mFriends.isEmpty()) {
-
-                    mStatusView.setVisibility(View.VISIBLE);
-
-                } else if (mFriends.size() < 10) {
-
-                    sort(mFriends);
-
-                    mFriendsList        = mFriends.toArrayList();
-
-                    mFriendsListAdapter = new FriendsAdapter(mFriendsList, FriendsFragment.this);
-                    mFriendsView.setAdapter(mFriendsListAdapter);
-
-                } else {
-
-                    sort(mFriends.subList(5, mFriends.size()));
-
-                    mFriendsList        = mFriends.toArrayList();
-
-                    mFriendsListAdapter = new FriendsAdapter(mFriendsList, FriendsFragment.this);
-
-                    mLetterStickyHeader = new StickyHeadersBuilder()
-                            .setAdapter(mFriendsListAdapter)
-                            .setRecyclerView(mFriendsView)
-                            .setStickyHeadersAdapter(new LetterHeaderAdapter(mFriendsList), true)
-                            .build();
+        mFriendsTabs.setViewPager(mViewPager);
+        mFriendsTabs.setDividerColors(Color.TRANSPARENT);
+        mFriendsTabs.setSelectedIndicatorColors(Color.WHITE);
 
 
-                    mFriendsView.setAdapter(mFriendsListAdapter);
-                    mFriendsView.addItemDecoration(mLetterStickyHeader);
-
-                }
-
-                mProgressBar.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-
-                mStatusView .setText        (error.toString());
-                mProgressBar.setVisibility  (View.GONE);
-
-            }
-        });
     }
 
     @Override
-    public void onItemClick(int position) {
-        new UserDialog(getActivity(), mFriends.get(position)).show();
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        toolbarShadow.setVisibility(View.VISIBLE);
     }
 
-    private void sort(List<VKApiUserFull> list) {
+    private class TabPagerAdapter extends FragmentStatePagerAdapter
+            implements IFragmentTitleCallback {
 
-        Collections.sort(list, new Comparator<VKApiUserFull>() {
-            @Override
-            public int compare(VKApiUserFull lhs, VKApiUserFull rhs) {
+        public TabPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-                return lhs.first_name.compareTo(rhs.first_name);
+        @Override
+        public Fragment getItem(int position) {
+
+            switch (position) {
+
+                case FRIENDS_ALL:           return FriendsListFragment.newInstance(false, this);
+                case FRIENDS_ONLY_ONLINE:   return FriendsListFragment.newInstance(true,  this);
             }
-        });
+
+            return new Fragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            switch (position) {
+
+                case FRIENDS_ALL: {
+
+                    return "FRIENDS";
+                }
+                case FRIENDS_ONLY_ONLINE: {
+
+                    return "ONLINE";
+                }
+            }
+
+            return "Error";
+        }
+
+        @Override
+        public void setFriendsCountTitle(int count, int position) {
+
+            switch (position) {
+
+                case FRIENDS_ALL: {
+
+                    mFriendsTabs.setTitle(count + " FRIENDS", FRIENDS_ALL);
+                    break;
+                }
+                case FRIENDS_ONLY_ONLINE: {
+
+                    mFriendsTabs.setTitle(count + " ONLINE", FRIENDS_ONLY_ONLINE);
+                    break;
+                }
+            }
+        }
     }
 }

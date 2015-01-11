@@ -70,7 +70,7 @@ public class StartActivity extends ActionBarActivity {
     }
 
     private void startMainActivity() {
-        new VKApiUsers().get().executeWithListener(new VKRequest.VKRequestListener() {
+        new VKApiUsers().access().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onError(VKError error) {
                 super.onError(error);
@@ -80,10 +80,10 @@ public class StartActivity extends ActionBarActivity {
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 try {
-                    VKList<VKApiUserFull> users = (VKList<VKApiUserFull>) response.parsedModel;
-                    VKApiUserFull currentUser = users.get(0);
-                    ProfileUtil.setFromUser(currentUser);
-                }catch (Exception exp){
+                    VKApiUserFull currentUser = (VKApiUserFull) response.parsedModel;
+                    if(currentUser!=null)
+                        ProfileUtil.setFromUser(currentUser);
+                } catch (Exception exp) {
 
                 }
             }

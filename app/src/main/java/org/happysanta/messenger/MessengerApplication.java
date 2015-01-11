@@ -8,6 +8,7 @@ import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGener
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.splunk.mint.Mint;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
@@ -31,6 +32,11 @@ public class MessengerApplication extends Application implements VKSdkListener {
 
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         analytics.newTracker(R.xml.global_tracker);
+        if(!BuildConfig.DEBUG) {
+            Mint.initAndStartSession(this, "8205f1a9");
+        } else {
+            Mint.initAndStartSession(this, "ce6606ab");
+        }
         ImageLoaderConfiguration imageLoaderConfig= new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.MAX_PRIORITY)
                 .memoryCache(new LruMemoryCache(5 * 1024 * 1024))

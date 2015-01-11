@@ -63,14 +63,14 @@ class VKApiBase {
     VKRequest prepareRequest(String methodName, VKParameters methodParameters,
                              VKRequest.HttpMethod httpMethod,
                              VKParser responseParser) {
-        return this.prepareRequest(methodName, mMethodGroup,httpMethod, methodParameters, responseParser);
+        return this.prepareRequest(mMethodGroup, methodName, methodParameters, httpMethod, responseParser);
     }
 
     VKRequest prepareRequest(String methodName, VKParameters methodParams, VKParser responseParser) {
         return this.prepareRequest(methodName,methodParams, VKRequest.HttpMethod.GET,responseParser);
     }
 
-    VKRequest prepareRequest(String methodName, String methodGroup,VKRequest.HttpMethod httpMethod, VKParameters methodParameters, VKParser responseParser){
+    VKRequest prepareRequest(String methodGroup, String methodName, VKParameters methodParameters, VKRequest.HttpMethod httpMethod, VKParser responseParser){
 
         VKRequest result = new VKRequest(String.format(Locale.US, "%s.%s", methodGroup, methodName),
                 methodParameters, httpMethod);
