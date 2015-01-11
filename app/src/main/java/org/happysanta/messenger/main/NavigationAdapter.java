@@ -78,10 +78,8 @@ public class NavigationAdapter extends BaseAdapter {
                     return NavigationFragment.NAVIGATION_PROFILE_ID;
                 case 2:
                     return NavigationFragment.NAVIGATION_MESSAGES_ID;
-
                 case 3:
                     return NavigationFragment.NAVIGATION_GROUPS_ID;
-
                 case 4:
                     return NavigationFragment.NAVIGATION_FRIENDS_ID;
                 case 5:

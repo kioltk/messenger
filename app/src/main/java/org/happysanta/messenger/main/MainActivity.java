@@ -21,6 +21,7 @@ public class MainActivity extends BaseActivity
 
      private NavigationFragment mNavigationFragment;
     private DrawerLayout mDrawerLayout;
+    private int currentFragmentId;
 
 
     @Override
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         getFragmentManager().beginTransaction().replace(R.id.container,new Fragment()).commit();
+        currentFragmentId = itemdId;
         switch (itemdId) {
             case (int) NavigationFragment.NAVIGATION_PROFILE_ID:
                 fragmentManager.beginTransaction()
@@ -92,9 +94,12 @@ public class MainActivity extends BaseActivity
         }
     }
 
-
-
-
-
-
+    @Override
+    public void onBackPressed() {
+        if(currentFragmentId==NavigationFragment.NAVIGATION_MESSAGES_ID) {
+            super.onBackPressed();
+        } else {
+            mNavigationFragment.restore();
+        }
+    }
 }
