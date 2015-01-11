@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-
-import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.user.UserDialog;
@@ -25,7 +22,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 
-        LinearLayout jenyaButton = (LinearLayout) rootView.findViewById(R.id.dev_jenya);
+        View jenyaButton = rootView.findViewById(R.id.dev_jenya);
         jenyaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,30 +32,39 @@ public class AboutFragment extends Fragment {
             }
         });
 
-        LinearLayout artemButton = (LinearLayout) rootView.findViewById(R.id.dev_artem);
+        View artemButton = rootView.findViewById(R.id.dev_artem);
         artemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    UserDialog dialog = new UserDialog(getActivity(), 103850036);
-                    dialog.show();
+                UserDialog dialog = new UserDialog(getActivity(), 103850036);
+                dialog.show();
             }
         });
 
-        LinearLayout denyaButton = (LinearLayout) rootView.findViewById(R.id.dev_denya);
+        View denyaButton = rootView.findViewById(R.id.dev_denya);
         denyaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    UserDialog dialog = new UserDialog(getActivity(), 32018303);
-                    dialog.show();
-                           }
+                UserDialog dialog = new UserDialog(getActivity(), 32018303);
+                dialog.show();
+            }
         });
 
-        LinearLayout andreyButton = (LinearLayout) rootView.findViewById(R.id.dev_andrey);
+        View andreyButton = rootView.findViewById(R.id.dev_andrey);
         andreyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    UserDialog dialog = new UserDialog(getActivity(), 121935185);
-                    dialog.show();
+                UserDialog dialog = new UserDialog(getActivity(), 121935185);
+                dialog.show();
+            }
+        });
+
+        View alexeyButton = rootView.findViewById(R.id.dev_alexey);
+        alexeyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserDialog dialog = new UserDialog(getActivity(), 47808167);
+                dialog.show();
             }
         });
 
