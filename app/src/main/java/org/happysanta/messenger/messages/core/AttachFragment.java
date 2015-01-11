@@ -12,7 +12,7 @@ public class AttachFragment extends BaseFragment {
 
     // attaches here
 
-    public AttachFragment getInstance() {
+    public static AttachFragment getInstance() {
         AttachFragment fragment = new AttachFragment();
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);

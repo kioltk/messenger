@@ -171,15 +171,15 @@ public class ConversationFragment extends BaseFragment {
     }
 
     private void toggleAttach() {
-        if(attachWindowOpened) {
+        if(!attachWindowOpened) {
             // closing
             attachButton.setImageResource(R.drawable.ic_header_important);
-            attachFragment = attachFragment.getInstance();
+            attachFragment = AttachFragment.getInstance();
             getChildFragmentManager().beginTransaction().replace(R.id.attach_window, attachFragment).commit();
         } else {
             // opening
-            attachButton.setImageResource(R.drawable.ic_ab_done);
-            getChildFragmentManager().beginTransaction().remove(attachFragment);
+            attachButton.setImageResource(R.drawable.ic_drawer);
+            getChildFragmentManager().beginTransaction().remove(attachFragment).commit();
         }
         attachWindowOpened = !attachWindowOpened;
     }
