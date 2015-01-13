@@ -91,11 +91,67 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_margin="10dp"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp" />
-                </RelativeLayout>
+                <ImageButton
+                    android:id="@+id/news_comments"
+                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@android:drawable/ic_input_add"/>
+
+                <TextView
+                    android:id="@+id/news_comments_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="500"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/news_comments"
+                    android:layout_toEndOf="@+id/news_comments" />
+
+                <ImageButton
+                    android:id="@+id/news_repost"
+                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@android:drawable/presence_video_online"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/news_reposts_count"
+                    android:layout_toStartOf="@+id/news_reposts_count" />
+
+                <TextView
+                    android:id="@+id/news_reposts_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="500"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/news_like"
+                    android:layout_toStartOf="@+id/news_like" />
+
+                <ImageButton
+                    android:id="@+id/news_like"
+                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/news_likes_count"
+                    android:layout_toStartOf="@+id/news_likes_count"
+                    android:background="@android:drawable/star_on" />
+
+                <TextView
+                    android:id="@+id/news_likes_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="500"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="false"
+                    android:layout_marginRight="5dp" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 
