@@ -175,12 +175,26 @@ public class ConversationFragment extends BaseFragment implements AttachListener
                 toggleAttach();
             }
         });
+        editMessageText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    showAttach(false);
+                }
+            }
+        });
 
         return rootView;
     }
 
     private void toggleAttach() {
-        if(!attachWindowOpened) {
+        attachWindowOpened = !attachWindowOpened;
+        showAttach(attachWindowOpened);
+
+    }
+
+    private void showAttach(boolean show) {
+        if(show) {
             // opening
             attachButton.setImageResource(R.drawable.ic_header_important);
             attachFragment = AttachFragment.getInstance();
@@ -189,14 +203,15 @@ public class ConversationFragment extends BaseFragment implements AttachListener
             KeyboardUtil.hide(editMessageText, activity);
         } else {
             // closing
-            attachButton.setImageResource(R.drawable.ic_drawer);
-            getChildFragmentManager().beginTransaction().remove(attachFragment).commit();
-            attachFragment.setAttachListener(null);
-            attachFragment = null;
+            if(attachFragment!=null) {
+                attachButton.setImageResource(R.drawable.ic_drawer);
+                getChildFragmentManager().beginTransaction().remove(attachFragment).commit();
+                attachFragment.setAttachListener(null);
+                attachFragment = null;
+            }
         }
-        attachWindowOpened = !attachWindowOpened;
+        attachWindowOpened = show;
     }
-
 
 
     public void sendMessage(VKApiMessage message) {
@@ -231,11 +246,13 @@ public class ConversationFragment extends BaseFragment implements AttachListener
             case R.id.action_profile: {
                 UserDialog profileDialog = new UserDialog(activity, dialogId);
                 profileDialog.show();
-            }break;
+            }
+            break;
             case R.id.action_chat_participants: {
                 ChatDialog chatDialog = new ChatDialog(activity, dialogId);
                 chatDialog.show();
-            }break;
+            }
+            break;
         }
         return super.onOptionsItemSelected(item);
     }

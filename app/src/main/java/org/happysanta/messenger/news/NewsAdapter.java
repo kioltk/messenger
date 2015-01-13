@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,13 +30,11 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return newsList.size();
+        return 5;
     }
 
     @Override
-    public Object getItem(int position) {
-        return newsList.get(position);
-    }
+    public VKApiPost getItem(int position) { return newsList.get(position); }
 
     @Override
     public long getItemId(int position) {
@@ -53,11 +52,23 @@ public class NewsAdapter extends BaseAdapter {
         TextView textView = (TextView) itemView.findViewById(R.id.news_body);
         final TextView dateView = (TextView) itemView.findViewById(R.id.news_date);
 
+        ImageButton commentsView = (ImageButton) itemView.findViewById(R.id.news_comments);
+        ImageButton repostView   = (ImageButton) itemView.findViewById(R.id.news_repost);
+        ImageButton likeView     = (ImageButton) itemView.findViewById(R.id.news_like);
+
+        TextView commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
+        TextView repostsCountView  = (TextView) itemView.findViewById(R.id.news_reposts_count);
+        TextView likesCountView    = (TextView) itemView.findViewById(R.id.news_likes_count);
+
         final VKApiPost post = (VKApiPost) getItem(position);
 
-        nameView.setText(""+post.from_id);
+        nameView.setText("" + post.from_id);
         textView.setText(post.text);
         dateView.setText("" + post.date);
+
+        commentsCountView.setText("" + post.comments_count);
+        repostsCountView.setText("" + post.reposts_count);
+        likesCountView.setText("" + post.likes_count);
 
         return itemView;
     }
