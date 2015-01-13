@@ -25,8 +25,6 @@ import org.happysanta.messenger.core.util.ProfileUtil;
  * Created by Jesus Christ. Amen.
  */
 public class NavigationAdapter extends BaseAdapter {
-    private static final int DIVIDER = -1;
-    private static final int DIVIDER_SMALL = -2;
     public Context context;
 
     public NavigationAdapter (Activity activity ) {context = activity;}
@@ -48,50 +46,7 @@ public class NavigationAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        if(position==1){
-            return DIVIDER_SMALL;
-        }
-        if(BuildConfig.DEBUG) {
-            switch (position) {
-                case 0:
-                    return NavigationFragment.NAVIGATION_PROFILE_ID;
-                case 2:
-                    return NavigationFragment.NAVIGATION_NEWS_ID;
-                case 3:
-                    return NavigationFragment.NAVIGATION_MESSAGES_ID;
-                case 4:
-                    return NavigationFragment.NAVIGATION_GROUPS_ID;
-                case 5:
-                    return NavigationFragment.NAVIGATION_FRIENDS_ID;
-                case 6:
-                    return DIVIDER;
-                case 7:
-                    return NavigationFragment.NAVIGATION_SETTINGS_ID;
-                case 8:
-                    return NavigationFragment.NAVIGATION_ABOUT_ID;
-
-            }
-        }else{
-
-            switch (position) {
-                case 0:
-                    return NavigationFragment.NAVIGATION_PROFILE_ID;
-                case 2:
-                    return NavigationFragment.NAVIGATION_MESSAGES_ID;
-                case 3:
-                    return NavigationFragment.NAVIGATION_GROUPS_ID;
-                case 4:
-                    return NavigationFragment.NAVIGATION_FRIENDS_ID;
-                case 5:
-                    return DIVIDER;
-                case 6:
-                    return NavigationFragment.NAVIGATION_SETTINGS_ID;
-                case 7:
-                    return NavigationFragment.NAVIGATION_ABOUT_ID;
-
-            }
-        }
-        return -1;
+        return NavigationFragment.getItemId(position);
     }
 
     @Override
@@ -177,10 +132,10 @@ public class NavigationAdapter extends BaseAdapter {
             case NavigationFragment.NAVIGATION_ABOUT_ID:
                 textView.setText(R.string.navigation_about);
                 break;
-            case DIVIDER:
+            case NavigationFragment.DIVIDER:
                 itemView = LayoutInflater.from(context).inflate(R.layout.navigation_divider, null);
                 break;
-            case DIVIDER_SMALL:
+            case NavigationFragment.DIVIDER_SMALL:
                 itemView = LayoutInflater.from(context).inflate(R.layout.navigation_divider_small, null);
                 break;
         }

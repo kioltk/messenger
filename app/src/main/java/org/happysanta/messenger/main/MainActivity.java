@@ -19,7 +19,7 @@ import org.happysanta.messenger.user.UserFragment;
 public class MainActivity extends BaseActivity
         implements NavigationFragment.NavigationDrawerCallbacks {
 
-     private NavigationFragment mNavigationFragment;
+    private NavigationFragment mNavigationFragment;
     private DrawerLayout mDrawerLayout;
     private int currentFragmentId;
 
@@ -49,7 +49,7 @@ public class MainActivity extends BaseActivity
     public void onNavigationDrawerItemSelected(int itemdId) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        getFragmentManager().beginTransaction().replace(R.id.container,new Fragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.container, new Fragment()).commit();
         currentFragmentId = itemdId;
         switch (itemdId) {
             case (int) NavigationFragment.NAVIGATION_PROFILE_ID:

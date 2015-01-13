@@ -12,11 +12,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.happysanta.messenger.BuildConfig;
 import org.happysanta.messenger.R;
 
 /**
@@ -26,6 +28,8 @@ import org.happysanta.messenger.R;
  */
 public class NavigationFragment extends Fragment {
 
+    public static final int DIVIDER = -1;
+    public static final int DIVIDER_SMALL = -2;
     public static final int NAVIGATION_PROFILE_ID = 11;
     public static final int NAVIGATION_NEWS_ID = 10;
     public static final int NAVIGATION_MESSAGES_ID = 1;
@@ -33,6 +37,53 @@ public class NavigationFragment extends Fragment {
     public static final int NAVIGATION_FRIENDS_ID = 3;
     public static final int NAVIGATION_SETTINGS_ID = 4;
     public static final int NAVIGATION_ABOUT_ID = 5;
+
+    public static int getItemId(int position){
+        if(position==1){
+            return DIVIDER_SMALL;
+        }
+        if(BuildConfig.DEBUG) {
+            switch (position) {
+                case 0:
+                    return NavigationFragment.NAVIGATION_PROFILE_ID;
+                case 2:
+                    return NavigationFragment.NAVIGATION_NEWS_ID;
+                case 3:
+                    return NavigationFragment.NAVIGATION_MESSAGES_ID;
+                case 4:
+                    return NavigationFragment.NAVIGATION_GROUPS_ID;
+                case 5:
+                    return NavigationFragment.NAVIGATION_FRIENDS_ID;
+                case 6:
+                    return DIVIDER;
+                case 7:
+                    return NavigationFragment.NAVIGATION_SETTINGS_ID;
+                case 8:
+                    return NavigationFragment.NAVIGATION_ABOUT_ID;
+
+            }
+        }else{
+
+            switch (position) {
+                case 0:
+                    return NavigationFragment.NAVIGATION_PROFILE_ID;
+                case 2:
+                    return NavigationFragment.NAVIGATION_MESSAGES_ID;
+                case 3:
+                    return NavigationFragment.NAVIGATION_GROUPS_ID;
+                case 4:
+                    return NavigationFragment.NAVIGATION_FRIENDS_ID;
+                case 5:
+                    return DIVIDER;
+                case 6:
+                    return NavigationFragment.NAVIGATION_SETTINGS_ID;
+                case 7:
+                    return NavigationFragment.NAVIGATION_ABOUT_ID;
+
+            }
+        }
+        return -1;
+    }
 
     /**
      * Remember the position of the selected item.
@@ -84,6 +135,20 @@ public class NavigationFragment extends Fragment {
         selectItem(mCurrentSelectedPosition);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Indicate that this fragment would like to influence the set of actions in the action bar.
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -91,10 +156,9 @@ public class NavigationFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem((int) id);
+                selectItem(position);
             }
         });
-        // todo Нужна шикарная навигация
         mDrawerListView.setAdapter(new NavigationAdapter(getActivity()));/*new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
@@ -196,7 +260,8 @@ public class NavigationFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
+
+            mCallbacks.onNavigationDrawerItemSelected(NavigationFragment.getItemId(position));
         }
     }
 
