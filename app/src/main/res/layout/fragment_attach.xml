@@ -1,7 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#88000000"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#FF333333"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/attach_photo"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/attach_background"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_attach_photo"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:id="@+id/attach_audio"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/attach_background"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_attach_music"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/attach_map"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/attach_background"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_attach_maps"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/attach_video"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/attach_background"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_attach_video"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/attach_gallery"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/attach_background"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_attach_gallery"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/attach_file"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/attach_background"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_attach_file"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
