@@ -4,17 +4,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.core.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,28 +22,37 @@ import java.util.HashSet;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class AttachFragment extends BaseFragment implements View.OnClickListener {
+public class AttachDialog extends Dialog implements View.OnClickListener {
 
     private static final String TAG = "ATTACH_FRAG";
 
     private AttachListener attachListener;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_attach, null);
+    public AttachDialog(Context context) {
+        super(context, R.style.dialog);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dialog_attach);
 
-        final ImageView attachPhoto  = (ImageView) view.findViewById(R.id.attach_photo);
-        final ImageView attachAudio  = (ImageView) view.findViewById(R.id.attach_audio);
-        final ImageView attachGall   = (ImageView) view.findViewById(R.id.attach_gallery);
-        final ImageView attachMap    = (ImageView) view.findViewById(R.id.attach_map);
-        final ImageView attachVideo  = (ImageView) view.findViewById(R.id.attach_video);
-        final ImageView attachFile   = (ImageView) view.findViewById(R.id.attach_file);
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        getWindow().setAttributes(params);
+        /*setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });*/
+        final ImageView attachPhoto = (ImageView) findViewById(R.id.attach_photo);
+        final ImageView attachAudio = (ImageView) findViewById(R.id.attach_audio);
+        final ImageView attachGall = (ImageView) findViewById(R.id.attach_gallery);
+        final ImageView attachMap = (ImageView) findViewById(R.id.attach_map);
+        final ImageView attachVideo = (ImageView) findViewById(R.id.attach_video);
+        final ImageView attachFile = (ImageView) findViewById(R.id.attach_file);
 
         ArrayList<View> circles = new ArrayList<View>() {{
 
@@ -57,20 +65,11 @@ public class AttachFragment extends BaseFragment implements View.OnClickListener
 
         }};
 
-        for (int i = circles.size()-1 ; i >= 0 ; i--) {
+        for (int i = circles.size() - 1; i >= 0; i--) {
 
             setAnimator(circles.get(i), i);
         }
 
-    }
-
-    // attaches here
-
-    public static AttachFragment getInstance() {
-        AttachFragment fragment = new AttachFragment();
-        Bundle bundle = new Bundle();
-        fragment.setArguments(bundle);
-        return fragment;
     }
 
     public void setAttachListener(AttachListener attachListener) {
@@ -155,7 +154,7 @@ public class AttachFragment extends BaseFragment implements View.OnClickListener
                 super.onAnimationEnd(animation);
 
                 v.setClickable(true);
-                v.setOnClickListener(AttachFragment.this);
+                v.setOnClickListener(AttachDialog.this);
             }
         });
     }
@@ -169,32 +168,32 @@ public class AttachFragment extends BaseFragment implements View.OnClickListener
 
             case R.id.attach_photo: {
 
-                Toast.makeText(getActivity(), "Photo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Photo", Toast.LENGTH_SHORT).show();
                 break;
             }
             case R.id.attach_audio: {
 
-                Toast.makeText(getActivity(), "Audio", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Audio", Toast.LENGTH_SHORT).show();
                 break;
             }
             case R.id.attach_gallery: {
 
-                Toast.makeText(getActivity(), "Gallery", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Gallery", Toast.LENGTH_SHORT).show();
                 break;
             }
             case R.id.attach_map: {
 
-                Toast.makeText(getActivity(), "Map", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Map", Toast.LENGTH_SHORT).show();
                 break;
             }
             case R.id.attach_video: {
 
-                Toast.makeText(getActivity(), "Video", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Video", Toast.LENGTH_SHORT).show();
                 break;
             }
             case R.id.attach_file: {
 
-                Toast.makeText(getActivity(), "File", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "File", Toast.LENGTH_SHORT).show();
                 break;
             }
         }

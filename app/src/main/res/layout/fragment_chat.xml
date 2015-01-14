@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light">
 
-    <ListView
-        android:id="@+id/messages_list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:divider="#00ffffff"
         android:dividerHeight="0dp"
         android:background="#e8ecf0"

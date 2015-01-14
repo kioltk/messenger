@@ -2,8 +2,11 @@ package org.happysanta.messenger.messages.conversations;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,19 +23,19 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKAttachments;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
-import org.happysanta.messenger.core.util.KeyboardUtil;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.DialogActivity;
 import org.happysanta.messenger.messages.chats.ChatDialog;
-import org.happysanta.messenger.messages.core.AttachFragment;
+import org.happysanta.messenger.messages.core.AttachDialog;
 import org.happysanta.messenger.messages.core.AttachListener;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.GeoCompat;
@@ -57,7 +59,7 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     private boolean isChat;
 
     // ui
-    private ListView messagesList;
+    private RecyclerView messagesRecycler;
     private View sendButton;
     private EditText editMessageText;
     private TextView statusView;
@@ -65,8 +67,9 @@ public class ConversationFragment extends BaseFragment implements AttachListener
 
     // attach
     private boolean attachWindowOpened = false;
-    private AttachFragment attachFragment;
+    private AttachDialog attachDialog;
     private ArrayList<VKAttachments.VKApiAttachment> attaches = new ArrayList<>(10);
+    private VKList<VKApiUserFull> participants;
 
     public ConversationFragment() {
     }
@@ -75,45 +78,54 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_chat, container, false);
-        messagesList = (ListView) findViewById(R.id.messages_list);
+        messagesRecycler = (RecyclerView) findViewById(R.id.recycler);
         statusView = (TextView) findViewById(R.id.status);
         attachButton = (ImageView) findViewById(R.id.attach);
         sendButton = findViewById(R.id.send_button);
         editMessageText = (EditText) findViewById(R.id.message_box);
         dialogId = getArguments().getInt(DialogActivity.ARG_DIALOGID, 0);
         isChat = getArguments().getBoolean(DialogActivity.ARG_ISCHAT, false);
-
+        if (isChat) {
+            participants = new VKList<>();
+            SparseArray<VKApiUserFull> usersSparseArray = getArguments().getSparseParcelableArray(DialogActivity.ARG_CHAT_PARTICIPANTS);
+            for (int i = 0, sparseArray = usersSparseArray.size(); i < sparseArray; i++) {
+                VKApiUserFull user = usersSparseArray.valueAt(i);
+                participants.add(user);
+            }
+        }
         dialogUtil = new DialogUtil(isChat, dialogId);
 
         statusView.setText("loading");
+        messagesRecycler.setHasFixedSize(false);
+        messagesRecycler.setLayoutManager(new LinearLayoutManager(activity));
         editMessageText.setText(dialogUtil.getBody());
-        messagesAdapter = new MessagesAdapter(activity, messages);
+        messagesAdapter = isChat? new MessagesAdapter(activity, messages, participants) : new MessagesAdapter(activity, messages);
 
-        VKRequest request = isChat? new VKApiMessages().getChatHistory(dialogId):new VKApiMessages().getHistory(dialogId);
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        messages.addAll((VKList<VKApiMessage>) response.parsedModel);
-                        messagesAdapter.notifyDataSetChanged();
-                        tryScrollToBottom();
-                        VKList<VKApiMessage> messagesSort = new VKList();
-                        for (VKApiMessage message : messages) {
-                            messagesSort.add(0, message);
-                            messages = messagesSort;
-                        }
-                        messagesList.setAdapter(messagesAdapter);
-                        if (messages.isEmpty()) {
-                            statusView.setText("Start the conversation");
-                        } else {
-                            statusView.setVisibility(View.GONE);
-                        }
-                        //messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-                    }
-                    @Override
-                    public void onError(VKError error) {
-                        statusView.setText(error.toString());
-                    }
-                });
+        VKRequest request = isChat ? new VKApiMessages().getChatHistory(dialogId) : new VKApiMessages().getHistory(dialogId);
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                VKList<VKApiMessage> messagesSort = new VKList();
+                for (VKApiMessage message : (VKList<VKApiMessage>) response.parsedModel) {
+                    messagesSort.add(0, message);
+                }
+                messages.addAll(messagesSort);
+                messagesRecycler.setAdapter(messagesAdapter);
+                if (messages.isEmpty()) {
+                    statusView.setText("Start the conversation");
+                } else {
+                    statusView.setVisibility(View.GONE);
+                }
+                messagesAdapter.notifyDataSetChanged();
+                tryScrollToBottom();
+                //messagesRecycler.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+            }
+
+            @Override
+            public void onError(VKError error) {
+                statusView.setText(error.toString());
+            }
+        });
 
 
         LongpollService.addConversationListener(new LongpollDialogListener(dialogId) {
@@ -134,19 +146,19 @@ public class ConversationFragment extends BaseFragment implements AttachListener
             @Override
             public void onClick(View v) {
                 String messageText = editMessageText.getText().toString();
-                if(messageText==null || messageText.equals("")){
+                if (messageText == null || messageText.equals("")) {
                     return;
                 }
                 VKApiMessage message = new VKApiMessage();
                 if (isChat) {
                     message.chat_id = dialogId;
-                }else {
+                } else {
                     message.user_id = dialogId;
                 }
                 message.body = messageText;
                 message.out = true;
                 message.read_state = false;
-                message.guid = (int) (System.currentTimeMillis()/1000L * dialogId);
+                message.guid = (int) (System.currentTimeMillis() / 1000L * dialogId);
                 sendMessage(message);
                 editMessageText.setText(null);
             }
@@ -178,8 +190,8 @@ public class ConversationFragment extends BaseFragment implements AttachListener
         editMessageText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    showAttach(false);
+                if (hasFocus) {
+                    // showAttach(false);
                 }
             }
         });
@@ -188,29 +200,14 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     }
 
     private void toggleAttach() {
-        attachWindowOpened = !attachWindowOpened;
-        showAttach(attachWindowOpened);
-
+        showAttach(!attachWindowOpened);
     }
 
     private void showAttach(boolean show) {
-        if(show) {
-            // opening
-            attachButton.setImageResource(R.drawable.ic_header_important);
-            attachFragment = AttachFragment.getInstance();
-            attachFragment.setAttachListener(this);
-            getChildFragmentManager().beginTransaction().replace(R.id.attach_window, attachFragment).commit();
-            KeyboardUtil.hide(editMessageText, activity);
-        } else {
-            // closing
-            if(attachFragment!=null) {
-                attachButton.setImageResource(R.drawable.ic_drawer);
-                getChildFragmentManager().beginTransaction().remove(attachFragment).commit();
-                attachFragment.setAttachListener(null);
-                attachFragment = null;
-            }
-        }
-        attachWindowOpened = show;
+        attachButton.setImageResource(R.drawable.ic_header_important);
+        attachDialog = new AttachDialog(activity);
+        attachDialog.setAttachListener(this);
+        attachDialog.show();
     }
 
 
@@ -220,19 +217,19 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     }
 
     private void tryScrollToBottom() {
-        messagesList.post(new Runnable() {
+        messagesRecycler.post(new Runnable() {
             @Override
             public void run() {
-                messagesList.smoothScrollToPosition(messagesAdapter.getCount() - 1);
-                //messagesList.scrollTo(0,messagesList.getHeight());
+                messagesRecycler.smoothScrollToPosition(messagesAdapter.getItemCount() - 1);
+                //messagesRecycler.scrollTo(0,messagesRecycler.getHeight());
             }
         });
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu,MenuInflater menuInflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 
-        if(isChat) {
+        if (isChat) {
             menuInflater.inflate(R.menu.menu_chat, menu);
         } else {
             menuInflater.inflate(R.menu.menu_conversation, menu);
@@ -272,31 +269,31 @@ public class ConversationFragment extends BaseFragment implements AttachListener
 
     @Override
     public void onFileAttached(File file) {
-        Toast.makeText(activity, file.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onPictureAttached(File pictureFile) {
-        Toast.makeText(activity, pictureFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, pictureFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onVideoAttached(File videoFile) {
-        Toast.makeText(activity, videoFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, videoFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAudioAttached(File audioFile) {
-        Toast.makeText(activity, audioFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, audioFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onGeoAttached(GeoCompat geo) {
-        Toast.makeText(activity, geo.title,Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, geo.title, Toast.LENGTH_SHORT).show();
     }
 
     public boolean onBackPressed() {
-        if(attachFragment != null){
+        if (attachDialog != null) {
             toggleAttach();
             return false;
         }

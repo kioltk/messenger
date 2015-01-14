@@ -1,6 +1,8 @@
 package com.vk.sdk.api.model;
 
 import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.SparseArray;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -40,7 +42,7 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
         this.participants = chatUsers;
     }
 
-    public VKApiUserFull getParticipant(int userId){
+    public VKApiUserFull getParticipant(int userId) {
         return participants.getById(userId);
     }
 
@@ -57,11 +59,12 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
     public int getId() {
         return dialogId;
     }
-    public boolean isChat(){
+
+    public boolean isChat() {
         return isChat;
     }
 
-    public String getBody(){
+    public String getBody() {
         return lastMessage.getBody();
     }
 
@@ -77,7 +80,7 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
         this.lastMessage = lastMessage;
     }
 
-    public boolean isOnline(){
+    public boolean isOnline() {
         return dialogOwner.online;
     }
 
@@ -88,11 +91,19 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
         return title;
     }
 
-    public String getSubtitle(){
+    public String getSubtitle() {
         if (!isChat) {
-            return dialogOwner.online ? (dialogOwner.online_mobile?"online":"mobile"):(""+dialogOwner.last_seen);
+            return dialogOwner.online ? (dialogOwner.online_mobile ? "online" : "mobile") : ("" + dialogOwner.last_seen);
         }
-        return participants.size()+" users";
+        return participants.size() + " users";
     }
 
+    public SparseArray<? extends Parcelable> getParticipants() {
+
+        SparseArray<VKApiUserFull> participantsSparse = new SparseArray<VKApiUserFull>();
+        for (VKApiUserFull participant : participants) {
+            participantsSparse.put(participant.id, participant);
+        }
+        return participantsSparse;
+    }
 }

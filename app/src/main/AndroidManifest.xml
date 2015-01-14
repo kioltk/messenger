@@ -32,7 +32,9 @@
         </activity>
         <activity
             android:name=".messages.DialogActivity"
-            android:label="@string/title_activity_chat" >
+            android:label="@string/title_activity_chat"
+            android:windowSoftInputMode="adjustResize"
+            >
         </activity>
 
         <service

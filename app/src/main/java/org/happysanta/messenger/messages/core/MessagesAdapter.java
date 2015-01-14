@@ -6,11 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,10 +24,13 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiGeo;
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
+import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.core.util.MapUtil;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 
@@ -36,25 +39,89 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class MessagesAdapter extends BaseAdapter {
+public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     private final Activity activity;
     private final VKList<VKApiMessage> messages;
+    private final boolean isChat;
+    private final VKList<VKApiUserFull> chatUsers;
     private View typingView;
 
     public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages) {
         this.activity = activity;
         this.messages = messages;
-        typingView = LayoutInflater.from(activity).inflate(R.layout.item_typing, null);
+        this.isChat = false;
+        typingView = LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null);
+        chatUsers = null;
+    }
+    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> chatUsers){
+        this.activity = activity;
+        this.messages = messages;
+        isChat = true;
+        this.chatUsers = chatUsers;
+        typingView = LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null);
     }
 
     @Override
-    public int getCount() {
-        return messages.size() + 1;
+    public int getItemCount() {
+        return messages.size() + 2;
     }
 
-    @Override
     public VKApiMessage getItem(int position) {
-        return messages.get(position);
+        return messages.get(position-1);
+    }
+
+    @Override
+    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case MessageViewType.Typing:
+                return new TypingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_typing,null));
+            case MessageViewType.Loading:
+                return new LoadingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_loading, null));
+            case MessageViewType.Complex:
+                return new ComplexMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_complex, null));
+        }
+        return new MessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_empty, null));
+    }
+
+    @Override
+    public void onBindViewHolder(MessageViewHolder holder, int position) {
+        // getView(position, holder.itemView);
+        switch (getItemViewType(position)){
+            case MessageViewType.Complex:
+                getView(position, holder.itemView);
+                break;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int viewType = MessageViewType.Unknown;
+        if (position==0) {
+            return MessageViewType.Loading;
+        }
+        if(position==getItemCount()-1){
+            return MessageViewType.Typing;
+        }
+        VKApiMessage currentMessage = getItem(position);
+        if (currentMessage.body != null && !currentMessage.body.equals("")) {
+            if (currentMessage.emoji && currentMessage.body.length() == 2) {
+                return MessageViewType.Emoji;
+            } else {
+                return MessageViewType.Complex;
+            }
+        } else {
+            if (currentMessage.sticker != null) {
+                return MessageViewType.Sticker;
+            } else {
+                if (currentMessage.geo != null) {
+                    return MessageViewType.Geo;
+                } else {
+                    // todo another attaches?
+
+                }
+            }
+        }
+        return viewType;
     }
 
     @Override
@@ -62,21 +129,23 @@ public class MessagesAdapter extends BaseAdapter {
         return 0;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+
+    public View getView(int position, View convertView) {
 
         if (position == messages.size()) {
             return typingView;
         }
 
 
-        View itemView = LayoutInflater.from(activity).inflate(R.layout.item_message, null);
+        View itemView = convertView;
         View bodyView;
+        View simpleContentView = itemView.findViewById(R.id.message_simple_content);
         TextView textView = (TextView) itemView.findViewById(R.id.text);
         ImageView emojiView = (ImageView) itemView.findViewById(R.id.emoji);
         ImageView stickerView = (ImageView) itemView.findViewById(R.id.sticker);
         final ImageView mapView = (ImageView) itemView.findViewById(R.id.map);
         final TextView dateView = (TextView) itemView.findViewById(R.id.dateView);
+        final ImageView ownerView = (ImageView) itemView.findViewById(R.id.owner);
 
         LinearLayout.LayoutParams mapLayoutParams = (LinearLayout.LayoutParams) mapView.getLayoutParams();
         LinearLayout.LayoutParams dateLayoutParams = new LinearLayout.LayoutParams(
@@ -84,33 +153,34 @@ public class MessagesAdapter extends BaseAdapter {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
 
-        final VKApiMessage message = getItem(position);
+        final VKApiMessage currentMessage = getItem(position);
 
-        if (!message.read_state) {
+        if (!currentMessage.read_state) {
             itemView.setBackgroundColor(activity.getResources().getColor(R.color.dialog_unread_background));
         } else {
             itemView.setBackgroundDrawable(null);
         }
 
+        ownerView.setVisibility(View.GONE);
 
-        if (message.body != null && !message.body.equals("")) {
-            if (message.emoji && message.body.length() == 2) {
+        if (currentMessage.body != null && !currentMessage.body.equals("")) {
+            if (currentMessage.emoji && currentMessage.body.length() == 2) {
                 textView.setVisibility(View.GONE);
                 emojiView.setVisibility(View.VISIBLE);
                 bodyView = emojiView;
                 // todo set emoji?
             } else {
-                textView.setText(message.body);
+                textView.setText(currentMessage.body);
                 bodyView = textView;
             }
         } else {
-            if (message.sticker != null) {
+            if (currentMessage.sticker != null) {
                 stickerView.setVisibility(View.VISIBLE);
                 textView.setVisibility(View.GONE);
                 bodyView = stickerView;
                 // todo sticker
             } else {
-                if (message.geo != null) {
+                if (currentMessage.geo != null) {
                     textView.setVisibility(View.GONE);
                     bodyView = mapView;
                 } else {
@@ -119,8 +189,8 @@ public class MessagesAdapter extends BaseAdapter {
                 }
             }
         }
-        if (message.geo != null) {
-            final VKApiGeo geo = message.geo;
+        if (currentMessage.geo != null) {
+            final VKApiGeo geo = currentMessage.geo;
             mapView.setVisibility(View.VISIBLE);
             mapView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -168,7 +238,7 @@ public class MessagesAdapter extends BaseAdapter {
                 }
             });
         }
-        dateView.setText("" + message.date);
+        dateView.setText("" + currentMessage.date);
         dateView.setVisibility(View.GONE);
 
 
@@ -179,33 +249,73 @@ public class MessagesAdapter extends BaseAdapter {
         int itemRightPadding = itemDefaultPadding;
         int itemBottomPadding = itemDefaultPadding;
 
-        if (message.out) {
+        VKApiMessage prevMessage = null;
+        VKApiMessage nextMessage = null;
+        if (position != 0) {
+            prevMessage = messages.get(position - 1);
+        }
+        if (position < messages.size() - 1) {
+            nextMessage = messages.get(position + 1);
+        }
+
+        if (currentMessage.out) {
             itemLayoutParams.gravity = Gravity.RIGHT;
             dateLayoutParams.gravity = Gravity.RIGHT;
             mapLayoutParams.gravity = Gravity.RIGHT;
             itemLeftPadding = itemDefaultPadding * 4;
-
-            if (position != 0 && messages.get(position - 1).out) {
-                itemTopPadding = itemDefaultPadding / 4;
-            }
-            if (position < messages.size() - 1 && messages.get(position + 1).out) {
-                itemBottomPadding = itemDefaultPadding / 4;
-            }
         } else {
             itemLayoutParams.gravity = Gravity.LEFT;
             dateLayoutParams.gravity = Gravity.LEFT;
             mapLayoutParams.gravity = Gravity.LEFT;
             itemRightPadding = itemDefaultPadding * 4;
-            if (position != 0 && !messages.get(position - 1).out) {
+        }
+
+        if(isChat) {
+            itemLeftPadding = itemDefaultPadding * 8;
+            if (prevMessage != null && prevMessage.user_id == currentMessage.user_id) {
+                itemTopPadding = itemDefaultPadding / 4;
+            }else{
+                if(!currentMessage.out){
+                    ownerView.setVisibility(View.VISIBLE);
+                    ownerView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
+                    VKApiUserFull owner = chatUsers.getById(currentMessage.user_id);
+                    ImageUtil.showFromCache(owner.getPhoto(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            ownerView.setImageBitmap(BitmapUtil.circle(loadedImage));
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+
+                        }
+                    });
+                }
+            }
+            if (nextMessage != null && nextMessage.user_id == currentMessage.user_id) {
+                itemBottomPadding = itemDefaultPadding / 4;
+            }
+        } else {
+            if (prevMessage != null && prevMessage.out == currentMessage.out) {
                 itemTopPadding = itemDefaultPadding / 4;
             }
-            if (position < messages.size() - 1 && !messages.get(position + 1).out) {
+            if (nextMessage != null && nextMessage.out == currentMessage.out) {
                 itemBottomPadding = itemDefaultPadding / 4;
             }
         }
 
 
-        itemView.setPadding(itemLeftPadding, itemTopPadding, itemRightPadding, itemBottomPadding);
+        simpleContentView.setPadding(itemLeftPadding, itemTopPadding, itemRightPadding, itemBottomPadding);
         bodyView.setLayoutParams(itemLayoutParams);
         mapView.setLayoutParams(mapLayoutParams);
         dateView.setLayoutParams(dateLayoutParams);
