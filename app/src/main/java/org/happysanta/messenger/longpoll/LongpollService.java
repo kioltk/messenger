@@ -114,7 +114,7 @@ public class LongpollService extends Service {
                         }
                     };
                 }
-                Log.e("AGCY SPY LONGPOLLSERVICE", "refreshing error: " + error);
+                Log.e("HAPPYSANTA MESSENGER LONGPOLLSERVICE", "refreshing error: " + error);
             }
 
         });

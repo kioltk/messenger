@@ -1,4 +1,4 @@
-package org.happysanta.messenger.messages.core;
+package org.happysanta.messenger.messages.attach;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

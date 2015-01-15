@@ -1,9 +1,9 @@
-package org.happysanta.messenger.messages.core;
+package org.happysanta.messenger.messages.attach;
 
 /**
  * Created by Jesus Christ. Amen.
  */
-public class GeoCompat {
+public class AttachGeo {
     public String title;
     public String city;
     public String country;

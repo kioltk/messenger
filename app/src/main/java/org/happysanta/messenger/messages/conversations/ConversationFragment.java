@@ -33,12 +33,12 @@ import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
-import org.happysanta.messenger.messages.DialogActivity;
+import org.happysanta.messenger.messages.ChatActivity;
+import org.happysanta.messenger.messages.attach.AttachGeo;
 import org.happysanta.messenger.messages.chats.ChatDialog;
-import org.happysanta.messenger.messages.core.AttachDialog;
-import org.happysanta.messenger.messages.core.AttachListener;
+import org.happysanta.messenger.messages.attach.AttachDialog;
+import org.happysanta.messenger.messages.attach.AttachListener;
 import org.happysanta.messenger.messages.core.DialogUtil;
-import org.happysanta.messenger.messages.core.GeoCompat;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.UserDialog;
 
@@ -83,11 +83,11 @@ public class ConversationFragment extends BaseFragment implements AttachListener
         attachButton = (ImageView) findViewById(R.id.attach);
         sendButton = findViewById(R.id.send_button);
         editMessageText = (EditText) findViewById(R.id.message_box);
-        dialogId = getArguments().getInt(DialogActivity.ARG_DIALOGID, 0);
-        isChat = getArguments().getBoolean(DialogActivity.ARG_ISCHAT, false);
+        dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
+        isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
         if (isChat) {
             participants = new VKList<>();
-            SparseArray<VKApiUserFull> usersSparseArray = getArguments().getSparseParcelableArray(DialogActivity.ARG_CHAT_PARTICIPANTS);
+            SparseArray<VKApiUserFull> usersSparseArray = getArguments().getSparseParcelableArray(ChatActivity.ARG_CHAT_PARTICIPANTS);
             for (int i = 0, sparseArray = usersSparseArray.size(); i < sparseArray; i++) {
                 VKApiUserFull user = usersSparseArray.valueAt(i);
                 participants.add(user);
@@ -119,6 +119,11 @@ public class ConversationFragment extends BaseFragment implements AttachListener
                 messagesAdapter.notifyDataSetChanged();
                 tryScrollToBottom();
                 //messagesRecycler.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+            }
+
+            @Override
+            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
+                statusView.setText("progress: " + bytesLoaded/bytesTotal*100+"%");
             }
 
             @Override
@@ -192,6 +197,7 @@ public class ConversationFragment extends BaseFragment implements AttachListener
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     // showAttach(false);
+                    tryScrollToBottom();
                 }
             }
         });
@@ -288,15 +294,11 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     }
 
     @Override
-    public void onGeoAttached(GeoCompat geo) {
+    public void onGeoAttached(AttachGeo geo) {
         Toast.makeText(activity, geo.title, Toast.LENGTH_SHORT).show();
     }
 
     public boolean onBackPressed() {
-        if (attachDialog != null) {
-            toggleAttach();
-            return false;
-        }
         return true;
     }
 }

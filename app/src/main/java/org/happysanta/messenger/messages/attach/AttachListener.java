@@ -1,4 +1,4 @@
-package org.happysanta.messenger.messages.core;
+package org.happysanta.messenger.messages.attach;
 
 import java.io.File;
 
@@ -11,7 +11,7 @@ public interface AttachListener {
     void onPictureAttached(File pictureFile); // also camera
     void onVideoAttached(File videoFile);
     void onAudioAttached(File audioFile);
-    void onGeoAttached(GeoCompat geo);
+    void onGeoAttached(AttachGeo geo);
 
 
 }

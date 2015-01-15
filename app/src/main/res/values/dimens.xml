@@ -11,5 +11,7 @@
     <dimen name="ab_logo_size">40dp</dimen>
     <dimen name="default_message_padding">6dp</dimen>
     <dimen name="online_size">22dp</dimen>
+    <dimen name="chathead_size">65dp</dimen>
+    <dimen name="chathead_margin">10dp</dimen>
 
 </resources>

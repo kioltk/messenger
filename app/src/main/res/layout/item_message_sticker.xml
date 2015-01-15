@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:padding="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/owner"
+            android:visibility="gone"
+            android:src="@drawable/user_placeholder"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <ImageView
+            android:id="@+id/sticker"
+            android:src="@drawable/sticker"
+            android:alpha="0.2"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+        <TextView
+            android:text="Stickers are not supported yet"
+            android:textColor="#333"
+            android:layout_alignRight="@+id/sticker"
+            android:layout_alignLeft="@+id/sticker"
+            android:layout_alignTop="@+id/sticker"
+            android:layout_alignBottom="@+id/sticker"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</RelativeLayout>

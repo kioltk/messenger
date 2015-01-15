@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_gravity="center"
+    <ImageView
+        android:id="@+id/owner"
+        android:src="@drawable/user_placeholder"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+    <LinearLayout
+        android:orientation="vertical"
         android:gravity="center"
-        android:text="Unknown message type"
-        android:textSize="18dp"
-        android:textStyle="italic"
-        android:textColor="#666"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
-</LinearLayout>
+        android:layout_height="match_parent">
+        <TextView
+            android:text="Unknown message type"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textColor="#666"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"/>
+        <TextView
+            android:id="@+id/body"
+            android:text="subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
+</RelativeLayout>

@@ -24,11 +24,11 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
-public class DialogActivity extends BaseActivity {
+public class ChatActivity extends BaseActivity {
 
     public static final String ARG_DIALOGID = "arg_dialogid";
     public static final String ARG_ISCHAT = "arg_ischat";
-    private static final String ARG_TITLE = "arg_title";
+    public static final String ARG_TITLE = "arg_title";
     public static final String ARG_LOGO = "arg_logo";
     public static final String ARG_SUBTITLE = "arg_subtitle";
     public static final String ARG_CHAT_PARTICIPANTS = "arg_chat_participants";
@@ -54,8 +54,8 @@ public class DialogActivity extends BaseActivity {
         title = bundle.getString(ARG_TITLE, "Dialog");
         subtitle = bundle.getString(ARG_SUBTITLE, null);
         logo = bundle.getString(ARG_LOGO, null);
-        dialogId = bundle.getInt(DialogActivity.ARG_DIALOGID, 0);
-        isChat = bundle.getBoolean(DialogActivity.ARG_ISCHAT, false);
+        dialogId = bundle.getInt(ChatActivity.ARG_DIALOGID, 0);
+        isChat = bundle.getBoolean(ChatActivity.ARG_ISCHAT, false);
 
         setTitle(title);
 
@@ -124,7 +124,7 @@ public class DialogActivity extends BaseActivity {
     }
 
     public static Intent getActivityIntent(Context context, VKApiDialog dialog) {
-        Intent intent = new Intent(context, DialogActivity.class);
+        Intent intent = new Intent(context, ChatActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_DIALOGID, dialog.getId());
         bundle.putBoolean(ARG_ISCHAT, dialog.isChat());

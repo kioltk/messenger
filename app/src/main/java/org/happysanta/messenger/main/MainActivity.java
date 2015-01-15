@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 
+import org.happysanta.messenger.BuildConfig;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
 import org.happysanta.messenger.core.BaseActivity;
@@ -13,6 +14,7 @@ import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.messages.chats.ChatsListFragment;
 import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
 import org.happysanta.messenger.news.NewsListFragment;
+import org.happysanta.messenger.sandbox.SandboxFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 import org.happysanta.messenger.user.UserFragment;
 
@@ -40,9 +42,15 @@ public class MainActivity extends BaseActivity
                 mDrawerLayout);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, new ConversationsListFragment())
-                .commit();
+        if(BuildConfig.DEBUG) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, new SandboxFragment())
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, new ConversationsListFragment())
+                    .commit();
+        }
     }
 
     @Override
@@ -87,6 +95,11 @@ public class MainActivity extends BaseActivity
             case (int) NavigationFragment.NAVIGATION_ABOUT_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new AboutFragment())
+                        .commit();
+                break;
+            case NavigationFragment.NAVIGATION_SANDBOX_ID:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new SandboxFragment())
                         .commit();
                 break;
             default:

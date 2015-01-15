@@ -35,7 +35,7 @@ import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
-import org.happysanta.messenger.messages.DialogActivity;
+import org.happysanta.messenger.messages.ChatActivity;
 import org.happysanta.messenger.messages.core.DialogUtil;
 
 import java.util.ArrayList;
@@ -46,8 +46,8 @@ import java.util.ArrayList;
  */
 public class ConversationsListFragment extends BaseFragment {
     private View rootView;
-    private VKList<VKApiDialog> allDialogs;
-    private VKList<VKApiDialog> showingDialogs;
+    private VKList<VKApiDialog> allDialogs = new VKList<>();
+    private VKList<VKApiDialog> showingDialogs = new VKList<>();
     private TextView status;
     private boolean chatsShowed = false;
     private RecyclerView recycler;
@@ -73,11 +73,10 @@ public class ConversationsListFragment extends BaseFragment {
             @Override
             public void onComplete(VKResponse response) {
 
-                allDialogs =(VKList<VKApiDialog>) response.parsedModel;
+                allDialogs.addAll((VKList<VKApiDialog>) response.parsedModel);
                 if(chatsShowed) {
-                    showingDialogs = new VKList<VKApiDialog>(allDialogs);
+                    showingDialogs.addAll(allDialogs);
                 } else {
-                    showingDialogs = new VKList<VKApiDialog>();
                     for (VKApiDialog dialog : allDialogs) {
                         if (!dialog.isChat()) {
                             showingDialogs.add(dialog);
@@ -356,7 +355,7 @@ public class ConversationsListFragment extends BaseFragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
+                        Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
                         startActivity(intent);
                     }
                 });

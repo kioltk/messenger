@@ -1,17 +1,13 @@
 package org.happysanta.messenger.start;
 
-import android.app.MediaRouteButton;
+import android.animation.Animator;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKOpenAuthActivity;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
@@ -20,10 +16,8 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiUsers;
 import com.vk.sdk.api.model.VKApiUserFull;
-import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.util.VKUtil;
 
-import org.happysanta.messenger.MessengerApplication;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.ProfileUtil;
 import org.happysanta.messenger.main.MainActivity;
@@ -34,6 +28,8 @@ import java.util.Arrays;
 public class StartActivity extends ActionBarActivity {
 
     private View splash;
+    private Button startButton;
+    private View startFictive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,34 +38,88 @@ public class StartActivity extends ActionBarActivity {
         setContentView(R.layout.activity_start);
 
         splash = findViewById(R.id.splash);
+        startButton = (Button) findViewById(R.id.start);
+        startFictive = findViewById(R.id.start_fictive);
 
         if(VKSdk.wakeUpSession(this)){
-            startMainActivity();
+            startMainActivity(false);
             return;
         }
 
 
-        final Button button = (Button) findViewById(R.id.start);
-        button.setOnClickListener(new View.OnClickListener() {
+        startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 start();
+            }
+        });
+        startFictive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMainActivity(true);
             }
         });
 
         String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
         Log.d("fingerprint", Arrays.toString(fingerprints));
 
-        button.postDelayed(new Runnable() {
+        startButton.postDelayed(new Runnable() {
             @Override
             public void run() {
-                button.setVisibility(View.VISIBLE);
+                startButton.setVisibility(View.VISIBLE);
                 //splash.setVisibility(View.GONE);
             }
         }, 1500);
     }
 
-    private void startMainActivity() {
+    private void startMainActivity(boolean animateButtons) {
+        if(animateButtons) {
+            startButton.animate().alpha(0).translationY(100).setDuration(250).setStartDelay(100).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    startButton.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
+            startFictive.animate().alpha(0).translationY(100).setDuration(250).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    startFictive.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
+        } else {
+            startButton.setVisibility(View.GONE);
+            startFictive.setVisibility(View.GONE);
+        }
         new VKApiUsers().access().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onError(VKError error) {
@@ -94,7 +144,7 @@ public class StartActivity extends ActionBarActivity {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
-        },1500);
+        }, 500);
     }
 
     private void start() {
@@ -123,7 +173,7 @@ public class StartActivity extends ActionBarActivity {
                     case RESULT_CANCELED:
                         break;
                     case RESULT_OK:
-                        startMainActivity();
+                        startMainActivity(true);
                         break;
                 }
             }

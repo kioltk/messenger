@@ -51,7 +51,7 @@ public abstract class LongpollTask extends AsyncTask<Void, Void, Object> {
             HttpResponse httpResponse = httpClient.execute(get);
             HttpEntity httpEntity = httpResponse.getEntity();
             response = EntityUtils.toString(httpEntity);
-            Log.i("AGCY SPY","longpoll responses:" + response);
+            Log.i("HAPPYSANTA MESSENGER","longpoll responses:" + response);
             if (isCancelled())
                 return null;
             return parseResult(response);

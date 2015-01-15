@@ -37,6 +37,7 @@ public class NavigationFragment extends Fragment {
     public static final int NAVIGATION_FRIENDS_ID = 3;
     public static final int NAVIGATION_SETTINGS_ID = 4;
     public static final int NAVIGATION_ABOUT_ID = 5;
+    public static final int NAVIGATION_SANDBOX_ID = 105;
 
     public static int getItemId(int position){
         if(position==1){
@@ -152,27 +153,30 @@ public class NavigationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_navigation, container, false);
+        mDrawerListView = (ListView) rootView.findViewById(R.id.navigation_list);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new NavigationAdapter(getActivity()));/*new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.navigation_profile),
-                        getString(R.string.navigation_messages),
-                        getString(R.string.navigation_groups),
-                        getString(R.string.navigation_friends),
-                        getString(R.string.navigation_settings),
-                        getString(R.string.navigation_about)
-                }));*/
+        mDrawerListView.setAdapter(new NavigationAdapter(getActivity()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+
+        rootView.findViewById(R.id.sandbox).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDrawerLayout != null) {
+                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                }
+                if (mCallbacks != null) {
+                    mCallbacks.onNavigationDrawerItemSelected(NavigationFragment.NAVIGATION_SANDBOX_ID);
+                }
+            }
+        });
+
+        return rootView;
     }
 
     public boolean isDrawerOpen() {

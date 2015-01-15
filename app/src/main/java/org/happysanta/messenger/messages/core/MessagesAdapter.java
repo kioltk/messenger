@@ -1,38 +1,26 @@
 package org.happysanta.messenger.messages.core;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiMessages;
-import com.vk.sdk.api.model.VKApiGeo;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.core.util.BitmapUtil;
-import org.happysanta.messenger.core.util.Dimen;
-import org.happysanta.messenger.core.util.ImageUtil;
-import org.happysanta.messenger.core.util.MapUtil;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
+import org.happysanta.messenger.messages.core.holders.ComplexMessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.LoadingMessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.MessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.StickerMessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.TypingMessageViewHolder;
 
 import java.util.ArrayList;
 
@@ -71,29 +59,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     }
 
     @Override
-    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case MessageViewType.Typing:
-                return new TypingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_typing,null));
-            case MessageViewType.Loading:
-                return new LoadingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_loading, null));
-            case MessageViewType.Complex:
-                return new ComplexMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_complex, null));
-        }
-        return new MessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_empty, null));
-    }
-
-    @Override
-    public void onBindViewHolder(MessageViewHolder holder, int position) {
-        // getView(position, holder.itemView);
-        switch (getItemViewType(position)){
-            case MessageViewType.Complex:
-                getView(position, holder.itemView);
-                break;
-        }
-    }
-
-    @Override
     public int getItemViewType(int position) {
         int viewType = MessageViewType.Unknown;
         if (position==0) {
@@ -116,6 +81,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
                 if (currentMessage.geo != null) {
                     return MessageViewType.Geo;
                 } else {
+
                     // todo another attaches?
 
                 }
@@ -123,6 +89,80 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         }
         return viewType;
     }
+    @Override
+    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case MessageViewType.Typing:
+                return new TypingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null));
+            case MessageViewType.Loading:
+                return new LoadingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_loading, null));
+            case MessageViewType.Sticker:
+                return new StickerMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_sticker, null));
+            case MessageViewType.Complex:
+                return new ComplexMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_complex, null));
+        }
+        return new MessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_empty, null));
+    }
+
+    @Override
+    public void onBindViewHolder(MessageViewHolder holder, int position) {
+        int itemViewType = getItemViewType(position);
+        if(itemViewType<0){
+            return;
+        }
+        VKApiMessage prevMessage = position > 1 ? getItem(position-1) : null;
+        VKApiMessage currentMessage = getItem(position);
+        VKApiMessage nextMessage = position < getItemCount() - 2 ? getItem(position + 1) : null;
+        // getView(position, holder.itemView);
+        switch (itemViewType){
+            case MessageViewType.Complex:
+                holder.bindData(currentMessage);
+                break;
+            case MessageViewType.Photo:
+                holder.bindData(currentMessage);
+                break;
+            case MessageViewType.Sticker:
+                holder.bindData(currentMessage);
+                break;
+            case MessageViewType.Unknown:
+            default:
+                holder.bindData(currentMessage);
+                // holder.showOwner(chatUsers.getById(currentMessage.user_id));
+                return;
+        }
+        if (isChat) {
+            if (prevMessage!=null && currentMessage.user_id == prevMessage.user_id) {
+                holder.groupTop();
+            } else {
+                holder.ungroupTop();
+                if(!currentMessage.out){
+                    holder.showOwner(chatUsers.getById(currentMessage.user_id));
+                } else {
+                    holder.hideOwner();
+                }
+            }
+            if(nextMessage!=null && currentMessage.user_id == nextMessage.user_id){
+                holder.groupBottom();
+            } else {
+                holder.ungroupBottom();
+            }
+
+
+        } else {
+            if (prevMessage!=null && currentMessage.out == prevMessage.out) {
+                holder.groupTop();
+            } else {
+                holder.ungroupTop();
+            }
+            if(nextMessage!=null && currentMessage.out == nextMessage.out){
+                holder.groupBottom();
+            } else {
+                holder.ungroupBottom();
+            }
+        }
+    }
+
+
 
     @Override
     public long getItemId(int position) {
@@ -131,18 +171,18 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
 
     public View getView(int position, View convertView) {
-
+        View itemView = convertView;
+/*
         if (position == messages.size()) {
             return typingView;
         }
 
 
-        View itemView = convertView;
         View bodyView;
         View simpleContentView = itemView.findViewById(R.id.message_simple_content);
         TextView textView = (TextView) itemView.findViewById(R.id.text);
-        ImageView emojiView = (ImageView) itemView.findViewById(R.id.emoji);
-        ImageView stickerView = (ImageView) itemView.findViewById(R.id.sticker);
+        //ImageView emojiView = (ImageView) itemView.findViewById(R.id.emoji);
+        //ImageView stickerView = (ImageView) itemView.findViewById(R.id.sticker);
         final ImageView mapView = (ImageView) itemView.findViewById(R.id.map);
         final TextView dateView = (TextView) itemView.findViewById(R.id.dateView);
         final ImageView ownerView = (ImageView) itemView.findViewById(R.id.owner);
@@ -329,7 +369,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
                     dateView.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        });*/
 
         return itemView;
     }

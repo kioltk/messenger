@@ -30,8 +30,6 @@ package com.vk.sdk.api.model;
 
 import android.os.Parcel;
 
-import com.vk.sdk.api.VKApi;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -206,6 +204,20 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
     public String getBody() {
         if(body!=null && !body.equals(""))
             return body;
+        if(sticker!=null){
+            return "Sticker";
+        }
+        if(!attachments.isEmpty()){
+            if (attachments.size()>1) {
+                return attachments.size()+" attachments";
+            } else {
+                return attachments.get(0).getType();
+            }
+        }
+        if(geo!=null){
+            return "Map";
+        }
         return null;
+
     }
 }

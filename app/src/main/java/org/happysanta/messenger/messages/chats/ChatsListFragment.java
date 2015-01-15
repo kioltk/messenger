@@ -27,7 +27,7 @@ import com.vk.sdk.api.model.VKList;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
-import org.happysanta.messenger.messages.DialogActivity;
+import org.happysanta.messenger.messages.ChatActivity;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -48,7 +48,7 @@ public class ChatsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 VKApiDialog dialog = dialogs.get(position);
-                Intent intent = DialogActivity.getActivityIntent(getActivity(), dialog);
+                Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
                 startActivity(intent);
             }
         });

@@ -3,9 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ProgressBar
-        android:layout_centerInParent="true"
-        android:textColor="#666"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"/>
+    <RelativeLayout
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--<ProgressBar
+            android:layout_centerInParent="true"
+            android:textColor="#666"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"/>-->
+        <TextView
+            android:text="Tap to load more"
+            android:textColor="@color/color_primary"
+            android:textStyle="bold|italic"
+            android:textSize="16sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        </RelativeLayout>
 </RelativeLayout>

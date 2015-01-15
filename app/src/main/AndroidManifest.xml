@@ -3,7 +3,7 @@
     package="org.happysanta.messenger" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus"/>
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".messages.DialogActivity"
+            android:name=".messages.ChatActivity"
             android:label="@string/title_activity_chat"
             android:windowSoftInputMode="adjustResize"
             >
