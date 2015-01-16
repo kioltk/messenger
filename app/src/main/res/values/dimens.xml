@@ -14,4 +14,18 @@
     <dimen name="chathead_size">65dp</dimen>
     <dimen name="chathead_margin">10dp</dimen>
 
+    <dimen name="picker_coordY_audio">-112dp</dimen>
+
+    <dimen name="picker_coordX_map">-66dp</dimen>
+    <dimen name="picker_coordY_map">84dp</dimen>
+
+    <dimen name="picker_coordX_video">66dp</dimen>
+    <dimen name="picker_coordY_video">84dp</dimen>
+
+    <dimen name="picker_coordX_gallery">100dp</dimen>
+    <dimen name="picker_coordY_gallery">-42dp</dimen>
+
+    <dimen name="picker_coordX_file">-100dp</dimen>
+    <dimen name="picker_coordY_file">-42dp</dimen>
+
 </resources>
