@@ -293,10 +293,6 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     }
 
     public boolean onBackPressed() {
-        if (attachDialog != null) {
-            toggleAttach();
-            return false;
-        }
         return true;
     }
 }

@@ -112,11 +112,11 @@ public class DialogActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (conversationFragment.onBackPressed())
-            super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (conversationFragment.onBackPressed())
+//            super.onBackPressed();
+//    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
