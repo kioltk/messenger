@@ -1,18 +1,18 @@
 package org.happysanta.messenger.user;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -22,8 +22,8 @@ import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
-import org.happysanta.messenger.longpoll.LongpollService;
-import org.happysanta.messenger.longpoll.listeners.LongpollListener;
+import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.ImageUtil;
 
 import java.util.ArrayList;
 
@@ -42,8 +42,9 @@ public class UserFragment extends BaseFragment {
 
         TextView statusView = (TextView) rootView.findViewById(R.id.status);
 
-        ImageView imageView = (ImageView) rootView.findViewById(R.id.user_photo);
+        final ImageView imageView = (ImageView) rootView.findViewById(R.id.user_photo);
 
+        imageView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         // todo это всё нужно делать заранее на экране загрузки
         new VKApiUsers().get().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -61,6 +62,27 @@ public class UserFragment extends BaseFragment {
                     VKList<VKApiUserFull> users = (VKList<VKApiUserFull>) response.parsedModel;
                     VKApiUserFull currentUser = users.get(0);
                     usernameView.setText(currentUser.toString());
+                    ImageUtil.showFromCache(currentUser.getPhoto(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            imageView.setImageBitmap(BitmapUtil.circle(loadedImage));
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+
+                        }
+                    });
                 }catch (Exception exp){
                     usernameView.setText(exp.getMessage());
                 }
@@ -78,30 +100,5 @@ public class UserFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.menu_profile, menu);
-    }
-
-
-    private class UpdatesAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return updates.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return updates.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView textView = new TextView(getActivity());
-            textView.setText(getItem(position).toString());
-            return textView;
-        }
     }
 }

@@ -77,7 +77,7 @@ public class NavigationAdapter extends BaseAdapter {
                 TextView userStatus = (TextView) itemView.findViewById(R.id.user_status);
                 View searchButton = itemView.findViewById(R.id.search);
 
-
+                userPhoto.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
                 ImageUtil.showFromCache(ProfileUtil.getUserPhoto(), new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
@@ -101,7 +101,13 @@ public class NavigationAdapter extends BaseAdapter {
                     }
                 });
                 userName.setText(ProfileUtil.getUserName());
-                userStatus.setText(ProfileUtil.getUserStatus());
+                String status = ProfileUtil.getUserStatus();
+                if(status!=null && !status.equals("")) {
+                    userStatus.setText(status);
+                    userStatus.setVisibility(View.VISIBLE);
+                } else {
+                    userStatus.setVisibility(View.GONE);
+                }
                 int paddingBottom = itemView.getPaddingBottom();
                 int paddingTop = Dimen.getStatusBarHeight();
                 itemView.setPadding(0,paddingTop, 0,paddingBottom);
