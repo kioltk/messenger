@@ -40,4 +40,5 @@
     <color name="window_background">#e8ecf0</color>
     <color name="conversation_unread_background">#e0e0e4</color>
     <color name="dialog_unread_background">#d0d0e0</color>
+    <color name="logout">#ffff6164</color>
 </resources>

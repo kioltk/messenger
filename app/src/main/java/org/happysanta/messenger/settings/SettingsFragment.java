@@ -1,5 +1,6 @@
 package org.happysanta.messenger.settings;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -14,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.settings.views.LogoutPreference;
 import org.happysanta.messenger.settings.views.PopupPreference;
 
 /**
@@ -33,6 +35,7 @@ public class SettingsFragment extends PreferenceFragment {
     public static final String CH_ENABLE_KEY            = "pref_chat_heads";
     public static final String CH_HIDE_ON_FULLSCREEN    = "pref_chat_heads_hide_on_fullscreen";
     public static final String CH_START_FROM_TRAY_KEY   = "pref_chat_heads_start_from_tray";
+    private static final CharSequence PREF_LOGOUT = "pref_logout";
 
     private SharedPreferences mSharedPreferences;
 
@@ -49,6 +52,21 @@ public class SettingsFragment extends PreferenceFragment {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         initSummaries(findPreference(CONTACT_SYNC_PREF_KEY));
+
+        LogoutPreference logoutPref = (LogoutPreference) findPreference(PREF_LOGOUT);
+        logoutPref.setOnLogoutListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().finish();
+            }
+        });
+        /*setOnKeyListener.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                Toast.makeText(getActivity(),"keycode " + keyCode,Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });*/
     }
 
     private void initSummaries(Preference preference) {

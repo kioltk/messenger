@@ -83,5 +83,8 @@
             />
 
     </org.happysanta.messenger.settings.views.StyledPreferencesCategory>
-
+    <org.happysanta.messenger.settings.views.LogoutPreference
+        android:key="pref_logout"
+        android:title="@string/action_log_out"
+        />
 </PreferenceScreen>
