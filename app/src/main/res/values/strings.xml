@@ -3,7 +3,7 @@
 
     <string name="app_name">Messenger</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_chat_participants">Участники</string>
+    <string name="action_chat_participants">Participants</string>
     <string name="action_log_out">Log out</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_start">@string/app_name</string>
@@ -23,12 +23,12 @@
     <string name="about_privacy">Privacy</string>
     <string name="about_report">Report</string>
     <string name="about_terms">Terms</string>
-    <string name="google_static_map_api_key">AIzaSyCbnjC8ARVzo_mAr9ujOSts4EwtFTWumZs</string>
+    <string name="google_static_map_api_key" translatable="false">AIzaSyCbnjC8ARVzo_mAr9ujOSts4EwtFTWumZs</string>
     <string name="map_show_ok">Show</string>
     <string name="map_show_title">Map</string>
-    <string name="map_show_cancel">Отмена</string>
-    <string name="map_show_message">Открыть карту в другом приложении?</string>
-    <string name="navigation_news">Новости</string>
+    <string name="map_show_cancel">Cancel</string>
+    <string name="map_show_message">Show the map in external app?</string>
+    <string name="navigation_news">News</string>
     <string name="conversation_body">You: %s</string>
     <string name="conversation_action_profile">Profile</string>
     <!-- preferences -->

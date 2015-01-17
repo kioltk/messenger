@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Messenger</string>
+    <string name="about_help">Помощь</string>
+    <string name="about_license">Лицензии</string>
+    <string name="about_privacy">Приватность</string>
+    <string name="about_report">Жалоба</string>
+    <string name="about_terms">Условия</string>
+    <string name="action_chat_participants">Участники</string>
+    <string name="action_dialog_attachments">Вложения</string>
+    <string name="action_dialog_search">Поиск</string>
+    <string name="action_dialogs_search">Поиск</string>
+    <string name="action_dialogs_showchats">Чаты</string>
+    <string name="action_example">Пример</string>
+    <string name="action_dialogs_starred">Важные</string>
+    <string name="action_log_out">Выход</string>
+    <string name="conversation_action_profile">Профиль</string>
+    <string name="conversation_body">Вы: %s</string>
+    <string name="friends_empty">Нет друзей :(</string>
+    <string name="friends_onlines_none">Онлайн пуст</string>
+    <string name="map_show_cancel">Отмена</string>
+    <string name="map_show_ok">Показать</string>
+    <string name="map_show_message">Показать карту в отдельном приложении?</string>
+    <string name="map_show_title">Карта</string>
+    <string name="navigation_about">О приложении</string>
+    <string name="navigation_drawer_close"></string>
+    <string name="navigation_friends">Друзья</string>
+    <string name="navigation_groups">Чаты</string>
+    <string name="navigation_messages">Сообщения</string>
+    <string name="navigation_news">Новости</string>
+    <string name="navigation_profile">Профиль</string>
+    <string name="navigation_settings">Настройки</string>
+    <string name="pref_category_chat_heads">Чатхедс</string>
+    <string name="pref_category_notifications">Уведомления</string>
+</resources>
