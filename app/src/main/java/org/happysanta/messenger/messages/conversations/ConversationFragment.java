@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -34,6 +35,7 @@ import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.ChatActivity;
 import org.happysanta.messenger.messages.attach.AttachAdapter;
+import org.happysanta.messenger.messages.attach.AttachCountListener;
 import org.happysanta.messenger.messages.attach.AttachDialog;
 import org.happysanta.messenger.messages.chats.ChatDialog;
 import org.happysanta.messenger.messages.core.DialogUtil;
@@ -200,8 +202,24 @@ public class ConversationFragment extends BaseFragment {
             }
         });
         attachAdapter = new AttachAdapter(attaches);
+        attachAdapter.setCountListener(new AttachCountListener() {
+            @Override
+            public void onCountChanged(final int newCount) {
+                attachRecycler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // todo animate
+                        if (newCount == 0) {
+                            attachRecycler.setVisibility(View.GONE);
+                        } else {
+                            attachRecycler.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
+        });
         attachRecycler.setHasFixedSize(false);
-        attachRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        attachRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         attachRecycler.setAdapter(attachAdapter);
 
         return rootView;
@@ -212,6 +230,10 @@ public class ConversationFragment extends BaseFragment {
     }
 
     private void showAttach(boolean show) {
+        if(attaches.size()>=10){
+            Toast.makeText(activity, "Too many attaches", Toast.LENGTH_SHORT).show();
+            return;
+        }
         attachButton.setImageResource(R.drawable.ic_header_important);
         attachDialog = new AttachDialog(activity);
         attachDialog.setAttachListener(attachAdapter);

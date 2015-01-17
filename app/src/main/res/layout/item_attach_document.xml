@@ -30,5 +30,11 @@
             android:textColor="#fff"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/remove"
+            android:src="@drawable/ic_ab_app"
+            android:layout_alignParentRight="true"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
         </RelativeLayout>
 </RelativeLayout>

@@ -26,6 +26,7 @@ import org.happysanta.messenger.messages.core.holders.MessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.PhotoMessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.StickerMessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.TypingMessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.VideoMessageViewHolder;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants) {
         this(activity, messages, participants, true);
     }
-    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants, boolean isChat){
+
+    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants, boolean isChat) {
         this.activity = activity;
         this.messages = messages;
         this.isChat = isChat;
@@ -56,16 +58,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     }
 
     public VKApiMessage getItem(int position) {
-        return messages.get(position-1);
+        return messages.get(position - 1);
     }
 
     @Override
     public int getItemViewType(int position) {
         int viewType = MessageViewType.Unknown;
-        if (position==0) {
+        if (position == 0) {
             return MessageViewType.Loading;
         }
-        if(position==getItemCount()-1){
+        if (position == getItemCount() - 1) {
             return MessageViewType.Typing;
         }
         VKApiMessage currentMessage = getItem(position);
@@ -103,6 +105,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         }
         return viewType;
     }
+
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -115,7 +118,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             case MessageViewType.Doc:
                 return new FileMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_file, null));
             case MessageViewType.Video:
-                return new PhotoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_video, null));
+                return new VideoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_video, null));
             case MessageViewType.Audio:
                 return new AudioMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_audio, null));
             case MessageViewType.Sticker:
@@ -131,26 +134,33 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         int itemViewType = getItemViewType(position);
-        if(itemViewType<0){
+        if (itemViewType < 0) {
             return;
         }
-        VKApiMessage prevMessage = position > 1 ? getItem(position-1) : null;
+        VKApiMessage prevMessage = position > 1 ? getItem(position - 1) : null;
         VKApiMessage currentMessage = getItem(position);
         VKApiMessage nextMessage = position < getItemCount() - 2 ? getItem(position + 1) : null;
         // getView(position, holder.itemView);
-        switch (itemViewType){
+        switch (itemViewType) {
             case MessageViewType.Complex:
                 holder.bindData(currentMessage);
                 break;
+            case MessageViewType.Video:
             case MessageViewType.Photo:
                 holder.bindData(currentMessage);
+                if (!currentMessage.out) {
+                    holder.showOwner(chatUsers.getById(currentMessage.user_id));
+                } else {
+                    holder.hideOwner();
+                }
                 break;
+            case MessageViewType.Emoji:
             case MessageViewType.Sticker:
                 holder.bindData(currentMessage);
                 break;
             case MessageViewType.Geo:
                 holder.bindData(currentMessage);
-                if(!currentMessage.out) {
+                if (!currentMessage.out) {
                     holder.showOwner(chatUsers.getById(currentMessage.user_id));
                 } else {
                     holder.hideOwner();
@@ -159,21 +169,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             case MessageViewType.Unknown:
             default:
                 holder.bindData(currentMessage);
-                // holder.showOwner(chatUsers.getById(currentMessage.user_id));
+                if (!currentMessage.out)
+                    holder.showOwner(chatUsers.getById(currentMessage.user_id));
                 return;
         }
         if (isChat) {
-            if (prevMessage!=null && currentMessage.user_id == prevMessage.user_id) {
+            if (prevMessage != null && currentMessage.user_id == prevMessage.user_id) {
                 holder.groupTop();
             } else {
                 holder.ungroupTop();
-                if(!currentMessage.out){
+                if (!currentMessage.out) {
                     holder.showOwner(chatUsers.getById(currentMessage.user_id));
                 } else {
                     holder.hideOwner();
                 }
             }
-            if(nextMessage!=null && currentMessage.user_id == nextMessage.user_id){
+            if (nextMessage != null && currentMessage.user_id == nextMessage.user_id) {
                 holder.groupBottom();
             } else {
                 holder.ungroupBottom();
@@ -181,19 +192,18 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
 
         } else {
-            if (prevMessage!=null && currentMessage.out == prevMessage.out) {
+            if (prevMessage != null && currentMessage.out == prevMessage.out) {
                 holder.groupTop();
             } else {
                 holder.ungroupTop();
             }
-            if(nextMessage!=null && currentMessage.out == nextMessage.out){
+            if (nextMessage != null && currentMessage.out == nextMessage.out) {
                 holder.groupBottom();
             } else {
                 holder.ungroupBottom();
             }
         }
     }
-
 
 
     @Override

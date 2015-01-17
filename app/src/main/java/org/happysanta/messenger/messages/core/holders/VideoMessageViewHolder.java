@@ -15,10 +15,10 @@ import org.happysanta.messenger.core.util.ImageUtil;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class PhotoMessageViewHolder extends MessageViewHolder {
+public class VideoMessageViewHolder extends MessageViewHolder {
     private final ImageView ownerView;
 
-    public PhotoMessageViewHolder(View itemView) {
+    public VideoMessageViewHolder(View itemView) {
         super(itemView);
         ownerView = (ImageView) findViewById(R.id.owner);
     }
@@ -54,5 +54,4 @@ public class PhotoMessageViewHolder extends MessageViewHolder {
         });
 
     }
-
 }

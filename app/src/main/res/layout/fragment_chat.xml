@@ -23,6 +23,7 @@
     <TextView
         android:id="@+id/status"
         android:gravity="center"
+        android:layout_above="@+id/new_message_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <View
@@ -36,11 +37,10 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/attach_recycler"
             android:background="#fff"
-
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="110dp"/>
         <RelativeLayout
@@ -60,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="56dp"
+                android:maxHeight="150dp"
                 android:id="@+id/message_box"
                 android:hint="Enter the messege"
                 android:textColorHint="#949494"

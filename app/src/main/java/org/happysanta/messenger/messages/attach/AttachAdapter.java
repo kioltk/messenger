@@ -17,8 +17,9 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implements AttachListener {
+public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implements AttachListener, RemoveListener {
     private final ArrayList<VKAttachments.VKApiAttachment> attaches;
+    private AttachCountListener countListener;
 
     public AttachAdapter(ArrayList<VKAttachments.VKApiAttachment> attaches) {
         this.attaches = attaches;
@@ -37,9 +38,9 @@ public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implem
     public AttachViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case AttachViewType.Document:
-                return new DocumentAttachViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_attach_document, null));
+                return new DocumentAttachViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_attach_document, null), this);
         }
-        return new AttachViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_attach_unknown,null));
+        return new AttachViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_attach_unknown,null),this);
     }
 
     @Override
@@ -57,7 +58,13 @@ public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implem
     public void onFileAttached(File... file) {
         attaches.add(new VKApiDocument());
         notifyItemInserted(attaches.size()-1);
+        notifyCount();
     }
+
+    private void notifyCount() {
+        countListener.onCountChanged(attaches.size());
+    }
+
     @Override
     public void onPictureAttached(File... pictureFile) {
         // Toast.makeText(activity, pictureFile[0].getAbsolutePath(), Toast.LENGTH_SHORT).show();
@@ -76,5 +83,16 @@ public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implem
     @Override
     public void onGeoAttached(AttachGeo geo) {
         // Toast.makeText(activity, geo.title, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setCountListener(AttachCountListener attachCountListener) {
+        this.countListener = attachCountListener;
+    }
+
+    @Override
+    public void onRemove(int position) {
+        attaches.remove(position);
+        notifyItemRemoved(position);
+        countListener.onCountChanged(attaches.size());
     }
 }
