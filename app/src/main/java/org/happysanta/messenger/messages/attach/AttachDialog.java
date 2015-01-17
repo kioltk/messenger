@@ -59,12 +59,17 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
         FrameLayout rootView = (FrameLayout) findViewById(R.id.picker_dialog);
 
-        rootView.setOnClickListener(new View.OnClickListener() {
+        View cancelButton = findViewById(R.id.cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cancel();
             }
         });
+
+        cancelButton.setRotation(90);
+        cancelButton.setAlpha(0);
+        cancelButton.animate().rotation(0).setDuration(350).alpha(1).start();
 
         mTestText = (TextView) findViewById(R.id.picker_test_text);
 

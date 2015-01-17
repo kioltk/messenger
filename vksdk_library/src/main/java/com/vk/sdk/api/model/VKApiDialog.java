@@ -99,10 +99,13 @@ public class VKApiDialog extends VKApiModel implements Identifiable {
     }
 
     public SparseArray<? extends Parcelable> getParticipants() {
-
         SparseArray<VKApiUserFull> participantsSparse = new SparseArray<VKApiUserFull>();
-        for (VKApiUserFull participant : participants) {
-            participantsSparse.put(participant.id, participant);
+        if(isChat()) {
+            for (VKApiUserFull participant : participants) {
+                participantsSparse.put(participant.id, participant);
+            }
+        } else {
+            participantsSparse.put(dialogOwner.getId(), dialogOwner);
         }
         return participantsSparse;
     }
