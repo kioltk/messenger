@@ -30,44 +30,56 @@
         android:background="@drawable/new_message_holder_shadow"
         android:layout_width="match_parent"
         android:layout_height="2dp"/>
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/new_message_holder"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/attach"
-            android:src="@drawable/ic_header_important"
-            android:scaleType="center"
-            android:layout_width="56dp"
-            android:layout_height="56dp" />
-        <EditText
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/attach_recycler"
             android:background="#fff"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="56dp"
-            android:id="@+id/message_box"
-            android:hint="Enter the messege"
-            android:textColorHint="#949494"
-            android:textColor="#444"
-            android:layout_margin="0dp"
-            android:layout_toRightOf="@+id/attach"
-            android:layout_toLeftOf="@+id/send_button"
-            />
-        <ImageButton
-            android:textColor="#fff"
-            android:background="@drawable/send_background"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:id="@+id/send_button"
-            android:layout_alignParentRight="true"
-            android:layout_alignBottom="@+id/message_box"
-            android:src="@drawable/ic_send"
-            android:layout_margin="0dp"
-            android:layout_width="56dp"
-            android:layout_height="56dp"/>
-    </RelativeLayout>
+            android:layout_height="110dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/attach"
+                android:src="@drawable/ic_header_important"
+                android:scaleType="centerInside"
+                android:layout_alignBottom="@+id/message_box"
+                android:layout_width="56dp"
+                android:layout_height="56dp" />
+            <EditText
+                android:background="#fff"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:id="@+id/message_box"
+                android:hint="Enter the messege"
+                android:textColorHint="#949494"
+                android:textColor="#444"
+                android:layout_margin="0dp"
+                android:layout_toRightOf="@+id/attach"
+                android:layout_toLeftOf="@+id/send_button"
+                />
+            <ImageButton
+                android:id="@+id/send_button"
+                android:textColor="#fff"
+                android:background="@drawable/send_background"
+                android:src="@drawable/ic_send"
+                android:scaleType="centerInside"
+                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@+id/message_box"
+                android:layout_margin="0dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"/>
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

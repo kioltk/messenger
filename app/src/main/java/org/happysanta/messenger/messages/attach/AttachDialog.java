@@ -18,6 +18,7 @@ import android.widget.Toast;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.Dimen;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -225,8 +226,8 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
                 break;
             }
             case R.id.attach_file: {
-
-                Toast.makeText(getContext(), "File", Toast.LENGTH_SHORT).show();
+                dismiss();
+                attachListener.onFileAttached(new File("/storage/emulated/0/dslv_state.txt"));
                 break;
             }
         }

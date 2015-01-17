@@ -7,10 +7,14 @@ import java.io.File;
  */
 public interface AttachListener {
 
-    void onFileAttached(File file);
-    void onPictureAttached(File pictureFile); // also camera
-    void onVideoAttached(File videoFile);
-    void onAudioAttached(File audioFile);
+    void onFileAttached(File... file);
+
+    void onPictureAttached(File... pictureFile);
+
+    void onVideoAttached(File... videoFile);
+
+    void onAudioAttached(File... audioFile);
+
     void onGeoAttached(AttachGeo geo);
 
 

@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -34,22 +33,20 @@ import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
 import org.happysanta.messenger.messages.ChatActivity;
-import org.happysanta.messenger.messages.attach.AttachGeo;
-import org.happysanta.messenger.messages.chats.ChatDialog;
+import org.happysanta.messenger.messages.attach.AttachAdapter;
 import org.happysanta.messenger.messages.attach.AttachDialog;
-import org.happysanta.messenger.messages.attach.AttachListener;
+import org.happysanta.messenger.messages.chats.ChatDialog;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.UserDialog;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ConversationFragment extends BaseFragment implements AttachListener {
+public class ConversationFragment extends BaseFragment {
 
     // core
     private VKList<VKApiMessage> messages = new VKList<>();
@@ -70,6 +67,8 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     private AttachDialog attachDialog;
     private ArrayList<VKAttachments.VKApiAttachment> attaches = new ArrayList<>(10);
     private VKList<VKApiUserFull> participants;
+    private RecyclerView attachRecycler;
+    private AttachAdapter attachAdapter;
 
     public ConversationFragment() {
     }
@@ -78,11 +77,17 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_chat, container, false);
-        messagesRecycler = (RecyclerView) findViewById(R.id.recycler);
-        statusView = (TextView) findViewById(R.id.status);
+
+
         attachButton = (ImageView) findViewById(R.id.attach);
+        attachRecycler = (RecyclerView) findViewById(R.id.attach_recycler);
+
         sendButton = findViewById(R.id.send_button);
         editMessageText = (EditText) findViewById(R.id.message_box);
+        messagesRecycler = (RecyclerView) findViewById(R.id.recycler);
+
+        statusView = (TextView) findViewById(R.id.status);
+
         dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
         isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
         participants = new VKList<>();
@@ -91,13 +96,12 @@ public class ConversationFragment extends BaseFragment implements AttachListener
             VKApiUserFull user = usersSparseArray.valueAt(i);
             participants.add(user);
         }
-
         dialogUtil = new DialogUtil(isChat, dialogId);
 
         statusView.setText("loading");
+        editMessageText.setText(dialogUtil.getBody());
         messagesRecycler.setHasFixedSize(false);
         messagesRecycler.setLayoutManager(new LinearLayoutManager(activity));
-        editMessageText.setText(dialogUtil.getBody());
         messagesAdapter = isChat ? new MessagesAdapter(activity, messages, participants) : new MessagesAdapter(activity, messages, participants, false);
 
         VKRequest request = isChat ? new VKApiMessages().getChatHistory(dialogId) : new VKApiMessages().getHistory(dialogId);
@@ -118,11 +122,6 @@ public class ConversationFragment extends BaseFragment implements AttachListener
                 messagesAdapter.notifyDataSetChanged();
                 tryScrollToBottom();
                 //messagesRecycler.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-            }
-
-            @Override
-            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
-                statusView.setText("progress: " + bytesLoaded / bytesTotal * 100 + "%");
             }
 
             @Override
@@ -184,13 +183,6 @@ public class ConversationFragment extends BaseFragment implements AttachListener
 
             }
         });
-
-        attachButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleAttach();
-            }
-        });
         editMessageText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -200,6 +192,17 @@ public class ConversationFragment extends BaseFragment implements AttachListener
                 }
             }
         });
+
+        attachButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleAttach();
+            }
+        });
+        attachAdapter = new AttachAdapter(attaches);
+        attachRecycler.setHasFixedSize(false);
+        attachRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        attachRecycler.setAdapter(attachAdapter);
 
         return rootView;
     }
@@ -211,7 +214,7 @@ public class ConversationFragment extends BaseFragment implements AttachListener
     private void showAttach(boolean show) {
         attachButton.setImageResource(R.drawable.ic_header_important);
         attachDialog = new AttachDialog(activity);
-        attachDialog.setAttachListener(this);
+        attachDialog.setAttachListener(attachAdapter);
         attachDialog.show();
     }
 
@@ -272,30 +275,7 @@ public class ConversationFragment extends BaseFragment implements AttachListener
 
     // todo attaches
 
-    @Override
-    public void onFileAttached(File file) {
-        Toast.makeText(activity, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-    }
 
-    @Override
-    public void onPictureAttached(File pictureFile) {
-        Toast.makeText(activity, pictureFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onVideoAttached(File videoFile) {
-        Toast.makeText(activity, videoFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onAudioAttached(File audioFile) {
-        Toast.makeText(activity, audioFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onGeoAttached(AttachGeo geo) {
-        Toast.makeText(activity, geo.title, Toast.LENGTH_SHORT).show();
-    }
 
 
 }
