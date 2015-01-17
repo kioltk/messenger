@@ -12,6 +12,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiMessages;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKAttachments;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
@@ -68,6 +69,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             return MessageViewType.Typing;
         }
         VKApiMessage currentMessage = getItem(position);
+
+        if (currentMessage.sticker != null) {
+            return MessageViewType.Sticker;
+        }
+
+        // todo complex checking
         if (currentMessage.body != null && !currentMessage.body.equals("")) {
             if (currentMessage.emoji && currentMessage.body.length() == 2) {
                 return MessageViewType.Emoji;
@@ -75,15 +82,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
                 return MessageViewType.Complex;
             }
         } else {
-            if (currentMessage.sticker != null) {
-                return MessageViewType.Sticker;
+            if (currentMessage.geo != null) {
+                return MessageViewType.Geo;
             } else {
-                if (currentMessage.geo != null) {
-                    return MessageViewType.Geo;
-                } else {
-
-                    // todo another attaches?
-
+                if (currentMessage.attachments != null && !currentMessage.attachments.isEmpty()) {
+                    String attachType = "";
+                    attachType = currentMessage.attachments.get(0).getType();
+                    switch (attachType) {
+                        case VKAttachments.TYPE_PHOTO:
+                            return MessageViewType.Photo;
+                        case VKAttachments.TYPE_AUDIO:
+                            return MessageViewType.Audio;
+                        case VKAttachments.TYPE_DOC:
+                            return MessageViewType.Doc;
+                        case VKAttachments.TYPE_VIDEO:
+                            return MessageViewType.Video;
+                    }
                 }
             }
         }
@@ -98,7 +112,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
                 return new LoadingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_loading, null));
             case MessageViewType.Photo:
                 return new PhotoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_photo, null));
-            case MessageViewType.File:
+            case MessageViewType.Doc:
                 return new FileMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_file, null));
             case MessageViewType.Video:
                 return new PhotoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_video, null));

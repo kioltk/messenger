@@ -14,7 +14,7 @@ import org.happysanta.messenger.R;
 public class ChatHeadView extends View /*implements View.OnClickListener, View.OnTouchListener*/ {
 
 
-    private ChatHeadsManager.ChatHeadMovementTask movementTask;
+    //private ChatHeadsManager.ChatHeadMovementTask movementTask;
     private int currentPositionX;
     private int currentPositionY;
     private boolean dragging = false;

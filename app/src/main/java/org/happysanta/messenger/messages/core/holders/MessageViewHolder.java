@@ -1,9 +1,6 @@
 package org.happysanta.messenger.messages.core.holders;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,13 +11,14 @@ import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseViewHolder;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 
 /**
  * Created by Jesus Christ. Amen.
  */
-public class MessageViewHolder extends RecyclerView.ViewHolder {
+public class MessageViewHolder extends BaseViewHolder {
     public MessageViewHolder(View itemView) {
         super(itemView);
     }
@@ -32,21 +30,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
             bodyView.setText(message.getBody());
     }
 
-    protected View findViewById(int layoutId){
-        return itemView.findViewById(layoutId);
-    }
 
-    protected Context getContext(){
-        return itemView.getContext();
-    }
-
-    protected Resources getResources(){
-        return getContext().getResources();
-    }
-
-    protected int getColor(int colorId) {
-        return getResources().getColor(colorId);
-    }
 
     public void groupTop() {
 

@@ -16,5 +16,5 @@ public class MessageViewType {
     public final static int Audio = 6;
     public final static int Video = 7;
     public final static int Gift = 8;
-    public final static int File = 9;
+    public final static int Doc = 9;
 }
