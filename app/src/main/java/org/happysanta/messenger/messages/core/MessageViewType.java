@@ -13,4 +13,8 @@ public class MessageViewType {
     public final static int Sticker = 3;
     public final static int Geo = 4;
     public final static int Photo = 5;
+    public final static int Audio = 6;
+    public final static int Video = 7;
+    public final static int Gift = 8;
+    public final static int File = 9;
 }

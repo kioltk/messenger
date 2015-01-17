@@ -85,21 +85,20 @@ public class ConversationFragment extends BaseFragment implements AttachListener
         editMessageText = (EditText) findViewById(R.id.message_box);
         dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
         isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
-        if (isChat) {
-            participants = new VKList<>();
-            SparseArray<VKApiUserFull> usersSparseArray = getArguments().getSparseParcelableArray(ChatActivity.ARG_CHAT_PARTICIPANTS);
-            for (int i = 0, sparseArray = usersSparseArray.size(); i < sparseArray; i++) {
-                VKApiUserFull user = usersSparseArray.valueAt(i);
-                participants.add(user);
-            }
+        participants = new VKList<>();
+        SparseArray<VKApiUserFull> usersSparseArray = getArguments().getSparseParcelableArray(ChatActivity.ARG_CHAT_PARTICIPANTS);
+        for (int i = 0, sparseArray = usersSparseArray.size(); i < sparseArray; i++) {
+            VKApiUserFull user = usersSparseArray.valueAt(i);
+            participants.add(user);
         }
+
         dialogUtil = new DialogUtil(isChat, dialogId);
 
         statusView.setText("loading");
         messagesRecycler.setHasFixedSize(false);
         messagesRecycler.setLayoutManager(new LinearLayoutManager(activity));
         editMessageText.setText(dialogUtil.getBody());
-        messagesAdapter = isChat? new MessagesAdapter(activity, messages, participants) : new MessagesAdapter(activity, messages);
+        messagesAdapter = isChat ? new MessagesAdapter(activity, messages, participants) : new MessagesAdapter(activity, messages, participants, false);
 
         VKRequest request = isChat ? new VKApiMessages().getChatHistory(dialogId) : new VKApiMessages().getHistory(dialogId);
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -123,7 +122,7 @@ public class ConversationFragment extends BaseFragment implements AttachListener
 
             @Override
             public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
-                statusView.setText("progress: " + bytesLoaded/bytesTotal*100+"%");
+                statusView.setText("progress: " + bytesLoaded / bytesTotal * 100 + "%");
             }
 
             @Override
@@ -298,7 +297,5 @@ public class ConversationFragment extends BaseFragment implements AttachListener
         Toast.makeText(activity, geo.title, Toast.LENGTH_SHORT).show();
     }
 
-    public boolean onBackPressed() {
-        return true;
-    }
+
 }

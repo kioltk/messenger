@@ -3,9 +3,12 @@ package org.happysanta.messenger.sandbox;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.chatheads.ChatHeadsManager;
@@ -31,9 +34,11 @@ public class SandboxFragment extends BaseFragment {
                 bundle.putString(ChatActivity.ARG_TITLE, "Korol");
                 bundle.putString(ChatActivity.ARG_SUBTITLE, "Sandbox");
                 bundle.putString(ChatActivity.ARG_LOGO, null);
-                //if(dialog.isChat())
-                //    bundle.putSparseParcelableArray(ARG_CHAT_PARTICIPANTS, dialog.getParticipants());
+                SparseArray<VKApiUserFull> sparseArray = new SparseArray<>();
+                sparseArray.put(51916034, new VKApiUserFull(){{ id = 51916034; first_name = "Korol"; last_name = "ololo"; photo_200 = ""; }});
+                bundle.putSparseParcelableArray(ChatActivity.ARG_CHAT_PARTICIPANTS, sparseArray);
                 intent.putExtras(bundle);
+
                 startActivity(intent);
             }
         });

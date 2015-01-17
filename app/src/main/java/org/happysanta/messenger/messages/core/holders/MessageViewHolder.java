@@ -14,6 +14,7 @@ import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 
 /**
@@ -68,6 +69,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
         final ImageView ownerView = (ImageView) findViewById(R.id.owner);
         if(ownerView!=null) {
+            ownerView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
             ImageUtil.showFromCache(owner.getPhoto(), new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
@@ -92,6 +94,9 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         }
     }
     public void hideOwner(){
-
+        final ImageView ownerView = (ImageView) findViewById(R.id.owner);
+        if(ownerView!=null){
+            ownerView.setVisibility(View.GONE);
+        }
     }
 }

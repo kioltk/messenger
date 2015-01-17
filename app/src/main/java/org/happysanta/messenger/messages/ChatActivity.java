@@ -2,7 +2,6 @@ package org.happysanta.messenger.messages;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -109,19 +108,8 @@ public class ChatActivity extends BaseActivity {
                     .replace(R.id.container, conversationFragment)
                     .commit();
         }
-
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (conversationFragment.onBackPressed())
-//            super.onBackPressed();
-//    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
 
     public static Intent getActivityIntent(Context context, VKApiDialog dialog) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -131,8 +119,7 @@ public class ChatActivity extends BaseActivity {
         bundle.putString(ARG_TITLE, dialog.getTitle());
         bundle.putString(ARG_SUBTITLE, dialog.getSubtitle());
         bundle.putString(ARG_LOGO, dialog.photo_200);
-        if(dialog.isChat())
-            bundle.putSparseParcelableArray(ARG_CHAT_PARTICIPANTS, dialog.getParticipants());
+        bundle.putSparseParcelableArray(ARG_CHAT_PARTICIPANTS, dialog.getParticipants());
         intent.putExtras(bundle);
         return intent;
     }

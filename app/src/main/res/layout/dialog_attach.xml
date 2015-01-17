@@ -68,4 +68,12 @@
         android:src="@drawable/ic_attach_photo"
         android:layout_gravity="center"/>
 
+    <ImageView
+        android:id="@+id/cancel"
+        android:src="@drawable/ic_vk"
+        android:scaleType="centerInside"
+        android:layout_gravity="bottom|left"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+
 </FrameLayout>

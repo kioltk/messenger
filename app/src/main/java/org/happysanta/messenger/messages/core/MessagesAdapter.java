@@ -16,9 +16,13 @@ import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
+import org.happysanta.messenger.messages.core.holders.AudioMessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.ComplexMessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.FileMessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.GeoMessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.LoadingMessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.MessageViewHolder;
+import org.happysanta.messenger.messages.core.holders.PhotoMessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.StickerMessageViewHolder;
 import org.happysanta.messenger.messages.core.holders.TypingMessageViewHolder;
 
@@ -34,18 +38,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     private final VKList<VKApiUserFull> chatUsers;
     private View typingView;
 
-    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages) {
-        this.activity = activity;
-        this.messages = messages;
-        this.isChat = false;
-        typingView = LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null);
-        chatUsers = null;
+    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants) {
+        this(activity, messages, participants, true);
     }
-    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> chatUsers){
+    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants, boolean isChat){
         this.activity = activity;
         this.messages = messages;
-        isChat = true;
-        this.chatUsers = chatUsers;
+        this.isChat = isChat;
+        this.chatUsers = participants;
         typingView = LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null);
     }
 
@@ -96,8 +96,18 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
                 return new TypingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null));
             case MessageViewType.Loading:
                 return new LoadingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_loading, null));
+            case MessageViewType.Photo:
+                return new PhotoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_photo, null));
+            case MessageViewType.File:
+                return new FileMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_file, null));
+            case MessageViewType.Video:
+                return new PhotoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_video, null));
+            case MessageViewType.Audio:
+                return new AudioMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_audio, null));
             case MessageViewType.Sticker:
                 return new StickerMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_sticker, null));
+            case MessageViewType.Geo:
+                return new GeoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_geo, null));
             case MessageViewType.Complex:
                 return new ComplexMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_complex, null));
         }
@@ -124,6 +134,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             case MessageViewType.Sticker:
                 holder.bindData(currentMessage);
                 break;
+            case MessageViewType.Geo:
+                holder.bindData(currentMessage);
+                if(!currentMessage.out) {
+                    holder.showOwner(chatUsers.getById(currentMessage.user_id));
+                } else {
+                    holder.hideOwner();
+                }
+                return;
             case MessageViewType.Unknown:
             default:
                 holder.bindData(currentMessage);
