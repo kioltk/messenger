@@ -9,10 +9,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.happysanta.messenger.R;
@@ -39,10 +37,10 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
     private AttachListener attachListener;
 
-    private ImageView mAttachPhoto, mAttachAudio, mAttachGall,
-            mAttachVideo, mAttachMap, mAttachFile;
+    private ArrayList<View> mNames = new ArrayList<>();
+    private ArrayList<View> mActions = new ArrayList<>();
 
-    private TextView mTestText;
+    private boolean mComplete = false;
 
     public AttachDialog(Context context) {
         super(context, R.style.dialog);
@@ -64,7 +62,20 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancel();
+
+                // TODO implement animated close for incomplete state
+                if (!mComplete) {
+
+                    cancel();
+                    return;
+                }
+
+                int j = 0;
+
+                for (int i = mActions.size() - 1 ; i >= 0 ; i--, j++) {
+
+                    setAnimator(mActions.get(i), j, true);
+                }
             }
         });
 
@@ -72,29 +83,32 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
         cancelButton.setAlpha(0);
         cancelButton.animate().rotation(0).setDuration(350).alpha(1).start();
 
-        mTestText = (TextView) findViewById(R.id.picker_test_text);
 
-        mAttachPhoto = (ImageView) findViewById(R.id.attach_photo);
-        mAttachAudio = (ImageView) findViewById(R.id.attach_audio);
-        mAttachGall = (ImageView) findViewById(R.id.attach_gallery);
-        mAttachVideo = (ImageView) findViewById(R.id.attach_video);
-        mAttachMap = (ImageView) findViewById(R.id.attach_map);
-        mAttachFile = (ImageView) findViewById(R.id.attach_file);
+        mActions = new ArrayList<View>() {{
 
-        ArrayList<View> circles = new ArrayList<View>() {{
-
-            add(mAttachPhoto);
-            add(mAttachAudio);
-            add(mAttachGall);
-            add(mAttachVideo);
-            add(mAttachMap);
-            add(mAttachFile);
+            add(findViewById(R.id.attach_photo));
+            add(findViewById(R.id.attach_audio));
+            add(findViewById(R.id.attach_gallery));
+            add(findViewById(R.id.attach_video));
+            add(findViewById(R.id.attach_map));
+            add(findViewById(R.id.attach_file));
 
         }};
 
-        for (int i = 0; i < circles.size(); i++) {
+        mNames = new ArrayList<View>() {{
 
-            setAnimator(circles.get(i), i);
+            add(findViewById(R.id.attach_photo_name));
+            add(findViewById(R.id.attach_audio_name));
+            add(findViewById(R.id.attach_gallery_name));
+            add(findViewById(R.id.attach_video_name));
+            add(findViewById(R.id.attach_map_name));
+            add(findViewById(R.id.attach_file_name));
+
+        }};
+
+        for (int i = 0; i < mActions.size(); i++) {
+
+            setAnimator(mActions.get(i), i, false);
         }
 
     }
@@ -103,66 +117,78 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
         this.attachListener = attachListener;
     }
 
-    private void setAnimator(final View v, final int counter) {
+    private void setAnimator(final View button, final int counter, final boolean close) {
 
-        v.setScaleX(0);
-        v.setScaleY(0);
+        if (!close) {
 
-        int argX = 0;
-        int argY = 0;
+            button.setScaleX(0);
+            button.setScaleY(0);
+        }
+
+        int xPos = 0;
+        int yPos = 0;
 
         switch (counter) {
 
             case PHOTO: {
 
-                argX = 0;
-                argY = 0;
+                xPos = 0;
+                yPos = 0;
                 break;
             }
 
             case AUDIO: {
 
-                argX = 0;
-                argY = Dimen.get(R.dimen.picker_coordY_audio);
+                xPos = 0;
+                yPos = Dimen.get(R.dimen.picker_coordY_audio);
                 break;
             }
 
             case GALLERY: {
 
-                argX = Dimen.get(R.dimen.picker_coordX_gallery);
-                argY = Dimen.get(R.dimen.picker_coordY_gallery);
+                xPos = Dimen.get(R.dimen.picker_coordX_gallery);
+                yPos = Dimen.get(R.dimen.picker_coordY_gallery);
                 break;
             }
             case VIDEO: {
 
-                argX = Dimen.get(R.dimen.picker_coordX_video);
-                argY = Dimen.get(R.dimen.picker_coordY_video);
+                xPos = Dimen.get(R.dimen.picker_coordX_video);
+                yPos = Dimen.get(R.dimen.picker_coordY_video);
                 break;
             }
             case MAP: {
 
-                argX = Dimen.get(R.dimen.picker_coordX_map);
-                argY = Dimen.get(R.dimen.picker_coordY_map);
+                xPos = Dimen.get(R.dimen.picker_coordX_map);
+                yPos = Dimen.get(R.dimen.picker_coordY_map);
                 break;
             }
             case FILE: {
 
-                argX = Dimen.get(R.dimen.picker_coordX_file);
-                argY = Dimen.get(R.dimen.picker_coordY_file);
+                xPos = Dimen.get(R.dimen.picker_coordX_file);
+                yPos = Dimen.get(R.dimen.picker_coordY_file);
             }
         }
 
-        final ObjectAnimator scaleX = ObjectAnimator.ofFloat(v, "scaleX", 1);
-        final ObjectAnimator scaleY = ObjectAnimator.ofFloat(v, "scaleY", 1);
+        final ObjectAnimator scaleX = ObjectAnimator.ofFloat(button, "scaleX", close ? 0 : 1);
+        final ObjectAnimator scaleY = ObjectAnimator.ofFloat(button, "scaleY", close ? 0 : 1);
 
-        final ObjectAnimator translationY = ObjectAnimator.ofFloat(v, "translationY", argY);
-        final ObjectAnimator translationX = ObjectAnimator.ofFloat(v, "translationX", argX);
+        final ObjectAnimator translationY = ObjectAnimator.ofFloat(
+                button,
+                "translationY",
+                close ? 0 : yPos
+        );
+
+        final ObjectAnimator translationX = ObjectAnimator.ofFloat(
+                button,
+                "translationX",
+                close ? 0 : xPos
+        );
 
         AnimatorSet set = new AnimatorSet();
 
-        set.setStartDelay(50 * counter);
+        set.setStartDelay(100 * counter);
         set.setDuration(150);
-        set.setInterpolator(new AccelerateDecelerateInterpolator());
+        set.setInterpolator(new DecelerateInterpolator());
         set.playTogether(new HashSet<Animator>() {{
 
             add(scaleX);
@@ -172,25 +198,83 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
         }});
 
-        set.start();
-
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
 
-                v.setClickable(true);
-                v.setOnClickListener(AttachDialog.this);
+                if (!close) {
+
+                    if (counter > 4) mComplete = true;
+
+                    button.setClickable(true);
+                    button.setOnClickListener(AttachDialog.this);
+
+                    setTextAnimator(mNames.get(counter), button, counter, false);
+
+                } else {
+
+                    button.setVisibility(View.GONE);
+
+                    if (counter == 5) cancel();
+
+                }
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+
+                if (close) {
+
+                    int revCounter = mActions.indexOf(button);
+
+                    setTextAnimator(mNames.get(revCounter), button, counter, true);
+                }
             }
         });
+
+        set.start();
     }
 
-    private void setTextAnimator(View text, View button, int counter) {
+    private void setTextAnimator(final View text, View button, final int counter,
+                                 final boolean close) {
 
-        // TODO implement this
+        if (!close) {
 
-//        ObjectAnimator animator = ObjectAnimator.ofInt(button, "bottom", 10, 20);
+            text.setVisibility(View.VISIBLE);
 
+            float centerX = Dimen.get(R.dimen.picker_icon_size)/2;
+            float xPos = button.getX() + (centerX - text.getWidth()/2);
+            float yPos = button.getY() + Dimen.get(R.dimen.picker_icon_size)
+                    + text.getHeight()/3;
+
+            text.setScaleX(0);
+            text.setScaleY(0);
+            text.setAlpha(0);
+
+            text.setX(xPos);
+            text.setY(yPos);
+        }
+
+        final ObjectAnimator scaleX = ObjectAnimator.ofFloat(text, "scaleX", close ? 0 : 1);
+        final ObjectAnimator scaleY = ObjectAnimator.ofFloat(text, "scaleY", close ? 0 : 1);
+        final ObjectAnimator alpha  = ObjectAnimator.ofFloat(text, "alpha",  close ? 0 : 0.7F);
+
+        AnimatorSet set = new AnimatorSet();
+
+        if (close) set.setStartDelay(80 * counter);
+        set.setDuration(150);
+        set.setInterpolator(new DecelerateInterpolator());
+        set.playTogether(new HashSet<Animator>() {{
+
+            add(scaleX);
+            add(scaleY);
+            add(alpha);
+
+        }});
+
+        set.start();
     }
 
     @Override
@@ -232,5 +316,22 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
             }
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (!mComplete) {
+
+            super.onBackPressed();
+            return;
+        }
+
+        int j = 0;
+
+        for (int i = mActions.size() - 1 ; i >= 0 ; i--, j++) {
+
+            setAnimator(mActions.get(i), j, true);
+        }
     }
 }

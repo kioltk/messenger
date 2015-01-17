@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/picker_dialog"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/picker_test_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="Test"
-        android:textSize="20sp"
-        android:textColor="#fff"/>
+    android:layout_height="match_parent"
+    android:background="#333"
+    tools:ignore="ContentDescription">
 
     <ImageView
         android:id="@+id/attach_audio"
@@ -20,8 +15,9 @@
         android:layout_height="72dp"
         android:background="@drawable/attach_background"
         android:scaleType="centerInside"
+        android:clickable="false"
         android:src="@drawable/ic_attach_music"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"/>
 
     <ImageView
         android:id="@+id/attach_map"
@@ -29,6 +25,7 @@
         android:layout_height="72dp"
         android:background="@drawable/attach_background"
         android:scaleType="centerInside"
+        android:clickable="false"
         android:src="@drawable/ic_attach_maps"
         android:layout_gravity="center" />
 
@@ -38,6 +35,7 @@
         android:layout_height="72dp"
         android:background="@drawable/attach_background"
         android:scaleType="centerInside"
+        android:clickable="false"
         android:src="@drawable/ic_attach_video"
         android:layout_gravity="center" />
 
@@ -47,6 +45,7 @@
         android:layout_height="72dp"
         android:background="@drawable/attach_background"
         android:scaleType="centerInside"
+        android:clickable="false"
         android:src="@drawable/ic_attach_gallery"
         android:layout_gravity="center" />
 
@@ -56,6 +55,7 @@
         android:layout_height="72dp"
         android:background="@drawable/attach_background"
         android:scaleType="centerInside"
+        android:clickable="false"
         android:src="@drawable/ic_attach_file"
         android:layout_gravity="center" />
 
@@ -65,8 +65,69 @@
         android:layout_height="72dp"
         android:background="@drawable/attach_background"
         android:scaleType="centerInside"
+        android:clickable="false"
         android:src="@drawable/ic_attach_photo"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/attach_photo_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Photo"
+        android:textSize="14sp"
+        android:textColor="#aaa"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/attach_audio_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Audio"
+        android:textSize="14sp"
+        android:textColor="#aaa"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/attach_gallery_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Gallery"
+        android:textSize="14sp"
+        android:textColor="#aaa"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/attach_video_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Video"
+        android:textSize="14sp"
+        android:textColor="#aaa"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/attach_map_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Map"
+        android:textSize="14sp"
+        android:textColor="#aaa"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/attach_file_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="File"
+        android:textSize="14sp"
+        android:textColor="#aaa"
+        android:gravity="center"/>
 
     <ImageView
         android:id="@+id/cancel"
