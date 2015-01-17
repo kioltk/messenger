@@ -1,11 +1,14 @@
 package org.happysanta.messenger.messages.attach;
 
 import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.StateListAnimator;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,7 +42,7 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
     private ArrayList<View> mNames = new ArrayList<>();
     private ArrayList<View> mActions = new ArrayList<>();
 
-    private boolean mComplete = false;
+    private boolean mAnimationComplete = false;
 
     public AttachDialog(Context context) {
         super(context, R.style.dialog);
@@ -62,7 +65,7 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
             public void onClick(View v) {
 
                 // TODO implement animated close for incomplete state
-                if (!mComplete) {
+                if (!mAnimationComplete) {
 
                     cancel();
                     return;
@@ -179,8 +182,8 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
         AnimatorSet set = new AnimatorSet();
 
-        set.setStartDelay(100 * counter);
-        set.setDuration(150);
+        set.setStartDelay(67 * counter);
+        set.setDuration(100);
         set.setInterpolator(new DecelerateInterpolator());
         set.playTogether(new HashSet<Animator>() {{
 
@@ -198,10 +201,21 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
                 if (!close) {
 
-                    if (counter > 4) mComplete = true;
+                    if (counter > 4) mAnimationComplete = true;
 
                     button.setClickable(true);
                     button.setOnClickListener(AttachDialog.this);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                        StateListAnimator onClickAnimator = AnimatorInflater
+                                .loadStateListAnimator(
+                                        getContext(),
+                                        R.anim.attach_button_state_animator
+                                );
+
+                        button.setStateListAnimator(onClickAnimator);
+                    }
 
                     setTextAnimator(mNames.get(counter), button, counter, false);
 
@@ -256,8 +270,8 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
         AnimatorSet set = new AnimatorSet();
 
-        if (close) set.setStartDelay(80 * counter);
-        set.setDuration(150);
+        if (close) set.setStartDelay(53 * counter);
+        set.setDuration(100);
         set.setInterpolator(new DecelerateInterpolator());
         set.playTogether(new HashSet<Animator>() {{
 
@@ -314,7 +328,7 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
     @Override
     public void onBackPressed() {
 
-        if (!mComplete) {
+        if (!mAnimationComplete) {
 
             super.onBackPressed();
             return;
