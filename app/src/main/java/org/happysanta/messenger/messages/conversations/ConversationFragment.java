@@ -1,5 +1,7 @@
 package org.happysanta.messenger.messages.conversations;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -238,6 +240,12 @@ public class ConversationFragment extends BaseFragment {
         attachDialog = new AttachDialog(activity);
         attachDialog.setAttachListener(attachAdapter);
         attachDialog.show();
+        attachDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                attachDialog = null;
+            }
+        });
     }
 
 
@@ -295,7 +303,12 @@ public class ConversationFragment extends BaseFragment {
         return fragment;
     }
 
-    // todo attaches
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(attachDialog==null || !attachDialog.onActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
 
 

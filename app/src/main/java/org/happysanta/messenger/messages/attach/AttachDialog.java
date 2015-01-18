@@ -6,8 +6,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
+import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,10 +17,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.droidkit.pickers.Intents;
+
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.ActivityResultCatcher;
 import org.happysanta.messenger.core.util.Dimen;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -27,7 +30,7 @@ import java.util.HashSet;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class AttachDialog extends Dialog implements View.OnClickListener {
+public class AttachDialog extends Dialog implements View.OnClickListener, ActivityResultCatcher {
 
     private static final String TAG = "ATTACH_FRAG";
 
@@ -38,6 +41,9 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
     private static final int MAP        = 4;
     private static final int FILE       = 5;
 
+    private static final int REQUEST_CODE_FILE = 5;
+    private final Activity activity;
+
     private AttachListener attachListener;
 
     private ArrayList<View> mNames = new ArrayList<>();
@@ -45,8 +51,9 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
     private boolean mAnimationComplete = false;
 
-    public AttachDialog(Context context) {
-        super(context, R.style.dialog);
+    public AttachDialog(Activity activity) {
+        super(activity, R.style.dialog);
+        this.activity = activity;
     }
 
     @Override
@@ -314,8 +321,8 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
                 break;
             }
             case R.id.attach_map: {
-
-                Toast.makeText(getContext(), "Map", Toast.LENGTH_SHORT).show();
+                activity.startActivityForResult(Intents.pickLocation(getContext()), REQUEST_CODE_FILE);
+                dismiss();
                 break;
             }
             case R.id.attach_video: {
@@ -324,8 +331,8 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
                 break;
             }
             case R.id.attach_file: {
+                activity.startActivityForResult(Intents.pickFile(getContext()), REQUEST_CODE_FILE);
                 dismiss();
-                attachListener.onFileAttached(new File("/storage/emulated/0/dslv_state.txt"));
                 break;
             }
         }
@@ -347,5 +354,11 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
 
             setAnimator(mActions.get(i), j, true);
         }
+    }
+
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        return false;
     }
 }
