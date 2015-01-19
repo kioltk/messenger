@@ -37,6 +37,7 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.ActivityResultCatcher;
 import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.core.util.Dimen;
+import org.happysanta.messenger.core.util.ProfileUtil;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
@@ -114,6 +115,9 @@ public class ConversationFragment extends BaseFragment {
         for (int i = 0, sparseArray = usersSparseArray.size(); i < sparseArray; i++) {
             VKApiUserFull user = usersSparseArray.valueAt(i);
             participants.add(user);
+        }
+        if(participants.getById(ProfileUtil.getUserId())==null){
+            participants.add(ProfileUtil.getUser());
         }
         dialogUtil = new DialogUtil(isChat, dialogId);
 

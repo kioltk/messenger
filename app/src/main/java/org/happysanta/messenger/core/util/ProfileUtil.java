@@ -16,6 +16,7 @@ public class ProfileUtil {
     private static final String PREF_PROFILE_ID = "user_id";
     private static Context context;
     private static SharedPreferences manager;
+    private static VKApiUserFull currentUser;
 
     public static void init(Context context) {
         ProfileUtil.context = context;
@@ -43,18 +44,29 @@ public class ProfileUtil {
         return manager.getString(PREF_PROFILE_STATUS, null);
     }
 
-    public static void setUserId(String userId) {
-        manager.edit().putString(PREF_PROFILE_ID, userId).apply();
+    public static void setUserId(int userId) {
+        manager.edit().putInt(PREF_PROFILE_ID, userId).apply();
     }
-    public static String getUserId() {
-        return manager.getString(PREF_PROFILE_ID, null);
+    public static Integer getUserId() {
+        return manager.getInt(PREF_PROFILE_ID, 0);
     }
 
     public static void setFromUser(VKApiUserFull currentUser) {
+        ProfileUtil.currentUser = currentUser;
         setUserPhoto(currentUser.getPhoto());
         setUserName(currentUser.toString());
-        setUserId(String.valueOf(currentUser.id));
+        setUserId(currentUser.id);
         setUserStatus(currentUser.activity);
         // todo listeners?
+    }
+
+    public static VKApiUserFull getUser() {
+        if(currentUser==null){
+            currentUser = new VKApiUserFull();
+            currentUser.photo_200 = getUserPhoto();
+            currentUser.id = getUserId();
+            currentUser.activity = getUserStatus();
+        }
+        return currentUser;
     }
 }

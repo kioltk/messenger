@@ -66,6 +66,15 @@ public class GeoMessageViewHolder extends MessageViewHolder {
             }
         });
         titleView.setText(geo.place.title);
+
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ownerView.getLayoutParams();
+        if (message.out) {
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT,0);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        } else {
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,0);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        }
         RelativeLayout.LayoutParams mapLayoutParams = (RelativeLayout.LayoutParams) mapView.getLayoutParams();
         ImageLoader.getInstance().displayImage(MapUtil.getMap(geo.lat, geo.lon, mapLayoutParams.width, mapLayoutParams.height, true, "").toString(), mapView, new ImageLoadingListener() {
             @Override
@@ -111,7 +120,7 @@ public class GeoMessageViewHolder extends MessageViewHolder {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if(loadedImage!=null)
-                    ownerView.setImageBitmap(loadedImage);
+                    ownerView.setImageBitmap(BitmapUtil.circle(loadedImage));
             }
 
             @Override

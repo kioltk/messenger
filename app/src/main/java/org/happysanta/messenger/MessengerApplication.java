@@ -76,7 +76,7 @@ public class MessengerApplication extends Application implements VKSdkListener {
     public void onReceiveNewToken(VKAccessToken newToken) {
         Log.d("VKSDK", "ReceiveNewToken");
         newToken.saveTokenToSharedPreferences(getApplicationContext(),VKSdk.VK_SDK_ACCESS_TOKEN_PREF_KEY);
-        ProfileUtil.setUserId(newToken.userId);
+        ProfileUtil.setUserId(Integer.parseInt(newToken.userId));
 
     }
 
