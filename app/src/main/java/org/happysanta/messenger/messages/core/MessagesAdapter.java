@@ -5,6 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -38,6 +42,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     private final VKList<VKApiMessage> messages;
     private final boolean isChat;
     private final VKList<VKApiUserFull> chatUsers;
+    private final View typingViewItem1;
     private View typingView;
 
     public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants) {
@@ -50,6 +55,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         this.isChat = isChat;
         this.chatUsers = participants;
         typingView = LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null);
+        typingViewItem1 = typingView.findViewById(R.id.typing_view_item1);
     }
 
     @Override
@@ -423,6 +429,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     public void typing() {
         typingView.setVisibility(View.VISIBLE);
+        AnimationSet set = new AnimationSet(true);
+        set.setRepeatMode(Animation.RESTART);
+        set.setDuration(600);
+        set.setInterpolator(new AccelerateDecelerateInterpolator());
+        set.addAnimation(new TranslateAnimation(0, 0, 0, 100));
+        typingViewItem1.startAnimation(set);
         typingView.postDelayed(new Runnable() {
             @Override
             public void run() {

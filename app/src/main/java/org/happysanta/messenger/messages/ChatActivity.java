@@ -110,6 +110,10 @@ public class ChatActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        conversationFragment.startActivityForResult(intent, requestCode);
+    }
 
     public static Intent getActivityIntent(Context context, VKApiDialog dialog) {
         Intent intent = new Intent(context, ChatActivity.class);

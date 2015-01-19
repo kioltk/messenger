@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implements AttachListener, RemoveListener {
+public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implements RemoveListener {
     private final ArrayList<VKAttachments.VKApiAttachment> attaches;
     private AttachCountListener countListener;
 
@@ -54,10 +54,12 @@ public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implem
         return attaches.size();
     }
 
-    @Override
-    public void onFileAttached(File... file) {
-        attaches.add(new VKApiDocument());
-        notifyItemInserted(attaches.size()-1);
+    public void onFileAttached(File... files) {
+        int rangeStart = attaches.size();
+        for (File file : files) {
+            attaches.add(new VKApiDocument());
+        }
+        notifyItemRangeInserted(rangeStart, files.length);
         notifyCount();
     }
 
@@ -65,25 +67,18 @@ public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implem
         countListener.onCountChanged(attaches.size());
     }
 
-    @Override
-    public void onPictureAttached(File... pictureFile) {
+    public void onPictureAttached(File... pictureFiles) {
         // Toast.makeText(activity, pictureFile[0].getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onVideoAttached(File... videoFile) {
+    public void onVideoAttached(File... videoFiles) {
         // Toast.makeText(activity, videoFile[0].getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onAudioAttached(File... audioFile) {
+    public void onAudioAttached(File... audioFiles) {
         // Toast.makeText(activity, audioFile[0].getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onGeoAttached(AttachGeo geo) {
-        // Toast.makeText(activity, geo.title, Toast.LENGTH_SHORT).show();
-    }
 
     public void setCountListener(AttachCountListener attachCountListener) {
         this.countListener = attachCountListener;
@@ -93,6 +88,6 @@ public class AttachAdapter extends RecyclerView.Adapter<AttachViewHolder> implem
     public void onRemove(int position) {
         attaches.remove(position);
         notifyItemRemoved(position);
-        countListener.onCountChanged(attaches.size());
+        notifyCount();
     }
 }

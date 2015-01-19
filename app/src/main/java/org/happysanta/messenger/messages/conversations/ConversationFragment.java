@@ -1,6 +1,8 @@
 package org.happysanta.messenger.messages.conversations;
 
-import android.content.DialogInterface;
+import android.animation.Animator;
+import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +34,9 @@ import com.vk.sdk.api.model.VKAttachments;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.ActivityResultCatcher;
 import org.happysanta.messenger.core.BaseFragment;
+import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
@@ -39,11 +45,13 @@ import org.happysanta.messenger.messages.ChatActivity;
 import org.happysanta.messenger.messages.attach.AttachAdapter;
 import org.happysanta.messenger.messages.attach.AttachCountListener;
 import org.happysanta.messenger.messages.attach.AttachDialog;
+import org.happysanta.messenger.messages.attach.AttachRequestCode;
 import org.happysanta.messenger.messages.chats.ChatDialog;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.UserDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -67,12 +75,19 @@ public class ConversationFragment extends BaseFragment {
     private ImageView attachButton;
 
     // attach
+    private static final int REQUEST_CODE_FILE = 5;
     private boolean attachWindowOpened = false;
     private AttachDialog attachDialog;
     private ArrayList<VKAttachments.VKApiAttachment> attaches = new ArrayList<>(10);
     private VKList<VKApiUserFull> participants;
     private RecyclerView attachRecycler;
     private AttachAdapter attachAdapter;
+    private ActivityResultCatcher attachResultCatcher = new ActivityResultCatcher() {
+        @Override
+        public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+            return false;
+        }
+    };
 
     public ConversationFragment() {
     }
@@ -107,7 +122,7 @@ public class ConversationFragment extends BaseFragment {
         messagesRecycler.setHasFixedSize(false);
         messagesRecycler.setLayoutManager(new LinearLayoutManager(activity));
         messagesAdapter = isChat ? new MessagesAdapter(activity, messages, participants) : new MessagesAdapter(activity, messages, participants, false);
-
+        messagesRecycler.setAdapter(messagesAdapter);
         VKRequest request = isChat ? new VKApiMessages().getChatHistory(dialogId) : new VKApiMessages().getHistory(dialogId);
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -117,7 +132,6 @@ public class ConversationFragment extends BaseFragment {
                     messagesSort.add(0, message);
                 }
                 messages.addAll(messagesSort);
-                messagesRecycler.setAdapter(messagesAdapter);
                 if (messages.isEmpty()) {
                     statusView.setText("Start the conversation");
                 } else {
@@ -205,17 +219,74 @@ public class ConversationFragment extends BaseFragment {
         });
         attachAdapter = new AttachAdapter(attaches);
         attachAdapter.setCountListener(new AttachCountListener() {
+
+            ValueAnimator animator;
+            int attachRecyclerHeight = Dimen.get(R.dimen.attachRecyclerHeight);
+            ValueAnimator.AnimatorUpdateListener animationListener = new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    ViewGroup.LayoutParams params = attachRecycler.getLayoutParams();
+                    params.height = (int) (attachRecyclerHeight*((Float)animation.getAnimatedValue()));
+                    attachRecycler.setLayoutParams(params);
+                    attachRecycler.invalidate();
+                }
+            };
+
             @Override
             public void onCountChanged(final int newCount) {
                 attachRecycler.post(new Runnable() {
+
                     @Override
                     public void run() {
-                        // todo animate
+                        animator = null;
                         if (newCount == 0) {
-                            attachRecycler.setVisibility(View.GONE);
+                            if(attachRecycler.getLayoutParams().height>1){
+                                animator = ValueAnimator.ofFloat(1f, 0f);
+                                animator.addUpdateListener(animationListener);
+                                animator.addListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        //attachRecycler.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                });
+                            }
                         } else {
-                            attachRecycler.setVisibility(View.VISIBLE);
+                            if(attachRecycler.getLayoutParams().height<1) {
+                                animator = ValueAnimator.ofFloat(0f, 1f);
+                                animator.addUpdateListener(animationListener);
+
+
+                            }
                         }
+                        if(animator!=null) {
+                            if (newCount > 0){
+                                animator.setInterpolator(new OvershootInterpolator());
+                            } else {
+                                // todo ios animation?
+                                animator.setInterpolator(new BounceInterpolator());
+                            }
+
+                            animator.setDuration(500);
+                            animator.setStartDelay(100);
+                            animator.start();
+                        }
+
                     }
                 });
             }
@@ -238,14 +309,13 @@ public class ConversationFragment extends BaseFragment {
         }
         attachButton.setImageResource(R.drawable.ic_header_important);
         attachDialog = new AttachDialog(activity);
-        attachDialog.setAttachListener(attachAdapter);
         attachDialog.show();
-        attachDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        /*attachDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 attachDialog = null;
             }
-        });
+        });*/
     }
 
 
@@ -303,14 +373,27 @@ public class ConversationFragment extends BaseFragment {
         return fragment;
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(attachDialog==null || !attachDialog.onActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case AttachRequestCode.FILE:
+                if(resultCode== Activity.RESULT_OK){
+                    ArrayList<String> list = data.getStringArrayListExtra("data");
+                    File[] files = new File[list.size()];
+                    for (int i = 0; i < list.size(); i++) {
+                        files[i] = new File(list.get(i));
+                    }
+                    attachAdapter.onFileAttached(files);
+                }
+                break;
+            case AttachRequestCode.MAP:
+                if(resultCode == Activity.RESULT_OK){
+                    //attachAdapter.onGeoAttached(new AttachGeo());
+                }
+                break;
         }
     }
-
-
 
 
 }

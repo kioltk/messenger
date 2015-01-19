@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <ImageView
+        android:id="@+id/owner"
         android:layout_margin="10dp"
         android:src="@drawable/user_placeholder"
         android:layout_width="40dp"

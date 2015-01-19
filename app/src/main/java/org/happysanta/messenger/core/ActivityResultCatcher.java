@@ -8,4 +8,5 @@ import android.content.Intent;
 public interface ActivityResultCatcher {
     // returns true if result catched
     boolean onActivityResult(int requestCode, int resultCode, Intent data);
+
 }

@@ -8,7 +8,6 @@ import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 import com.droidkit.pickers.Intents;
 
 import org.happysanta.messenger.R;
-import org.happysanta.messenger.core.ActivityResultCatcher;
 import org.happysanta.messenger.core.util.Dimen;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ import java.util.HashSet;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class AttachDialog extends Dialog implements View.OnClickListener, ActivityResultCatcher {
+public class AttachDialog extends Dialog implements View.OnClickListener {
 
     private static final String TAG = "ATTACH_FRAG";
 
@@ -41,10 +39,8 @@ public class AttachDialog extends Dialog implements View.OnClickListener, Activi
     private static final int MAP        = 4;
     private static final int FILE       = 5;
 
-    private static final int REQUEST_CODE_FILE = 5;
     private final Activity activity;
 
-    private AttachListener attachListener;
 
     private ArrayList<View> mNames = new ArrayList<>();
     private ArrayList<View> mActions = new ArrayList<>();
@@ -123,9 +119,6 @@ public class AttachDialog extends Dialog implements View.OnClickListener, Activi
 
     }
 
-    public void setAttachListener(AttachListener attachListener) {
-        this.attachListener = attachListener;
-    }
 
     private void setAnimator(final View button, final int counter, final boolean close) {
 
@@ -321,7 +314,7 @@ public class AttachDialog extends Dialog implements View.OnClickListener, Activi
                 break;
             }
             case R.id.attach_map: {
-                activity.startActivityForResult(Intents.pickLocation(getContext()), REQUEST_CODE_FILE);
+                activity.startActivityForResult(Intents.pickLocation(getContext()), AttachRequestCode.MAP);
                 dismiss();
                 break;
             }
@@ -331,7 +324,7 @@ public class AttachDialog extends Dialog implements View.OnClickListener, Activi
                 break;
             }
             case R.id.attach_file: {
-                activity.startActivityForResult(Intents.pickFile(getContext()), REQUEST_CODE_FILE);
+                activity.startActivityForResult(Intents.pickFile(getContext()), AttachRequestCode.FILE);
                 dismiss();
                 break;
             }
@@ -357,8 +350,5 @@ public class AttachDialog extends Dialog implements View.OnClickListener, Activi
     }
 
 
-    @Override
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        return false;
-    }
+
 }

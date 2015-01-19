@@ -7,6 +7,10 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 
 import com.vk.sdk.api.model.VKApiUserFull;
 
@@ -49,6 +53,24 @@ public class SandboxFragment extends BaseFragment {
                 ChatHeadsManager.showChatHeads();
             }
         });
+
+
+        final View typingView = findViewById(R.id.typing);
+        View typingViewItem1 = findViewById(R.id.typing_view_item1);
+
+        typingView.setVisibility(View.VISIBLE);
+        AnimationSet set = new AnimationSet(true);
+        set.setRepeatMode(Animation.RESTART);
+        set.setDuration(600);
+        set.setInterpolator(new AccelerateDecelerateInterpolator());
+        set.addAnimation(new TranslateAnimation(0, 0, 0, 100));
+        typingViewItem1.startAnimation(set);
+        typingView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                typingView.setVisibility(View.INVISIBLE);
+            }
+        }, 5500);
         return rootView;
     }
 

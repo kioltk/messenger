@@ -62,7 +62,7 @@ public abstract class BasePickerActivity extends Activity implements AdapterView
 
     protected void returnResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("picked", selectedItems);
+        returnIntent.putExtra("data", selectedItems);
         setResult(RESULT_OK, returnIntent);
         save();
         finish();

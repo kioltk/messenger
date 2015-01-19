@@ -40,9 +40,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/attach_recycler"
             android:background="#fff"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="110dp"/>
+            android:layout_height="0dp"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
