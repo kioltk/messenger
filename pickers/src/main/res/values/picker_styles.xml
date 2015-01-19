@@ -29,4 +29,8 @@
     <style name="pickerActionOverflowButtonStyle" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/picker_bar_more</item>
     </style>
+
+    <style name="PickerTheme.MapPicker" parent="PickerTheme">
+        <item name="android:actionBarStyle">@style/pickerActionBarStyleFilePicker</item>
+    </style>
 </resources>

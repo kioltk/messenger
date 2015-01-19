@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.droidkit.file">
+    package="com.droidkit.file">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <application>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <application
+        >
         <activity android:name="com.droidkit.pickers.file.FilePickerActivity"
-                  android:label="@string/picker_file_activity_title"
-                  android:theme="@style/PickerTheme.FilePicker">
+            android:label="@string/picker_file_activity_title"
+            android:theme="@style/PickerTheme.FilePicker">
         </activity>
         <activity android:name="com.droidkit.pickers.map.MapPickerActivity"
-                  android:label="@string/picker_map_activity_title">
+            android:label="@string/picker_map_activity_title"
+            android:theme="@style/PickerTheme.MapPicker"
+            >
         </activity>
         <!-- todo API key-->
-        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="your API key"/>
+        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCUcXT4YFDG1S8fsBrR4xA_Ur8NE0-1CPQ"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
     </application>
 </manifest>
