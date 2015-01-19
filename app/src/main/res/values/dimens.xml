@@ -30,5 +30,7 @@
 
     <dimen name="picker_icon_size">72dp</dimen>
     <dimen name="attachRecyclerHeight">110dp</dimen>
+    <dimen name="typing_item_jumpheight">10dp</dimen>
+    <dimen name="typing_item_margin">14dp</dimen>
 
 </resources>

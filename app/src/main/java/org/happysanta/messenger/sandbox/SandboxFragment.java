@@ -1,5 +1,6 @@
 package org.happysanta.messenger.sandbox;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,21 +9,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
+import android.view.animation.AccelerateInterpolator;
 
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.chatheads.ChatHeadsManager;
 import org.happysanta.messenger.core.BaseFragment;
+import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.messages.ChatActivity;
 
 /**
  * Created by Jesus Christ. Amen.
  */
 public class SandboxFragment extends BaseFragment {
+
+    private View typingViewItem3;
+    private View typingView;
+    private View typingViewItem1;
+    private View typingViewItem2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,23 +60,96 @@ public class SandboxFragment extends BaseFragment {
         });
 
 
-        final View typingView = findViewById(R.id.typing);
-        View typingViewItem1 = findViewById(R.id.typing_view_item1);
+        typingView = findViewById(R.id.typing);
+        typingViewItem1 = findViewById(R.id.typing_view_item1);
+        typingViewItem2 = findViewById(R.id.typing_view_item2);
+        typingViewItem3 = findViewById(R.id.typing_view_item3);
+        View typingViewButton = findViewById(R.id.show_typing);
+        typingViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTyping();
+            }
+        });
 
+        return rootView;
+    }
+
+    private void showTyping() {
         typingView.setVisibility(View.VISIBLE);
-        AnimationSet set = new AnimationSet(true);
-        set.setRepeatMode(Animation.RESTART);
-        set.setDuration(600);
-        set.setInterpolator(new AccelerateDecelerateInterpolator());
-        set.addAnimation(new TranslateAnimation(0, 0, 0, 100));
-        typingViewItem1.startAnimation(set);
+        new Runnable() {
+
+            void animate(final View view){
+                view.animate()
+                        .translationY(-Dimen.get(R.dimen.typing_item_jumpheight))
+                        .setDuration(200)
+                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                view.clearAnimation();
+                                view.animate().translationY(0)
+                                        .setDuration(300).setStartDelay(0)
+                                        .setInterpolator(new AccelerateInterpolator())
+                                        .start();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        })
+                        .start();
+            }
+
+            @Override
+            public void run() {
+
+                typingViewItem1.clearAnimation();
+                typingViewItem2.clearAnimation();
+                typingViewItem3.clearAnimation();
+
+                typingViewItem1.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animate(typingViewItem1);
+                    }
+                },0);
+                typingViewItem2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animate(typingViewItem2);
+                    }
+                },150);
+                typingViewItem3.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animate(typingViewItem3);
+                    }
+                },300);
+
+            }
+        }.run();
+
         typingView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                typingView.setVisibility(View.INVISIBLE);
+                typingView.setVisibility(View.GONE);
+                typingViewItem1.clearAnimation();
+                typingViewItem2.clearAnimation();
+                typingViewItem3.clearAnimation();
             }
-        }, 5500);
-        return rootView;
+        }, 1300);
     }
 
 }
