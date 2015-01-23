@@ -1,10 +1,11 @@
 package com.droidkit.pickers.file;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +24,13 @@ import java.util.ArrayList;
 /**
  * Created by kiolt_000 on 15/09/2014.
  */
-public abstract class BasePickerActivity extends Activity implements AdapterView.OnItemClickListener {
+public abstract class BasePickerActivity extends ActionBarActivity
+        implements AdapterView.OnItemClickListener {
+
     protected ArrayList<String> selectedItems = new ArrayList<String>();
     private boolean searchEnabled;
     protected Fragment currentFragment;
+    protected Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +42,16 @@ public abstract class BasePickerActivity extends Activity implements AdapterView
                     .add(R.id.container, getWelcomeFragment())
                     .commit();
         }
-        //getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        // getActionBar().setDisplayShowHomeEnabled(false);
-        // getActionBar().setDisplayUseLogoEnabled(false);
+
+//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//
+//        if (mToolbar != null) {
+//
+//            setSupportActionBar(mToolbar);
+//        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         View select = findViewById(R.id.select);
         select.setOnClickListener(new View.OnClickListener() {

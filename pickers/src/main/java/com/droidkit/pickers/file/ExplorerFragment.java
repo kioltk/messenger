@@ -473,7 +473,7 @@ public class ExplorerFragment extends Fragment {
     }
 
     private void setTitle() {
-        getActivity().getActionBar().setTitle(title);
+        ((FilePickerActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
 }

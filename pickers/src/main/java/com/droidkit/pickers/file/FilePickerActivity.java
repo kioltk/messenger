@@ -20,10 +20,6 @@ public class FilePickerActivity extends BasePickerActivity {
         //searchEnable();
         findViewById(R.id.controllers).setVisibility(View.GONE);
 
-        getActionBar().setIcon(R.drawable.picker_bar_filepicker_icon);
-        getActionBar().setLogo(R.drawable.picker_bar_filepicker_icon);
-        getActionBar().setDisplayShowHomeEnabled(true);
-        getActionBar().setDisplayUseLogoEnabled(true);
         /*
         final int actionBarTitle = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
         final TextView title = (TextView)getWindow().findViewById(actionBarTitle);

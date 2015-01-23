@@ -80,7 +80,9 @@ public class SearchFileFragment extends Fragment implements AbsListView.OnScroll
 
         /**/
 
-        getActivity().getActionBar().setTitle(R.string.picker_file_search_activity_title);
+        ((FilePickerActivity) getActivity()).getSupportActionBar()
+                .setTitle(R.string.picker_file_search_activity_title);
+
         if (index.isEmpty()) {
             indexingTask = new IndexTask(new File(root)) {
                 @Override
@@ -305,7 +307,7 @@ public class SearchFileFragment extends Fragment implements AbsListView.OnScroll
         // pickerActivity.searchDisable();
         pickerActivity.setFragment(this);
         pickerActivity.invalidateOptionsMenu();
-        pickerActivity.getActionBar().setIcon(R.drawable.picker_bar_search);
+        pickerActivity.getSupportActionBar().setIcon(R.drawable.picker_bar_search);
     }
 
     @Override
