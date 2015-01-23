@@ -31,12 +31,16 @@ public class AddressTask extends AsyncTask<Void, Void, Address> {
 
         try {
 
-
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(position.latitude, position.longitude, 1);
-            if (addresses.isEmpty()){
+
+            List<Address> addresses = geocoder.getFromLocation(position.latitude,
+                    position.longitude, 1);
+
+            if (addresses.isEmpty()) {
+
                 return null;
             }
+
             Address address = addresses.get(0);
 
             Log.v("IGA", "Address " + address.toString());
@@ -45,9 +49,11 @@ public class AddressTask extends AsyncTask<Void, Void, Address> {
             return address;
 
         } catch (IOException e) {
+
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         Timer.finish("Address was taken");
         return null;
     }

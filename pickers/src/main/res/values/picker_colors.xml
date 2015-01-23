@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="color_primary">#4b7ab1</color>
+    <color name="color_primary_dark">#366294</color>
+
     <color name="picker_globalWindowBackground" >#fffffc</color>
     <color name="picker_globalWindowBackgroundTranslucent" >#d8eeeeee</color>
 

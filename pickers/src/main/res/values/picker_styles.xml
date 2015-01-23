@@ -1,36 +1,34 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="PickerTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/pickerActionBarStyle</item>
-        <item name="android:homeAsUpIndicator">@drawable/picker_bar_back</item>
-        <item name="android:actionOverflowButtonStyle">@style/pickerActionOverflowButtonStyle</item>
+    <style name="PickerTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/picker_globalWindowBackground</item>
     </style>
-    <style name="PickerTheme.FilePicker" parent="PickerTheme">
-        <item name="android:actionBarStyle">@style/pickerActionBarStyleFilePicker</item>
+
+    <style name="PickerTheme.FilePicker" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/pickerActionBarStyle</item>
     </style>
 
-    <style name="pickerActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:titleTextStyle">@style/pickerActionBarTitleStyle</item>
+    <style name="pickerActionBarStyle">
         <item name="android:background">@color/picker_main_color</item>
     </style>
+
+    <style name="toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionMenuTextColor">#fff</item><!-- actionbar buttons text color -->
+        <item name="android:textColorPrimary">#fff</item><!-- actionbar text color -->
+        <item name="android:textColorSecondary">#fff</item><!-- actionbar buttons color -->
+        <!--item name="android:background">@color/color_primary</item--><!-- it have to be defined inside Toolbar tag -->
+    </style>
+
     <style name="pickerActionBarStyleFilePicker" parent="@style/pickerActionBarStyle">
     </style>
+
     <style name="pickerActionBarStylePicturePicker" parent="@style/pickerActionBarStyle">
         <item name="android:background">@color/picker_main_color_picturepicker</item>
     </style>
 
-    <style name="pickerActionBarTitleStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:textColor">#fff</item>
-    </style>
-    <style name="pickerActionOverflowButtonStyle" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
-        <item name="android:src">@drawable/picker_bar_more</item>
-    </style>
-
     <style name="PickerTheme.MapPicker" parent="PickerTheme">
-        <item name="android:actionBarStyle">@style/pickerActionBarStyleFilePicker</item>
+        <item name="android:actionBarStyle">@style/pickerActionBarStyle</item>
     </style>
 </resources>
