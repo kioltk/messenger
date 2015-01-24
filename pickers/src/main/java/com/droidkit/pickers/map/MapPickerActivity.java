@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -44,7 +45,8 @@ public class MapPickerActivity extends ActionBarActivity
         GoogleMap.OnMyLocationChangeListener,
         GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMapClickListener,
-        GoogleMap.OnCameraChangeListener {
+        GoogleMap.OnCameraChangeListener,
+        GoogleMap.OnMapLoadedCallback {
 
     private static final String LOG_TAG = "MapPickerActivity";
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -57,7 +59,7 @@ public class MapPickerActivity extends ActionBarActivity
 
     private TextView mTitle;
     private TextView mSubtitle;
-    private LinearLayout mCurrentPick;
+    private LinearLayout mCurrentPickPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +91,23 @@ public class MapPickerActivity extends ActionBarActivity
 
                 if (location != null) {
 
-                    LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
+                    final LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
 
                     CameraPosition.Builder builder = new CameraPosition.Builder();
                     builder.zoom(17);
                     builder.target(target);
 
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(builder.build()));
+
+                    currentLocation = location;
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            showMapCurrentPin(target);
+                        }
+                    }, 300);
 
                 } else {
 
@@ -151,7 +163,7 @@ public class MapPickerActivity extends ActionBarActivity
             buildAlertMessageNoGps();
         }
 
-        mCurrentPick = (LinearLayout) findViewById(R.id.current_pick);
+        mCurrentPickPanel = (LinearLayout) findViewById(R.id.current_pick);
         mTitle = (TextView) findViewById(R.id.current_pick_title);
         mSubtitle = (TextView) findViewById(R.id.current_pick_subtitle);
 
@@ -160,7 +172,7 @@ public class MapPickerActivity extends ActionBarActivity
     private void togglePicker(final boolean show) {
 
         final ObjectAnimator togglePanel = ObjectAnimator.ofFloat(
-                mCurrentPick,
+                mCurrentPickPanel,
                 "translationY",
                 show ? 0 : 76*3
         );
@@ -219,7 +231,7 @@ public class MapPickerActivity extends ActionBarActivity
                         super.onAnimationEnd(animation);
 
                         if (!show)
-                            mCurrentPick.setVisibility(View.GONE);
+                            mCurrentPickPanel.setVisibility(View.GONE);
                     }
                 });
             }
@@ -338,6 +350,7 @@ public class MapPickerActivity extends ActionBarActivity
         mMap.setOnMapClickListener(this);
         mMap.setOnCameraChangeListener(this);
         mMap.setOnMapLongClickListener(this);
+        mMap.setOnMapLoadedCallback(this);
     }
 
     void hideKeyBoard() {
@@ -372,6 +385,19 @@ public class MapPickerActivity extends ActionBarActivity
                             new LatLng(location.getLatitude(),
                                     location.getLongitude()), 14)
             );
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    showMapCurrentPin(
+                            new LatLng(
+                                    currentLocation.getLatitude(),
+                                    currentLocation.getLongitude()
+                            )
+                    );
+                }
+            }, 300);
         }
 
         this.currentLocation = location;
@@ -398,20 +424,20 @@ public class MapPickerActivity extends ActionBarActivity
             currentPick.setPosition(latLng);
         }
 
-        showMapCurrentPin();
+        showMapCurrentPin(latLng);
     }
 
 
 
-    public void showMapCurrentPin() {
+    public void showMapCurrentPin(LatLng position) {
 
-        mCurrentPick.setVisibility(View.VISIBLE);
+        mCurrentPickPanel.setVisibility(View.VISIBLE);
         mTitle.setText(R.string.picker_loading);
         mSubtitle.setText("");
 
         togglePicker(true);
 
-        AddressTask task = new AddressTask(this, currentPick.getPosition()) {
+        AddressTask task = new AddressTask(this, position) {
             @Override
             protected void onPostExecute(Address s) {
 
@@ -453,7 +479,7 @@ public class MapPickerActivity extends ActionBarActivity
     @Override
     public void onMapClick(LatLng latLng) {
 
-        if (mCurrentPick.isShown()) {
+        if (mCurrentPickPanel.isShown()) {
 
             mMap.clear();
             currentPick = null;
@@ -474,7 +500,7 @@ public class MapPickerActivity extends ActionBarActivity
 
             }
 
-            showMapCurrentPin();
+            showMapCurrentPin(latLng);
         }
     }
 
@@ -483,5 +509,11 @@ public class MapPickerActivity extends ActionBarActivity
 
         // TODO stub
 
+    }
+
+    @Override
+    public void onMapLoaded() {
+
+        Toast.makeText(this, "Tap on the map to pick location", Toast.LENGTH_SHORT).show();
     }
 }
