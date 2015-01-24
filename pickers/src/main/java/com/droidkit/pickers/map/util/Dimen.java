@@ -25,8 +25,9 @@ public class Dimen {
         Dimen.context = context;
     }
 
-    public static int getPX(int dimenResId) {
-        return 0;
+    public static int getPX(int resourceId) {
+
+        return context.getResources().getDimensionPixelSize(resourceId);
     }
 
 

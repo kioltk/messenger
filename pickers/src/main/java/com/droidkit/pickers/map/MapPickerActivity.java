@@ -174,13 +174,13 @@ public class MapPickerActivity extends ActionBarActivity
         final ObjectAnimator togglePanel = ObjectAnimator.ofFloat(
                 mCurrentPickPanel,
                 "translationY",
-                show ? 0 : 76*3
+                show ? 0 : Dimen.getPX(R.dimen.picker_map_translate_panel)
         );
 
         final ObjectAnimator toggleDefine = ObjectAnimator.ofFloat(
                 mDefineMyLocationButton,
                 "translationY",
-                show ? -99*3 : 0
+                show ? Dimen.getPX(R.dimen.picker_map_translate_nav_button) : 0
         );
 
         final ObjectAnimator togglePickX =
