@@ -1,16 +1,24 @@
 apply plugin: 'com.android.application'
 
 
-def basicVersion = '0.2'
-def customVersionCode = '1';
+def versionPropsFile = file('version.properties')
+def currentVersionCode = 0
+def currentVersionName = "0.0"
+if (versionPropsFile.canRead()) {
+    def Properties versionProps = new Properties()
 
+    versionProps.load(new FileInputStream(versionPropsFile))
 
+    currentVersionCode = versionProps['VERSION_CODE'].toInteger() + 1
+    currentVersionName = versionProps['VERSION_NAME']
+    versionProps['VERSION_CODE'] = currentVersionCode.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
+}
 
 if (project.hasProperty('buildIndex')) {
-    project.version = basicVersion + '.' + project.buildIndex
-    customVersionCode = '' + project.buildIndex
+    project.version = project.buildIndex + ""
 } else {
-    project.version = 'debug'
+    project.version = 'debug build' + currentVersionCode
 }
 
 project.archivesBaseName = "messenger";
@@ -22,10 +30,13 @@ android {
         applicationId "org.happysanta.messenger"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode Integer.valueOf(customVersionCode)
-        versionName project.version
+        versionCode currentVersionCode
     }
+
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
