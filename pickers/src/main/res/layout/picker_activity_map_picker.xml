@@ -28,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="76dp"
         android:elevation="7dp"
+        android:translationY="76dp"
         android:visibility="gone"
         tools:ignore="UnusedAttribute">
 
