@@ -31,6 +31,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode currentVersionCode
+        versionName project.version
     }
 
     buildTypes {
@@ -46,20 +47,21 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':vksdk_library')
     // support
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:cardview-v7:21.0.3'
     compile 'com.android.support:recyclerview-v7:21.0.3'
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.google.android.gms:play-services:6.5.87'
-    compile 'com.google.code.gson:gson:2.3'
+
     // utils
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
-    compile 'com.github.machinarius:preferencefragment:0.1.1'
-    compile 'com.eowise:recyclerview-stickyheaders:0.5.0@aar'
+    compile project(':vksdk_library')
     compile project(':pickers')
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+    compile 'com.eowise:recyclerview-stickyheaders:0.5.0@aar'
 
     // trackers
     compile 'com.splunk.mint:mint:4.0.8'
+
 }
