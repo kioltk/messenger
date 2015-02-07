@@ -28,9 +28,9 @@ import com.droidkit.pickers.file.items.ExternalStorageItem;
 import com.droidkit.pickers.file.items.HeaderItem;
 import com.droidkit.pickers.file.items.StorageItem;
 import com.droidkit.pickers.file.util.Converter;
-import com.droidkit.pickers.file.util.HistoryDatabase;
 import com.droidkit.pickers.file.util.FileDateOrderComparator;
 import com.droidkit.pickers.file.util.FileNameOrderComparator;
+import com.droidkit.pickers.file.util.HistoryDatabase;
 import com.droidkit.pickers.file.view.MaterialInterpolator;
 
 import java.io.File;
@@ -83,61 +83,84 @@ public class ExplorerFragment extends Fragment {
             items = new ArrayList<ExplorerItem>();
 
             if (bundle != null) {
+
                 path = bundle.getString("path");
 
-
                 Log.d(LOG_TAG, "Path: " + path);
+
                 File currentPathFile = new File(path);
                 File[] fileList = currentPathFile.listFiles();
+
                 title = currentPathFile.getPath();
+
                 if (title.contains(Environment.getExternalStorageDirectory().getPath())) {
+
                     title = title.replace(Environment.getExternalStorageDirectory().getPath(), "");
                 }
+
                 if (title.length() > 0 && title.toCharArray()[0] == '/') {
+
                     title = title.substring(1);
                 }
 
                 if (path.equals(Environment.getExternalStorageDirectory().getPath())) {
+
                     if (Environment.isExternalStorageEmulated()) {
+
                         title = getString(R.string.picker_file_memory_phone);
-                    } else
+                    }
+                    else
                         title = getString((R.string.picker_file_memory_external));
+
                 } else if (path.equals("/"))
                     title = getString(R.string.picker_file_memory_phone);
 
                 if (fileList == null) {
+
                     statusView.setVisibility(View.VISIBLE);
+
                     File external = Environment.getExternalStorageDirectory();
+
                     if (path.equals(external.getPath()))
                         statusView.setText(R.string.picker_file_memory_external_error);
                     else
                         statusView.setText(R.string.picker_file_denied);
 
                     return rootView;
+
                 } else {
+
                     if (fileList.length == 0) {
 
                         emptyView.setVisibility(View.VISIBLE);
+
                         AnimationSet slideInAnimation = new AnimationSet(true);
                         slideInAnimation.setInterpolator(new MaterialInterpolator());
                         slideInAnimation.setDuration(280);
+
                         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
                         slideInAnimation.addAnimation(alphaAnimation);
+
                         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 150, 0);
                         slideInAnimation.addAnimation(translateAnimation);
                         emptyView.startAnimation(slideInAnimation);
 
                         statusView.setVisibility(View.VISIBLE);
+
                         AnimationSet slideInAnimation1 = new AnimationSet(true);
                         slideInAnimation1.setInterpolator(new MaterialInterpolator());
                         slideInAnimation1.setDuration(280);
                         slideInAnimation1.setStartOffset(150);//cause of offset
+
                         AlphaAnimation alphaAnimation1 = new AlphaAnimation(0, 1);
                         slideInAnimation1.addAnimation(alphaAnimation1);
+
                         TranslateAnimation translateAnimation1 = new TranslateAnimation(0, 0, 150, 0);
                         slideInAnimation1.addAnimation(translateAnimation1);
+
                         statusView.startAnimation(slideInAnimation1);
                         statusView.setText(R.string.picker_file_directory_empty);
+
                         //return rootView;
                     }
                 }
@@ -147,18 +170,23 @@ public class ExplorerFragment extends Fragment {
                 for (File file : fileList) {
                     putItem(file);
                 }
+
                 Collections.sort(items, new FileNameOrderComparator());
 
                 insertBack();
                 adapter = new ExplorerAdapter(getActivity(), items);
 
             } else {
+
                 welcome = true;
 //                items.add(new StorageItem(getActivity()));
+
                 adapter = new WelcomeExplorerAdapter(getActivity(), items);
                 items.add(new HeaderItem(getString(R.string.picker_file_header_main)));
+
                 String externalStorageState = Environment.getExternalStorageState();
                 Log.w(LOG_TAG, externalStorageState);
+
                 if (
                         externalStorageState.equals(Environment.MEDIA_REMOVED)
                                 || externalStorageState.equals(Environment.MEDIA_BAD_REMOVAL)
@@ -233,19 +261,26 @@ public class ExplorerFragment extends Fragment {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
+
         if (!welcome) {
+
             inflater.inflate(R.menu.picker_file, menu);
             sortnameMenuItem = menu.findItem(R.id.sortname);
             sortdateMenuItem = menu.findItem(R.id.sortdate);
+
         } else
             inflater.inflate(R.menu.picker_file_welcome, menu);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
+
         if (id == R.id.sortname) {
+
             list.post(new Runnable() {
                 @Override
                 public void run() {
@@ -253,12 +288,17 @@ public class ExplorerFragment extends Fragment {
                     sortnameMenuItem.setVisible(false);
                 }
             });
+
             removeBack();
             Collections.sort(items, new FileNameOrderComparator());
             insertBack();
+
             adapter.notifyDataSetChanged();
+
             return true;
+
         } else if (id == R.id.sortdate) {
+
             list.post(new Runnable() {
                 @Override
                 public void run() {
@@ -266,21 +306,31 @@ public class ExplorerFragment extends Fragment {
                     sortnameMenuItem.setVisible(true);
                 }
             });
+
             removeBack();
             Collections.sort(items, new FileDateOrderComparator());
             insertBack();
+
             adapter.notifyDataSetChanged();
+
             return true;
+
         } else if (id == R.id.search) {
+
             Bundle bundle = new Bundle();
             bundle.putString("root", path);
+
             SearchFileFragment searchFragment = new SearchFileFragment();
             searchFragment.setArguments(bundle);
+
             pickerActivity.getFragmentManager().beginTransaction()
-                    //.setCustomAnimations(R.animator.picker_fragment_explorer_welcome_enter, R.animator.picker_fragment_explorer_welcome_exit)
-                    .replace(R.id.container, searchFragment)
+                    .setCustomAnimations(
+                            R.animator.picker_fragment_explorer_welcome_enter,
+                            R.animator.picker_fragment_explorer_welcome_exit)
+                    .replace(R.id.container, searchFragment, "search")
                     .addToBackStack("search")
                     .commit();
+
             //pickerActivity.searchDisable();
 
             return true;
@@ -291,6 +341,7 @@ public class ExplorerFragment extends Fragment {
     void putItem(File file) {
 
         ExplorerItem item;
+
         if (file.isDirectory()) {
             item = getFolderItem(file);
 
@@ -328,10 +379,14 @@ public class ExplorerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         Log.d("Explorer Animation", "Resume");
+
         setTitle();
+
         pickerActivity.setFragment(this);
         pickerActivity.invalidateOptionsMenu();
+
         if (!animated) {
             animated = true;
         }
@@ -346,23 +401,30 @@ public class ExplorerFragment extends Fragment {
         int animationLength = 0;
 
         if (nextAnim == R.animator.picker_fragment_explorer_welcome_enter) {
+
             list.setAlpha(0);
             list.post(new Runnable() {
                 @Override
                 public void run() {
                     list.setAlpha(1);
                     int offsetIncreaseOffset = 0;
+
                     for (int i = 0; i < list.getChildCount(); i++) {
+
                         View searchItemView = list.getChildAt(i);
+
                         AnimationSet slideInAnimation = new AnimationSet(true);
                         slideInAnimation.setInterpolator(new MaterialInterpolator());
                         slideInAnimation.setDuration(180);
+
                         if (items.get(i) instanceof HeaderItem) {
                             offsetIncreaseOffset += 150;
                             slideInAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
                             offsetIncreaseOffset += 200;
+
                         } else
                             slideInAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+
                         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
                         slideInAnimation.addAnimation(alphaAnimation);
                         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 150, 0);
@@ -373,7 +435,9 @@ public class ExplorerFragment extends Fragment {
             });
             animationLength = list.getChildCount() * 100 + 50;
             Log.d("Explorer animation", "CreateAnimator: enter");
+
         } else if (nextAnim == R.animator.picker_fragment_explorer_enter) {
+
             list.setAlpha(0);
             list.post(new Runnable() {
                 @Override
@@ -381,24 +445,32 @@ public class ExplorerFragment extends Fragment {
                     list.setAlpha(1);
                     int offsetIncreaseOffset = 0;
                     for (int i = 0; i < list.getChildCount(); i++) {
+
                         View searchItemView = list.getChildAt(i);
+
                         AnimationSet slideInAnimation = new AnimationSet(true);
                         slideInAnimation.setInterpolator(new MaterialInterpolator());
                         slideInAnimation.setDuration(100);
                         slideInAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+
                         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
                         slideInAnimation.addAnimation(alphaAnimation);
+
                         TranslateAnimation translateAnimation = new TranslateAnimation(100, 0, 0, 0);
                         slideInAnimation.addAnimation(translateAnimation);
+
                         searchItemView.startAnimation(slideInAnimation);
                     }
                 }
             });
             animationLength = list.getChildCount() * 100 + 50;
             Log.d("Explorer animation", "CreateAnimator: enter");
+
         } else if (nextAnim == R.animator.picker_fragment_explorer_welcome_exit ||
                 nextAnim == R.animator.picker_fragment_explorer_exit) {
+
             for (int i = 0; i < list.getChildCount(); i++) {
+
                 View searchItemView = list.getChildAt(i);
                 AnimationSet slideInAnimation = new AnimationSet(true);
                 slideInAnimation.setInterpolator(new MaterialInterpolator());

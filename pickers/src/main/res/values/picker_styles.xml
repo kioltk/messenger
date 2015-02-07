@@ -6,12 +6,15 @@
         <item name="android:windowBackground">@color/picker_globalWindowBackground</item>
     </style>
 
-    <style name="PickerTheme.FilePicker" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/pickerActionBarStyle</item>
+    <style name="PickerTheme.FilePicker" parent="PickerTheme">
     </style>
 
     <style name="pickerActionBarStyle">
-        <item name="android:background">@color/picker_main_color</item>
+        <!--<item name="android:background">@color/picker_main_color</item>-->
+    </style>
+
+    <style name="actionbar_popup" parent="ThemeOverlay.AppCompat.Light">
+        <!--<item name="android:textColorPrimary">#444</item>-->
     </style>
 
     <style name="toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -29,6 +32,6 @@
     </style>
 
     <style name="PickerTheme.MapPicker" parent="PickerTheme">
-        <item name="android:actionBarStyle">@style/pickerActionBarStyle</item>
+        <!--<item name="android:actionBarStyle">@style/pickerActionBarStyle</item>-->
     </style>
 </resources>

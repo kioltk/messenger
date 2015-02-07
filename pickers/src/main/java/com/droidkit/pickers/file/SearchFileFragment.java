@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,13 +19,12 @@ import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.droidkit.file.R;
+import com.droidkit.pickers.file.items.ExplorerItem;
 import com.droidkit.pickers.file.search.IndexTask;
 import com.droidkit.pickers.file.search.SearchTask;
-import com.droidkit.pickers.file.items.ExplorerItem;
 import com.droidkit.pickers.file.view.MaterialInterpolator;
 import com.droidkit.pickers.view.SearchViewHacker;
 
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 
 
 public class SearchFileFragment extends Fragment implements AbsListView.OnScrollListener {
+
     private View rootView;
     private String lastTitle;
     private ArrayList<ExplorerItem> items = new ArrayList<ExplorerItem>();
@@ -122,25 +123,50 @@ public class SearchFileFragment extends Fragment implements AbsListView.OnScroll
         MenuItem searchMenuItem = menu.getItem(0);
 
         searchView = (SearchView) searchMenuItem.getActionView();
-
         searchView.setIconified(false);
-        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+
+        int searchPlateId = searchView
+                .getContext()
+                .getResources()
+                .getIdentifier("android:id/search_plate", null, null);
+
         View searchPlate = searchView.findViewById(searchPlateId);
+
         if (searchPlate != null) {
+
             // searchPlate.setBackgroundColor(Color.DKGRAY);
-            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+
+            int searchTextId = searchPlate
+                    .getContext()
+                    .getResources()
+                    .getIdentifier("android:id/search_src_text", null, null);
+
             TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
+
             if (searchText != null) {
+
                 searchText.setTextColor(Color.WHITE);
                 searchText.setHintTextColor(Color.WHITE);
             }
         }
 
         SearchViewHacker.setCloseIcon(searchView, R.drawable.bar_clear_search);
+
         SearchViewHacker.setIcon(searchView, R.drawable.picker_bar_search);
-        SearchViewHacker.setText(searchView, getResources().getColor(R.color.picker_file_searchbox_focused_color));
+
+        SearchViewHacker.setText(searchView,
+                getResources().getColor(R.color.picker_file_searchbox_focused_color));
+
         SearchViewHacker.setEditText(searchView, R.drawable.picker_search_text_box);
-        SearchViewHacker.setHint(searchView, getString(R.string.picker_file_search_query_text), 0, getResources().getColor(R.color.picker_file_searchbox_hint_color), null);
+
+        SearchViewHacker.setHint(
+                searchView,
+                getString(R.string.picker_file_search_query_text),
+                0,
+                getResources().getColor(R.color.picker_file_searchbox_hint_color),
+                null
+        );
+
         SearchViewHacker.disableMagIcon(searchView);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -292,7 +318,7 @@ public class SearchFileFragment extends Fragment implements AbsListView.OnScroll
         super.onPause();
 
         hideKeyBoard();
-        pickerActivity.getActionBar().setIcon(R.drawable.picker_bar_filepicker_icon);
+        pickerActivity.getSupportActionBar().setIcon(R.drawable.picker_bar_filepicker_icon);
     }
 
 

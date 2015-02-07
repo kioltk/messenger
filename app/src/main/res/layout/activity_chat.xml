@@ -32,6 +32,7 @@
         app:theme="@style/toolbar"
         app:popupTheme="@style/actionbar_popup"
         />
+
     <View
         android:layout_below="@+id/toolbar"
         android:background="@drawable/toolbar_shadow"

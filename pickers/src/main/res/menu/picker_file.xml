@@ -7,18 +7,17 @@
         android:id="@+id/search"
         android:title="@string/picker_search"
         android:enabled="true"
-        android:showAsAction="always"
-
+        app:showAsAction="ifRoom"
         />
     <item
         android:visible="false"
         android:title="@string/picker_file_sort_name"
         android:enabled="true"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:id="@+id/sortname"
         />
     <item
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/picker_file_sort_date"
         android:id="@+id/sortdate"
         />

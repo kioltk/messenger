@@ -2,9 +2,9 @@ package com.droidkit.pickers.file;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-
 
 import com.droidkit.file.R;
 import com.droidkit.pickers.file.items.BackItem;
@@ -17,20 +17,16 @@ public class FilePickerActivity extends BasePickerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //searchEnable();
+//        searchEnable();
         findViewById(R.id.controllers).setVisibility(View.GONE);
 
-        /*
-        final int actionBarTitle = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
-        final TextView title = (TextView)getWindow().findViewById(actionBarTitle);
-        if ( title != null ) {
-            title.setEllipsize(TextUtils.TruncateAt.START);
-        }*/
-        // getActionBar().setIcon(null);
     }
 
     @Override
     protected Fragment getWelcomeFragment() {
+
+        Log.d("getWelcomeFragment", "Invoked");
+
         return new ExplorerFragment();
     }
 
@@ -45,6 +41,9 @@ public class FilePickerActivity extends BasePickerActivity {
         ExplorerItem item = (ExplorerItem) parent.getItemAtPosition(position);
 
         if (item instanceof BackItem) {
+
+            // TODO fix onBackPressed() behavior
+
             onBackPressed();
             return;
         }
@@ -56,10 +55,14 @@ public class FilePickerActivity extends BasePickerActivity {
 
             Fragment fragment = new ExplorerFragment();
             fragment.setArguments(bundle);
+
             getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_exit,
-                            R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_out)
-                    .replace(R.id.container, fragment)
+                    .setCustomAnimations(
+                            R.animator.picker_fragment_explorer_enter,
+                            R.animator.picker_fragment_explorer_exit,
+                            R.animator.picker_fragment_explorer_return,
+                            R.animator.picker_fragment_explorer_out)
+                    .replace(R.id.container, fragment, path)
                     .addToBackStack(path)
                     .commit();
         } else {

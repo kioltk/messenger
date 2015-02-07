@@ -21,7 +21,7 @@ public class Dimen {
         return result;
     }
 
-    public static void initialize(Context context){
+    public static void init(Context context){
         Dimen.context = context;
     }
 

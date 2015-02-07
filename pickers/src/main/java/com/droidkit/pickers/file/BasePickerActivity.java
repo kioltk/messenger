@@ -3,6 +3,7 @@ package com.droidkit.pickers.file;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.droidkit.file.R;
 import com.droidkit.pickers.file.items.ExplorerItem;
+import com.droidkit.pickers.map.util.Dimen;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,25 +32,22 @@ public abstract class BasePickerActivity extends ActionBarActivity
     protected ArrayList<String> selectedItems = new ArrayList<String>();
     private boolean searchEnabled;
     protected Fragment currentFragment;
+
     protected Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picker_activity_picker);
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.animator.picker_fragment_explorer_welcome_enter, R.animator.picker_fragment_explorer_welcome_exit)
+                    .setCustomAnimations(
+                            R.animator.picker_fragment_explorer_welcome_enter,
+                            R.animator.picker_fragment_explorer_welcome_exit)
                     .add(R.id.container, getWelcomeFragment())
                     .commit();
         }
-
-//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-//
-//        if (mToolbar != null) {
-//
-//            setSupportActionBar(mToolbar);
-//        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
@@ -82,6 +81,7 @@ public abstract class BasePickerActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         if (currentFragment != null) {
             currentFragment.onCreateOptionsMenu(menu, getMenuInflater());
             return true;
@@ -96,11 +96,16 @@ public abstract class BasePickerActivity extends ActionBarActivity
         switch (id) {
             case android.R.id.home:
                 // finish();
+
+                // TODO fix onBackPressed() behavior
+
                 onBackPressed();
                 return true;
         }
+
         if (currentFragment != null)
             return currentFragment.onOptionsItemSelected(item);
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -112,6 +117,7 @@ public abstract class BasePickerActivity extends ActionBarActivity
 
     @Override
     public void onBackPressed() {
+
         super.onBackPressed();
     }
 
@@ -195,5 +201,28 @@ public abstract class BasePickerActivity extends ActionBarActivity
 
     public void setFragment(Fragment fragment) {
         this.currentFragment = fragment;
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if (mToolbar != null) {
+
+            mToolbar.setTitleTextColor(Color.WHITE);
+
+            setSupportActionBar(mToolbar);
+
+            Dimen.init(this);
+            int paddingTop = Dimen.getStatusBarHeight();
+            mToolbar.setPadding(0, paddingTop, 0, 0);
+        }
+    }
+
+    public Toolbar getToolbar() {
+
+        return mToolbar;
     }
 }
