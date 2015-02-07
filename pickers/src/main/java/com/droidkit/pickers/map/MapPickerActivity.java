@@ -61,10 +61,12 @@ public class MapPickerActivity extends ActionBarActivity
     private TextView mSubtitle;
     private LinearLayout mCurrentPickPanel;
 
+    private boolean mIsAnimationProcessing = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Dimen.initialize(this);
+        Dimen.init(this);
         setContentView(R.layout.picker_activity_map_picker);
 
         setUpMapIfNeeded();
@@ -90,6 +92,9 @@ public class MapPickerActivity extends ActionBarActivity
                 Location location = mMap.getMyLocation();
 
                 if (location != null) {
+
+                    mMap.clear();
+                    currentPick = null;
 
                     final LatLng target = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -171,6 +176,10 @@ public class MapPickerActivity extends ActionBarActivity
 
     private void togglePicker(final boolean show) {
 
+        if (mIsAnimationProcessing) return;
+
+        mIsAnimationProcessing = true;
+
         final ObjectAnimator togglePanel = ObjectAnimator.ofFloat(
                 mCurrentPickPanel,
                 "translationY",
@@ -206,12 +215,14 @@ public class MapPickerActivity extends ActionBarActivity
         startAnimator.setDuration(200);
 
         startAnimator.playTogether(show ? toggleCurrent : toggleSelect);
-        startAnimator.start();
 
         startAnimator.addListener(new AnimatorListenerAdapter() {
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+
+                Log.d("ON FIRST END BOOLEAN", "VALUE: " + show);
 
                 if (show)
                     mPickCurrentLocationButton.setVisibility(View.VISIBLE);
@@ -223,19 +234,26 @@ public class MapPickerActivity extends ActionBarActivity
                 endAnimator.setDuration(200);
 
                 endAnimator.playTogether(show ? toggleSelect : toggleCurrent);
-                endAnimator.start();
 
                 endAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
 
+                        Log.d("ON SECOND END BOOLEAN", "VALUE: " + show);
+
                         if (!show)
                             mCurrentPickPanel.setVisibility(View.GONE);
+
+                        mIsAnimationProcessing = false;
                     }
                 });
+
+                endAnimator.start();
             }
         });
+
+        startAnimator.start();
     }
 
     private void buildAlertMessageNoGps() {
@@ -407,7 +425,6 @@ public class MapPickerActivity extends ActionBarActivity
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-
 
         if (currentPick == null) {
 
