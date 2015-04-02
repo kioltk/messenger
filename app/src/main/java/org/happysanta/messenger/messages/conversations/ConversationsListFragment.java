@@ -31,6 +31,9 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
+import org.happysanta.messenger.core.util.TimeUtils;
+import org.happysanta.messenger.core.views.SuperViewHolder;
+import org.happysanta.messenger.friends.adapter.FriendsAdapter;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
@@ -282,7 +285,7 @@ public class ConversationsListFragment extends BaseFragment {
 
     }
 
-    private class ConversationViewHolder extends RecyclerView.ViewHolder{
+    private class ConversationViewHolder extends SuperViewHolder {
         private final TextView titleView;
         private final TextView bodyView;
         private final TextView dateView;
@@ -329,7 +332,10 @@ public class ConversationsListFragment extends BaseFragment {
                 onlineView.setVisibility(dialog.isOnline() ? View.VISIBLE : View.GONE);
 
 
-                dateView.setText("" + dialog.getDate());
+                dateView.setText(TimeUtils.format(dialog.getDate()*1000, getContext()));
+
+
+
                 photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
                 ImageUtil.showFromCache(dialog.getPhoto(), new ImageLoadingListener() {
                     @Override

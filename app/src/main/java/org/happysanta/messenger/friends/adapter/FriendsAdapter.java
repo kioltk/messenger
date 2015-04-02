@@ -17,6 +17,7 @@ import com.vk.sdk.api.model.VKList;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
+import org.happysanta.messenger.core.views.SuperViewHolder;
 
 /**
  * Created by alex on 06/01/15.
@@ -36,7 +37,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         setHasStableIds(true);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder
+    public static class ViewHolder extends SuperViewHolder
             implements View.OnClickListener {
 
         public TextView            mNameView;

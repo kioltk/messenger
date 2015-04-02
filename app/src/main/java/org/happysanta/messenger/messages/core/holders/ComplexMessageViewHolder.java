@@ -23,6 +23,7 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.core.util.MapUtil;
+import org.happysanta.messenger.core.util.TimeUtils;
 import org.happysanta.messenger.messages.core.holders.MessageViewHolder;
 
 /**
@@ -123,7 +124,8 @@ public class ComplexMessageViewHolder extends MessageViewHolder {
                 }
             });
         }
-        dateView.setText("" + currentMessage.date);
+
+        dateView.setText(TimeUtils.format(currentMessage.date*1000, getContext()));
         dateView.setVisibility(View.GONE);
 
         itemDefaultPadding = Dimen.get(R.dimen.default_message_padding);
