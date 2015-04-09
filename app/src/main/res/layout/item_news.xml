@@ -28,57 +28,67 @@
                 android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/user_photo"
                 android:src="@drawable/user_placeholder"
                 android:layout_width="70px"
                 android:layout_height="70px"
-                android:id="@+id/user_photo" 
-                android:layout_marginRight="10dp"/>
-            <TextView
-                android:text="Jesus Allahov"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/user_photo"
-                android:layout_toEndOf="@+id/user_photo"
-                android:id="@+id/user_name"
-                android:textColor="#ff343434"/>
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginTop="10dp"/>
 
             <TextView
+                android:id="@+id/user_name"
+                android:text="Anna Lebedeva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/user_photo"
+                android:textColor="#ff343434"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="170dp"
+                />
+
+            <TextView
+                android:id="@+id/news_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="20:00"
-                android:id="@+id/news_date"
+                android:text="yesterday at 20:00"
                 android:layout_below="@+id/user_name"
                 android:layout_toRightOf="@+id/user_photo"
 
                 />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/news_menu"
-                    android:background="@drawable/ic_drawer"
-                    android:layout_above="@+id/news_date"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_width="7dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/menu"
+                    android:layout_toRightOf="@+id/user_name"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    />
+
+                <TextView
+                    android:id="@+id/news_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Есть у меня талант долго думать написать ли, в итоге пишу, а человек минуту назад уже выключил телефон."
+                    android:textSize="14dp"
+                    android:textColor="#ff343434"
+                    android:layout_below="@+id/user_photo"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:padding="8dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="12dp" />
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Есть у меня талант долго думать написать ли, в итоге пишу, а человек минуту назад уже выключил телефон.
-Хотя стоп...
-Этот талант не только на сообщения распространяется.."
-                android:textSize="14dp"
-                android:textColor="#ff343434"
-                android:id="@+id/news_body"
-                android:layout_below="@+id/user_photo"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:paddingTop="8dp" />
+
 
             <View
                 android:id="@+id/card_divider"
@@ -87,33 +97,33 @@
                 android:background="@android:color/darker_gray"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
+                android:layout_alignParentStart="true" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageButton
                     android:id="@+id/news_comments"
-                    android:layout_margin="5dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@android:drawable/ic_input_add"/>
+                    android:layout_margin="12dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/comment"/>
 
                 <TextView
                     android:id="@+id/news_comments_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="500"
+                    android:text="18"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/news_comments"
                     android:layout_toEndOf="@+id/news_comments" />
 
                 <ImageButton
                     android:id="@+id/news_repost"
-                    android:layout_margin="5dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@android:drawable/presence_video_online"
+                    android:layout_margin="12dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/share"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/news_reposts_count"
                     android:layout_toStartOf="@+id/news_reposts_count" />
@@ -123,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="500"
+                    android:text="3"
                     android:layout_marginRight="25dp"
                     android:layout_marginEnd="25dp"
                     android:layout_centerVertical="true"
@@ -132,23 +142,23 @@
 
                 <ImageButton
                     android:id="@+id/news_like"
-                    android:layout_margin="5dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_margin="12dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/news_likes_count"
                     android:layout_toStartOf="@+id/news_likes_count"
-                    android:background="@android:drawable/star_on" />
+                    android:background="@drawable/like" />
 
                 <TextView
                     android:id="@+id/news_likes_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="500"
+                    android:text="132"
+                    android:textColor="#619de2"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="false"
                     android:layout_marginRight="5dp" />
 
             </RelativeLayout>
