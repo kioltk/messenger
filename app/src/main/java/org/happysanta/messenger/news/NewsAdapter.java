@@ -14,6 +14,7 @@ import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.util.BitmapUtil;
 
 /**
  * Created by insidefun on 01.01.2015.
@@ -62,6 +63,7 @@ public class NewsAdapter extends BaseAdapter {
 
         final VKApiPost post = (VKApiPost) getItem(position);
 
+        photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         nameView.setText("" + post.from_id);
         textView.setText(post.text);
         dateView.setText("" + post.date);
