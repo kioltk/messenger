@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiMessage;
@@ -23,12 +24,14 @@ public class VideoMessageViewHolder extends MessageViewHolder {
     private final ImageView ownerView;
     private final TextView videoTitleView;
     private final TextView videoDurationView;
+    private final ImageView photoView;
 
     public VideoMessageViewHolder(View itemView) {
         super(itemView);
         ownerView = (ImageView) findViewById(R.id.owner);
         videoTitleView = (TextView) itemView.findViewById(R.id.video_title);
         videoDurationView = (TextView) itemView.findViewById(R.id.video_duration);
+        photoView = (ImageView) itemView.findViewById(R.id.video_bg);
     }
 
     @Override
@@ -36,6 +39,28 @@ public class VideoMessageViewHolder extends MessageViewHolder {
         VKApiVideo videoAttach = (VKApiVideo) message.attachments.get(0);
         videoTitleView.setText(videoAttach.title);
         videoDurationView.setText(getDurationString(videoAttach.duration));
+
+        ImageLoader.getInstance().displayImage(videoAttach.photo_320, photoView, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
     }
 
     private String getDurationString(int seconds) {

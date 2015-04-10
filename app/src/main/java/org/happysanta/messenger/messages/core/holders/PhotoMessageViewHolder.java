@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiMessage;
@@ -30,6 +31,8 @@ public class PhotoMessageViewHolder extends MessageViewHolder {
     @Override
     public void bindData(VKApiMessage message) {
         super.bindData(message);
+        VKApiPhoto photoAttach = (VKApiPhoto) message.attachments.get(0);
+
     }
 
     public void showOwner(VKApiUserFull owner) {
