@@ -160,6 +160,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
                     holder.hideOwner();
                 }
                 break;
+            case MessageViewType.Audio:
+                holder.bindData(currentMessage);
+                if (!currentMessage.out) {
+                    holder.showOwner(chatUsers.getById(currentMessage.user_id));
+                } else {
+                    holder.hideOwner();
+                }
             case MessageViewType.Emoji:
             case MessageViewType.Sticker:
                 holder.bindData(currentMessage);

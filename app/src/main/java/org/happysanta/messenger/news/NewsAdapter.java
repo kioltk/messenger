@@ -53,9 +53,9 @@ public class NewsAdapter extends BaseAdapter {
         TextView textView = (TextView) itemView.findViewById(R.id.news_body);
         final TextView dateView = (TextView) itemView.findViewById(R.id.news_date);
 
-        ImageButton commentsView = (ImageButton) itemView.findViewById(R.id.news_comments);
-        ImageButton repostView   = (ImageButton) itemView.findViewById(R.id.news_repost);
-        ImageButton likeView     = (ImageButton) itemView.findViewById(R.id.news_like);
+        View commentsView =  itemView.findViewById(R.id.news_comments);
+        View repostView   =  itemView.findViewById(R.id.news_repost);
+        View likeView     =  itemView.findViewById(R.id.news_like);
 
         TextView commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
         TextView repostsCountView  = (TextView) itemView.findViewById(R.id.news_reposts_count);
