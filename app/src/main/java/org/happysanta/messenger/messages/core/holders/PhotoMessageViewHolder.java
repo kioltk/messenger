@@ -33,6 +33,28 @@ public class PhotoMessageViewHolder extends MessageViewHolder {
         super.bindData(message);
         VKApiPhoto photoAttach = (VKApiPhoto) message.attachments.get(0);
 
+        ImageLoader.getInstance().displayImage(photoAttach.photo_604, photoView, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
     }
 
     public void showOwner(VKApiUserFull owner) {
