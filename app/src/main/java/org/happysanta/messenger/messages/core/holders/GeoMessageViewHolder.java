@@ -75,8 +75,7 @@ public class GeoMessageViewHolder extends MessageViewHolder {
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,0);
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         }
-        RelativeLayout.LayoutParams mapLayoutParams = (RelativeLayout.LayoutParams) mapView.getLayoutParams();
-        ImageLoader.getInstance().displayImage(MapUtil.getMap(geo.lat, geo.lon, mapLayoutParams.width, mapLayoutParams.height, true, "").toString(), mapView, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(MapUtil.getMap(geo.lat, geo.lon, 600, 400, true, "").toString(), mapView, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
