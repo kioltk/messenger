@@ -74,4 +74,18 @@ public class TimeUtils {
         return context.getString(R.string.picker_time_at, convertedDate, convertedTime);
 
     }
+
+    //Нужно исправить на 0:00
+    public static String formatDuration(int number){
+
+        if (number == 0) {
+            return "00";
+        }
+
+        if (number / 10 == 0) {
+            return "0" + number;
+        }
+
+        return String.valueOf(number);
+    }
 }

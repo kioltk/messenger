@@ -301,16 +301,28 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
             case R.id.attach_photo: {
 
                 Toast.makeText(getContext(), "Photo", Toast.LENGTH_SHORT).show();
+                /*
+                activity.startActivityForResult(Intents.pickPhoto(getContext()), AttachRequestCode.PHOTO);
+                dismiss();
+                */
                 break;
             }
             case R.id.attach_audio: {
 
                 Toast.makeText(getContext(), "Audio", Toast.LENGTH_SHORT).show();
+                /*
+                activity.startActivityForResult(Intents.pickAudio(getContext()), AttachRequestCode.AUDIO);
+                dismiss();
+                */
                 break;
             }
             case R.id.attach_gallery: {
 
                 Toast.makeText(getContext(), "Gallery", Toast.LENGTH_SHORT).show();
+                /*
+                activity.startActivityForResult(Intents.pickGallery(getContext()), AttachRequestCode.GALLERY);
+                dismiss();
+                */
                 break;
             }
             case R.id.attach_map: {
@@ -321,6 +333,10 @@ public class AttachDialog extends Dialog implements View.OnClickListener {
             case R.id.attach_video: {
 
                 Toast.makeText(getContext(), "Video", Toast.LENGTH_SHORT).show();
+                /*
+                activity.startActivityForResult(Intents.pickVideo(getContext()), AttachRequestCode.VIDEO);
+                dismiss();
+                */
                 break;
             }
             case R.id.attach_file: {

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
@@ -18,10 +19,12 @@ import org.happysanta.messenger.core.util.ImageUtil;
  */
 public class PhotoMessageViewHolder extends MessageViewHolder {
     private final ImageView ownerView;
+    private final ImageView photoView;
 
     public PhotoMessageViewHolder(View itemView) {
         super(itemView);
         ownerView = (ImageView) findViewById(R.id.owner);
+        photoView = (ImageView) itemView.findViewById(R.id.photo);
     }
 
     @Override

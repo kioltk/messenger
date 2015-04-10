@@ -18,4 +18,21 @@ public class Intents {
     public static Intent pickLocation(Context context) {
         return new Intent(context, MapPickerActivity.class);
     }
+    /*
+    public static Intent pickVideo(Context context) {
+        return new Intent(context, VideoPickerActivity.class);
+    }
+
+    public static Intent pickGallery(Context context) {
+        return new Intent(context, GalleryPickerActivity.class);
+    }
+
+    public static Intent pickAudio(Context context) {
+        return new Intent(context, AudioPickerActivity.class);
+    }
+
+    public static Intent pickPhoto(Context context) {
+        return new Intent(context, PhotoPickerActivity.class);
+    }
+    */
 }

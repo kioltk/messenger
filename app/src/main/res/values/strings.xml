@@ -61,5 +61,8 @@
     <string name="action_dialogs_search">Search</string>
     <string name="action_dialog_attachments">Attachments</string>
     <string name="action_dialog_search">Search</string>
+    <!-- audio message -->
+    <string name="audio_title">title</string>
+    <string name="audio_subtitle">Subtitle</string>
 
 </resources>

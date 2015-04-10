@@ -17,13 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="70dp">
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/file_title"
             android:textSize="16sp"
             android:text="title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/subtitle"
+            android:id="@+id/file_subtitle"
             android:text="Sbutitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

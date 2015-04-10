@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     >
+
     <ImageView
-        android:id="@+id/photo"
-        android:src="@drawable/img"
+        android:id="@+id/video_bg"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
@@ -24,4 +24,47 @@
         android:src="@drawable/user_placeholder"
         android:layout_width="40dp"
         android:layout_height="40dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="1dp"
+        android:background="#ff000000">
+
+        <LinearLayout
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/video_title"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="Video title"
+                android:textColor="#fff" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+
+            <TextView
+                android:id="@+id/video_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="1:24:19"
+                android:textColor="#fff" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
 </RelativeLayout>
+
