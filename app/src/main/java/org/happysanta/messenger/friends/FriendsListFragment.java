@@ -145,7 +145,7 @@ public class FriendsListFragment extends BaseFragment implements
 
     @Override
     public void onItemClick(int position) {
-        new UserDialog(getActivity(), mFriendsList.get(position)).show();
+        new UserDialog(getActivity(), mFriendsList.get(position).id).show();
     }
 
     private void setListener(IFragmentTitleCallback countListener) {

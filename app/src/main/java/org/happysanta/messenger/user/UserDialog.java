@@ -41,10 +41,6 @@ public class UserDialog {
         userDialog.setCanceledOnTouchOutside(true);
     }
 
-    public UserDialog(Activity activity, VKApiUserFull user) {
-        this(activity);
-        showUser(user);
-    }
 
     public UserDialog(Activity activity, final int userId) {
         this(activity);
