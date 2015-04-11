@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -80,13 +82,76 @@ public class UserDialog {
         }
     }
 
-    private void setCounters(VKApiUserFull.Counters counters) {
-        View view = findViewById(R.id.friends_list);
+    private void setCounters(final VKApiUserFull.Counters counters) {
+
+        TextView friendsView = (TextView)  findViewById(R.id.friends);
+        TextView mutualFriendsView = (TextView)  findViewById(R.id.mutual);
+        TextView onlineFriendsView = (TextView)  findViewById(R.id.online);
+        TextView followersView = (TextView)  findViewById(R.id.followers);
+
+        LinearLayout btnFriends = (LinearLayout) findViewById(R.id.btn_friends);
+        LinearLayout btnMutual = (LinearLayout) findViewById(R.id.btn_mutual);
+        LinearLayout btnOnline = (LinearLayout) findViewById(R.id.btn_online);
+        LinearLayout btnFollowers = (LinearLayout) findViewById(R.id.btn_followers);
+
+        if(counters.friends > 0){
+            friendsView.setText(Integer.toString(counters.friends));
+        } else {
+            btnFriends.setVisibility(View.GONE);
+        }
+
+        if(counters.mutual_friends > 0){
+            mutualFriendsView.setText(Integer.toString(counters.mutual_friends));
+        } else {
+            btnMutual.setVisibility(View.GONE);
+        }
+
+        if(counters.online_friends > 0){
+            onlineFriendsView.setText(Integer.toString(counters.online_friends));
+        } else {
+            btnOnline.setVisibility(View.GONE);
+        }
+
+        if(counters.followers > 0){
+            followersView.setText(Integer.toString(counters.followers));
+        } else {
+            btnFollowers.setVisibility(View.GONE);
+        }
+
+        btnFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(dialogView.getContext(), "Friends button", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnMutual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(dialogView.getContext(), "Mutual button", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnOnline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(dialogView.getContext(), "Online button", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnFollowers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(dialogView.getContext(), "Followers button", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 
     private void setPhoto(String photo) {
         final ImageView photoView = (ImageView) dialogView.findViewById(R.id.user_photo);
+        photoView.setImageBitmap(BitmapUtil.circle(R.id.user_photo));
         ImageUtil.showFromCache(photo, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
