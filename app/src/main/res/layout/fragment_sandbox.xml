@@ -4,32 +4,5 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="gone">
-    <include layout="@layout/item_message_typing"
-        android:layout_gravity="right"
-        android:layout_width="200dp"
-        android:layout_height="100dp" />
-    <TextView
-        android:text="Welcome to sandbox."
-        android:textStyle="bold|italic"
-        android:textColor="#444"
-        android:textSize="16sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/show_dialog"
-        android:text="show dialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/add_chathead"
-        android:text="add chathead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/show_typing"
-        android:text="Type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    android:layout_height="match_parent">
 </LinearLayout>
