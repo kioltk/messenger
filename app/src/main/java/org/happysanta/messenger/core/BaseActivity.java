@@ -15,8 +15,8 @@ import org.happysanta.messenger.core.util.Dimen;
  */
 public class BaseActivity extends ActionBarActivity {
 
-    private Toolbar toolbar;
-    private View    toolBarShadow;
+    protected Toolbar toolbar;
+    protected View toolBarShadow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,10 +28,10 @@ public class BaseActivity extends ActionBarActivity {
         super.setContentView(layoutResID);
         VKUIHelper.onCreate(this);
 
-        toolbar         = (Toolbar) findViewById(R.id.toolbar);
-        toolBarShadow   = findViewById(R.id.toolbar_shadow);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolBarShadow = findViewById(R.id.toolbar_shadow);
 
-        if(toolbar!=null) {
+        if (toolbar != null) {
 
             toolbar.setTitleTextColor(getResources().getColor(R.color.vk_white));
 

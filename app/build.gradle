@@ -1,36 +1,22 @@
 apply plugin: 'com.android.application'
 
 
-def versionPropsFile = file('version.properties')
-def currentVersionCode = 0
-def currentVersionName = "0.0"
-if (versionPropsFile.canRead()) {
-    def Properties versionProps = new Properties()
-
-    versionProps.load(new FileInputStream(versionPropsFile))
-
-    currentVersionCode = versionProps['VERSION_CODE'].toInteger() + 1
-    currentVersionName = versionProps['VERSION_NAME']
-    versionProps['VERSION_CODE'] = currentVersionCode.toString()
-    versionProps.store(versionPropsFile.newWriter(), null)
-}
-
 if (project.hasProperty('buildIndex')) {
     project.version = project.buildIndex + ""
 } else {
-    project.version = 'debug build' + currentVersionCode
+    project.version = 'debug build'
 }
 
 project.archivesBaseName = "messenger";
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "org.happysanta.messenger"
         minSdkVersion 14
-        targetSdkVersion 21
-        versionCode currentVersionCode
+        targetSdkVersion 22
+        versionCode 1
         versionName project.version
     }
 
@@ -48,11 +34,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // support
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:cardview-v7:21.0.3'
     compile 'com.android.support:recyclerview-v7:21.0.3'
-    compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.google.android.gms:play-services:6.5.87'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.google.android.gms:play-services:7.0.0'
 
     // utils
     compile project(':vksdk_library')

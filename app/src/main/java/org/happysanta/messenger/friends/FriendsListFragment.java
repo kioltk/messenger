@@ -23,6 +23,7 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.friends.adapter.FriendsAdapter;
 import org.happysanta.messenger.friends.adapter.LetterHeaderAdapter;
+import org.happysanta.messenger.user.ProfileActivity;
 import org.happysanta.messenger.user.UserDialog;
 
 import java.util.Collections;
@@ -145,7 +146,7 @@ public class FriendsListFragment extends BaseFragment implements
 
     @Override
     public void onItemClick(int position) {
-        new UserDialog(getActivity(), mFriendsList.get(position).id).show();
+        getActivity().startActivity(ProfileActivity.openProfile(getActivity(),mFriendsList.get(position).id));
     }
 
     private void setListener(IFragmentTitleCallback countListener) {

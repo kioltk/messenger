@@ -50,6 +50,7 @@ import org.happysanta.messenger.messages.attach.AttachRequestCode;
 import org.happysanta.messenger.messages.chats.ChatDialog;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
+import org.happysanta.messenger.user.ProfileActivity;
 import org.happysanta.messenger.user.UserDialog;
 
 import java.io.File;
@@ -353,8 +354,7 @@ public class ConversationFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_profile: {
-                UserDialog profileDialog = new UserDialog(activity, dialogId);
-                profileDialog.show();
+                startActivity(ProfileActivity.openProfile(getActivity(), dialogId));
             }
             break;
             case R.id.action_chat_participants: {

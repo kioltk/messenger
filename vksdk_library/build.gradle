@@ -3,12 +3,12 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 21
+        targetSdkVersion 22
     }
 }
 
@@ -18,11 +18,11 @@ configurations {
 }
 
 dependencies {
-    javadoc 'org.apache.httpcomponents:httpclient:4.0.1'
+    javadoc 'org.apache.httpcomponents:httpclient:4.3.5'
     javadoc 'org.json:json:20080701'
     compile 'com.google.code.gson:gson:2.3'
     javadoc 'com.google.android:annotations:4.1.1.4@jar'
-    compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.android.support:support-v4:22.0.0'
 }
 
 if (project.hasProperty('officialBuild')) {

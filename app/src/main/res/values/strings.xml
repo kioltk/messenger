@@ -64,5 +64,7 @@
     <!-- audio message -->
     <string name="audio_title">title</string>
     <string name="audio_subtitle">Subtitle</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

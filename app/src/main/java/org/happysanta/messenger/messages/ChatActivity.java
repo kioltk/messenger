@@ -62,6 +62,7 @@ public class ChatActivity extends BaseActivity {
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         if (null != actionbar) {
             actionbar.setHomeButtonEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
