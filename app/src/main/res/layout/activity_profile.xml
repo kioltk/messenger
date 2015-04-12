@@ -12,13 +12,256 @@
         android:background="@color/color_primary"
         app:theme="@style/toolbar"
         app:popupTheme="@style/actionbar_popup"
+
+
         />
     <RelativeLayout
         android:id="@+id/container"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp">
 
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/content_holder"
+                android:orientation="vertical"
+                android:padding="11dp"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp">
+
+                    <ImageView
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="11dp"
+                        android:id="@+id/user_photo"
+                        android:src="@drawable/user_placeholder"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+                    <TextView
+                        android:id="@+id/text_name"
+                        android:text="name and last name"
+                        android:textSize="18dp"
+                        android:textColor="@color/black_800"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_toRightOf="@+id/user_photo"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/status"
+                        android:text="online"
+                        android:textSize="16dp"
+                        android:textColor="#a1a1a1"
+                        android:layout_marginTop="3dp"
+                        android:layout_below="@+id/text_name"
+                        android:layout_toRightOf="@+id/user_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/city_holder"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:layout_marginLeft="75dp"
+                        android:background="#e0e0e0"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
+                        <ImageView
+                            android:layout_marginRight="11dp"
+                            android:src="@drawable/ic_launcher"
+                            android:scaleType="centerInside"
+                            android:layout_width="60dp"
+                            android:layout_height="match_parent"
+                            android:visibility="invisible"/>
+                        <TextView
+                            android:id="@+id/city"
+                            android:text="Город"
+                            android:gravity="center_vertical"
+                            android:textColor="#4c4c4c"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/bdate_holder"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:layout_marginLeft="75dp"
+                        android:background="#e0e0e0"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp">
+                        <ImageView
+                            android:layout_marginRight="11dp"
+                            android:src="@drawable/ic_launcher"
+                            android:scaleType="centerInside"
+                            android:layout_width="60dp"
+                            android:layout_height="match_parent"
+                            android:visibility="invisible"/>
+                        <TextView
+                            android:id="@+id/bdate"
+                            android:text="Дата рождения"
+                            android:gravity="center_vertical"
+                            android:textColor="#4c4c4c"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp">
+                    <LinearLayout
+                        android:id="@+id/btn_friends"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/friends"
+                            android:text="500"
+                            android:textColor="#4c4c4c"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:text="friends"
+                            android:textColor="#b8b8b8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/btn_mutual"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/mutual"
+                            android:text="500"
+                            android:textColor="#4c4c4c"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:text="in common"
+                            android:textColor="#b8b8b8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/btn_online"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/online_friend"
+                            android:text="500"
+                            android:textColor="#4c4c4c"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:text="online"
+                            android:textColor="#b8b8b8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/btn_followers"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/followers"
+                            android:text="500"
+                            android:textColor="#4c4c4c"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:text="followers"
+                            android:textColor="#b8b8b8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+                <View
+                    android:layout_marginLeft="85dp"
+                    android:background="#e0e0e0"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp">
+
+                    <Button
+                        android:id="@+id/button_message"
+                        android:text="message"
+                        android:textColor="#fff"
+                        android:textStyle="normal"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:background="#4b7ab1"
+                        android:layout_marginRight="4dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/user_photo"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="33dp" />
+                    <Button
+                        android:id="@+id/button_friends"
+                        android:text="add to friends"
+                        android:layout_weight="1"
+                        android:textColor="#fff"
+                        android:textStyle="normal"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:background="#4b7ab1"
+                        android:layout_marginLeft="4dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/user_photo"
+                        android:layout_width="0dp"
+                        android:layout_height="33dp"  />
+                </LinearLayout>
+            </LinearLayout>
+            <ProgressBar
+                android:layout_margin="50dp"
+                android:id="@+id/loading"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
