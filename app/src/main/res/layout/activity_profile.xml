@@ -14,12 +14,11 @@
         app:popupTheme="@style/actionbar_popup"
         />
 
-    <LinearLayout
+    <View
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="129dp"
-        android:background="@color/color_primary">
-    </LinearLayout>
+        android:background="@color/color_primary"/>
 
     <LinearLayout
         android:id="@+id/container"
