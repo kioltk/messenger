@@ -15,6 +15,7 @@ import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.TimeUtils;
 
 /**
  * Created by insidefun on 01.01.2015.
@@ -66,7 +67,7 @@ public class NewsAdapter extends BaseAdapter {
         photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         nameView.setText("" + post.from_id);
         textView.setText(post.text);
-        dateView.setText("" + post.date);
+        dateView.setText(TimeUtils.format(post.date*1000, activity));
 
         commentsCountView.setText("" + post.comments_count);
         repostsCountView.setText("" + post.reposts_count);
