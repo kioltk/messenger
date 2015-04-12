@@ -56,6 +56,9 @@ public class ProfileActivity extends BaseActivity {
     private View btnMutual;
     private View btnOnline;
     private View btnFollowers;
+    private TextView photosCountView;
+    private View btnPhoto;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,10 +86,14 @@ public class ProfileActivity extends BaseActivity {
          onlineFriendsView = (TextView)  findViewById(R.id.online_friend);
          followersView = (TextView)  findViewById(R.id.followers);
 
+
          btnFriends =  findViewById(R.id.btn_friends);
          btnMutual =  findViewById(R.id.btn_mutual);
          btnOnline =  findViewById(R.id.btn_online);
          btnFollowers =  findViewById(R.id.btn_followers);
+
+         photosCountView = (TextView) findViewById(R.id.photos_counter);
+         btnPhoto = findViewById(R.id.btn_photos);
 
 
         // потом мы загружаем юзера
@@ -184,6 +191,14 @@ public class ProfileActivity extends BaseActivity {
             btnFollowers.setVisibility(View.GONE);
         }
 
+        if (counters.photos > 1){
+            photosCountView.setText(counters.photos + " photos");
+        } else if (counters.photos > 0){
+            photosCountView.setText(counters.photos + " photo");
+        } else {
+            btnPhoto.setVisibility(View.GONE);
+        }
+
         btnFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,6 +224,13 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ProfileActivity.this, "Followers button", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ProfileActivity.this, "Photos button", Toast.LENGTH_SHORT).show();
             }
         });
 
