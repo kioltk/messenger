@@ -3,9 +3,12 @@ package org.happysanta.messenger.user;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKParameters;
@@ -27,10 +31,12 @@ import com.vk.sdk.api.model.VKList;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.ImageUtil;
 
 public class ProfileActivity extends BaseActivity {
     int userId;
+    private String subtitle;
 
     private static final String EXTRA_USERID = "extra_userid";
 
@@ -51,14 +57,17 @@ public class ProfileActivity extends BaseActivity {
     private View btnOnline;
     private View btnFollowers;
 
-    /*
-    * по стадиям тебе расскажу что тут должно происодить
-    * */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return true;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        // тут мы создаем вью и захватываем их
 
 
          nameView = (TextView) findViewById(R.id.text_name);
@@ -81,6 +90,24 @@ public class ProfileActivity extends BaseActivity {
 
 
         // потом мы загружаем юзера
+
+        android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+        if (null != actionbar) {
+            actionbar.setHomeButtonEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+            toolbar.setSubtitle(subtitle);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+
+        }
 
         userId = getIntent().getIntExtra(EXTRA_USERID, 0);
         // todo show loading?
@@ -121,7 +148,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void setCounters(final VKApiUserFull.Counters counters) {
-/*
+
         if (counters == null ||
                 (counters.friends == 0 &&
                         counters.followers == 0 &&
@@ -131,7 +158,7 @@ public class ProfileActivity extends BaseActivity {
             friendCardView.setVisibility(View.GONE);
             return;
         }
-        */
+
 
         if (counters.friends > 0) {
             friendsView.setText(Integer.toString(counters.friends));

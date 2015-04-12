@@ -12,21 +12,25 @@
         android:background="@color/color_primary"
         app:theme="@style/toolbar"
         app:popupTheme="@style/actionbar_popup"
-
-
         />
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/container"
+        android:orientation="vertical"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp">
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_info"
+            android:layout_gravity="top"
+            android:padding="11dp"
+            android:background="#fff"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            card_view:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:id="@+id/content_holder"
@@ -129,96 +133,7 @@
                             android:layout_height="match_parent" />
                     </LinearLayout>
                 </LinearLayout>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="66dp">
-                    <LinearLayout
-                        android:id="@+id/btn_friends"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/friends"
-                            android:text="500"
-                            android:textColor="#4c4c4c"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="friends"
-                            android:textColor="#b8b8b8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/btn_mutual"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/mutual"
-                            android:text="500"
-                            android:textColor="#4c4c4c"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="in common"
-                            android:textColor="#b8b8b8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/btn_online"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/online_friend"
-                            android:text="500"
-                            android:textColor="#4c4c4c"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="online"
-                            android:textColor="#b8b8b8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/btn_followers"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/followers"
-                            android:text="500"
-                            android:textColor="#4c4c4c"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="followers"
-                            android:textColor="#b8b8b8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </LinearLayout>
-                <View
-                    android:layout_marginLeft="85dp"
-                    android:background="#e0e0e0"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+
                 <LinearLayout
                     android:gravity="center"
                     android:layout_width="match_parent"
@@ -254,14 +169,122 @@
                         android:layout_height="33dp"  />
                 </LinearLayout>
             </LinearLayout>
-            <ProgressBar
-                android:layout_margin="50dp"
-                android:id="@+id/loading"
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
 
-    </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_counters"
+            android:padding="11dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="66dp">
+
+                <LinearLayout
+                    android:id="@+id/btn_friends"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/friends"
+                        android:text="500"
+                        android:textColor="#4c4c4c"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="friends"
+                        android:textColor="#b8b8b8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_mutual"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/mutual"
+                        android:text="500"
+                        android:textColor="#4c4c4c"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="in common"
+                        android:textColor="#b8b8b8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_online"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/online_friend"
+                        android:text="500"
+                        android:textColor="#4c4c4c"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="online"
+                        android:textColor="#b8b8b8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_followers"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/followers"
+                        android:text="500"
+                        android:textColor="#4c4c4c"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="followers"
+                        android:textColor="#b8b8b8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_margin="7dp"
+                android:layout_gravity="bottom"
+                android:background="#e0e0e0"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+        </android.support.v7.widget.CardView>
+
+        <ProgressBar
+            android:layout_margin="50dp"
+            android:id="@+id/loading"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </RelativeLayout>

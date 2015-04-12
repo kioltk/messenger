@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
-            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bdate_holder"
@@ -110,6 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="66dp">
             <LinearLayout
+                android:id="@+id/btn_friends"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_weight="1"
@@ -129,6 +130,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_mutual"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_weight="1"
@@ -148,13 +150,14 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_online"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <TextView
-                    android:id="@+id/online"
+                    android:id="@+id/online_friend"
                     android:text="500"
                     android:textColor="#4c4c4c"
                     android:textStyle="bold"
@@ -167,6 +170,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_followers"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_weight="1"
