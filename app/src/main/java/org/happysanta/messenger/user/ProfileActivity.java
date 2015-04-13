@@ -59,7 +59,6 @@ public class ProfileActivity extends BaseActivity {
     private TextView photosCountView;
     private View btnPhoto;
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -75,7 +74,7 @@ public class ProfileActivity extends BaseActivity {
 
          nameView = (TextView) findViewById(R.id.text_name);
          photoView = (ImageView) findViewById(R.id.user_photo);
-         cityView = ((TextView) findViewById(R.id.city));
+         cityView = (TextView) findViewById(R.id.city);
          statusView = (TextView) findViewById(R.id.status);
 
 
@@ -133,6 +132,21 @@ public class ProfileActivity extends BaseActivity {
                 showUser(currentUser);
             }
         });
+        /*
+        pagerView = (ViewPager) findViewById(R.id.pager);
+        feedAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return new NewsListFragment();
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        };
+        pagerView.setAdapter(feedAdapter);
+        */
     }
 
     private void showUser(VKApiUserFull user) {

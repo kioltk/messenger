@@ -57,6 +57,12 @@
             android:name=".user.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
+
+        <activity
+            android:name=".messages.conversations.GroupInfoActivity"
+            android:label="@string/title_activity_group_info" >
+        </activity>
+
     </application>
 
 </manifest>

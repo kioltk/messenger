@@ -358,8 +358,7 @@ public class ConversationFragment extends BaseFragment {
             }
             break;
             case R.id.action_chat_participants: {
-                ChatDialog chatDialog = new ChatDialog(activity, dialogId);
-                chatDialog.show();
+                startActivity(GroupInfoActivity.openGroupInfo(getActivity(), dialogId));
             }
             break;
         }
