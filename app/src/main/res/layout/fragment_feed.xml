@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.happysanta.messenger.friends.views.SlidingTabLayout
+        android:id="@+id/friends_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="7dp"
+        android:background="@color/color_primary"
+        tools:ignore="UnusedAttribute"/>
+
+    <View
+        android:id="@+id/tab_shadow"
+        android:background="@drawable/toolbar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:visibility="gone"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

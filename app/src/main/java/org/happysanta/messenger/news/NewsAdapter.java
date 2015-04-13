@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,7 +31,7 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return newsList.size();
     }
 
     @Override

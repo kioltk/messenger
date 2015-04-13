@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -38,6 +39,12 @@ public class StickerMessageViewHolder extends MessageViewHolder {
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         }
         stickerView.setLayoutParams(params);
+        stickerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"PAY FOR IT!",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

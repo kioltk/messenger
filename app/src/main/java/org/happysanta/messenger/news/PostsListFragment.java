@@ -19,7 +19,7 @@ import org.happysanta.messenger.core.BaseFragment;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class NewsListFragment extends BaseFragment {
+public class PostsListFragment extends BaseFragment {
 
     // core
     private VKList<VKApiPost> newsList = new VKList<>();
@@ -28,7 +28,7 @@ public class NewsListFragment extends BaseFragment {
     private ListView listView;
     private NewsAdapter newsAdapter;
 
-    public NewsListFragment(){
+    public PostsListFragment(){
     }
 
     @Override
