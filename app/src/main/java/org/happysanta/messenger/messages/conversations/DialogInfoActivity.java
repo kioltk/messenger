@@ -28,7 +28,7 @@ import org.happysanta.messenger.core.util.ImageUtil;
 /**
  * Created by admin on 13.04.2015.
  */
-public class GroupInfoActivity extends BaseActivity {
+public class DialogInfoActivity extends BaseActivity {
     int userId;
     int chatParticipants;
     private String subtitle;
@@ -66,7 +66,7 @@ public class GroupInfoActivity extends BaseActivity {
         dialogPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(GroupInfoActivity.this, "Edit photo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DialogInfoActivity.this, "Edit photo", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -152,7 +152,7 @@ public class GroupInfoActivity extends BaseActivity {
         statusView.setText(onlineText);
     }
 
-    public static Intent openGroupInfo(Context context, int chatId){
-        return new Intent(context, GroupInfoActivity.class).putExtra(EXTRA_DIALOG_ID, chatId);
+    public static Intent openDialogInfo(Context context, int chatId){
+        return new Intent(context, DialogInfoActivity.class).putExtra(EXTRA_DIALOG_ID, chatId);
     }
 }

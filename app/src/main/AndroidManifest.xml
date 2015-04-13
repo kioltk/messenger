@@ -59,7 +59,7 @@
         </activity>
 
         <activity
-            android:name=".messages.conversations.GroupInfoActivity"
+            android:name=".messages.conversations.DialogInfoActivity"
             android:label="@string/title_activity_group_info" >
         </activity>
 

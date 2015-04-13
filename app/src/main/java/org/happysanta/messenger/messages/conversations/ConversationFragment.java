@@ -47,11 +47,9 @@ import org.happysanta.messenger.messages.attach.AttachAdapter;
 import org.happysanta.messenger.messages.attach.AttachCountListener;
 import org.happysanta.messenger.messages.attach.AttachDialog;
 import org.happysanta.messenger.messages.attach.AttachRequestCode;
-import org.happysanta.messenger.messages.chats.ChatDialog;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.ProfileActivity;
-import org.happysanta.messenger.user.UserDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -358,7 +356,7 @@ public class ConversationFragment extends BaseFragment {
             }
             break;
             case R.id.action_chat_participants: {
-                startActivity(GroupInfoActivity.openGroupInfo(getActivity(), dialogId));
+                startActivity(DialogInfoActivity.openDialogInfo(getActivity(), dialogId));
             }
             break;
         }
