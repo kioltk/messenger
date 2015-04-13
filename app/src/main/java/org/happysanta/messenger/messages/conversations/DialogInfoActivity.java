@@ -16,9 +16,9 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.methods.VKApiUsers;
+import com.vk.sdk.api.methods.VKApiMessages;
+import com.vk.sdk.api.model.VKApiChat;
 import com.vk.sdk.api.model.VKApiUserFull;
-import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
@@ -30,7 +30,7 @@ import org.happysanta.messenger.core.util.ImageUtil;
  */
 public class DialogInfoActivity extends BaseActivity {
     int userId;
-    int chatParticipants;
+    int dialogId;
     private String subtitle;
     private static final String EXTRA_DIALOG_ID = "extra_chat_participants";
 
@@ -42,6 +42,7 @@ public class DialogInfoActivity extends BaseActivity {
     private TextView nameView;
     private ImageView photoView;
     private TextView statusView;
+    private VKApiChat chat;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,7 +53,7 @@ public class DialogInfoActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_info);
+        setContentView(R.layout.activity_dialog_info);
 
         dialogPhotoView = (ImageView) findViewById(R.id.dialog_photo);
         dialogTitleView = (TextView) findViewById(R.id.dialog_title);
@@ -86,18 +87,16 @@ public class DialogInfoActivity extends BaseActivity {
             });
         }
 
-        chatParticipants = getIntent().getIntExtra(EXTRA_DIALOG_ID, 0);
+        dialogId = getIntent().getIntExtra(EXTRA_DIALOG_ID, 0);
 
-        new VKApiUsers().get(new VKParameters(){{
-            put("chat_participants", chatParticipants);
-            put("fields","photo_200,activity,last_seen,counters,bdate");
+        new VKApiMessages().getChat(new VKParameters() {{
+            put("chat_id", dialogId);
+            put("fields", "photo_200,last_seen");
         }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                VKList<VKApiUserFull> participants = (VKList<VKApiUserFull>) response.parsedModel;
-                VKApiUserFull chatParticipants = participants.get(0);
+                chat = (VKApiChat) response.parsedModel;
 
-                showParticipant(chatParticipants);
             }
         });
     }

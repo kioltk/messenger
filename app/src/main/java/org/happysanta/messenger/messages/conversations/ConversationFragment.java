@@ -169,22 +169,7 @@ public class ConversationFragment extends BaseFragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String messageText = editMessageText.getText().toString();
-                if (messageText == null || messageText.equals("")) {
-                    return;
-                }
-                VKApiMessage message = new VKApiMessage();
-                if (isChat) {
-                    message.chat_id = dialogId;
-                } else {
-                    message.user_id = dialogId;
-                }
-                message.body = messageText;
-                message.out = true;
-                message.read_state = false;
-                message.guid = (int) (System.currentTimeMillis() / 1000L * dialogId);
-                sendMessage(message);
-                editMessageText.setText(null);
+                sendMessage();
             }
         });
 
@@ -322,9 +307,26 @@ public class ConversationFragment extends BaseFragment {
     }
 
 
-    public void sendMessage(VKApiMessage message) {
+    public void sendMessage() {
+        String messageText = editMessageText.getText().toString();
+        if (messageText == null || messageText.equals("")) {
+            return;
+        }
+        VKApiMessage message = new VKApiMessage();
+        if (isChat) {
+            message.chat_id = dialogId;
+        } else {
+            message.user_id = dialogId;
+        }
+        message.body = messageText;
+        message.out = true;
+        message.read_state = false;
+        message.guid = (int) (System.currentTimeMillis() / 1000L * dialogId);
+
         messagesAdapter.send(message);
         tryScrollToBottom();
+
+        editMessageText.setText(null);
     }
 
     private void tryScrollToBottom() {

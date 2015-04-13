@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKParser;
 import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.model.VKApiChat;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
@@ -169,6 +170,15 @@ public class VKApiMessages extends VKApiBase {
             }
         });
     }
+    public VKRequest getChat(VKParameters vkParameters) {
+
+        return prepareRequest("getChat", vkParameters, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return new VKApiChat(object);
+            }
+        });
+    }
 
     public VKRequest getHistory(final int userId) {
         return getHistory(new VKParameters() {{
@@ -202,4 +212,5 @@ public class VKApiMessages extends VKApiBase {
             }
         });
     }
+
 }
