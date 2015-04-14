@@ -67,5 +67,7 @@
     <string name="title_activity_profile">Profile</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_group_info">Group info</string>
+    <string name="action_edit_post">Edit</string>
+    <string name="action_delete_post">Delete</string>
 
 </resources>
