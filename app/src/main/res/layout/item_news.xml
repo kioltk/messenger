@@ -87,7 +87,27 @@
                 android:textSize="14sp"
                 android:textColor="#ff343434"
                 android:padding="8dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"/>
+
+            <LinearLayout
+                android:id="@+id/attach"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/photo_attach"
+                    android:background="#e0e0e0"
+                    android:scaleType="centerCrop"
+                    android:layout_weight="0.8"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
             <View
                 android:id="@+id/card_divider"
@@ -104,13 +124,15 @@
                     android:id="@+id/news_comments"
                     android:gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
                     <org.happysanta.messenger.core.views.TintImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:scaleType="centerInside"
-                        app:tintColor="#ddd"
-                        app:src="@drawable/comment"/>
+                        app:tintColor="@color/post_item_grey"
+                        app:src="@drawable/comment"
+                        android:layout_margin="8dp" />
 
                     <TextView
                         android:id="@+id/news_comments_count"
@@ -125,13 +147,15 @@
                     android:layout_toLeftOf="@+id/btn_like"
                     android:gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
                     <org.happysanta.messenger.core.views.TintImageView
                         android:id="@+id/news_repost"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        app:tintColor="#ddd"
-                        app:src="@drawable/share"/>
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:tintColor="@color/post_item_grey"
+                        app:src="@drawable/share"
+                        android:layout_margin="8dp" />
 
                     <TextView
                         android:id="@+id/news_reposts_count"
@@ -146,13 +170,15 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical|right"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
                     <org.happysanta.messenger.core.views.TintImageView
                         android:id="@+id/news_like"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        app:tintColor="#ddd"
-                        app:src="@drawable/like" />
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:tintColor="@color/post_item_grey"
+                        app:src="@drawable/like"
+                        android:layout_margin="8dp" />
 
                     <TextView
                         android:id="@+id/news_likes_count"

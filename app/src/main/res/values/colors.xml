@@ -41,4 +41,6 @@
     <color name="conversation_unread_background">#e0e0e4</color>
     <color name="dialog_unread_background">#d0d0e0</color>
     <color name="logout">#ffff6164</color>
+    <color name="post_item_blue">#619de2</color>
+    <color name="post_item_grey">#ddd</color>
 </resources>
