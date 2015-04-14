@@ -1,7 +1,7 @@
 package org.happysanta.messenger.news;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKList;
 
@@ -40,6 +44,10 @@ public class NewsAdapter extends BaseAdapter {
     private TextView likesCountView;
     private View btnShare;
     private View btnLike;
+
+    private View attach;
+    private ImageView photoAttachView;
+
 
     public NewsAdapter(Activity activity, VKList<VKApiPost> newsList) {
         this.activity = activity;
@@ -70,6 +78,8 @@ public class NewsAdapter extends BaseAdapter {
         btnMenu =  itemView.findViewById(R.id.btn_menu);
 
         textView = (TextView) itemView.findViewById(R.id.news_body);
+        attach = itemView.findViewById(R.id.attach);
+        photoAttachView = (ImageView) itemView.findViewById(R.id.photo_attach);
 
         commentsView =  itemView.findViewById(R.id.news_comments);
         repostView = (TintImageView) itemView.findViewById(R.id.news_repost);
@@ -82,6 +92,34 @@ public class NewsAdapter extends BaseAdapter {
         btnLike = itemView.findViewById(R.id.btn_like);
 
         final VKApiPost post = (VKApiPost) getItem(position);
+        if (post.attachments.size() > 0) {
+            VKApiPhoto photoAttach = (VKApiPhoto) post.attachments.get(0);
+
+            if(photoAttach instanceof VKApiPhoto){
+                ImageLoader.getInstance().displayImage(photoAttach.photo_604, photoAttachView, new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        photoAttachView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                    }
+                });
+            }
+        }
 
         photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         photoView.setOnClickListener(new View.OnClickListener() {
@@ -92,14 +130,21 @@ public class NewsAdapter extends BaseAdapter {
         });
 
         nameView.setText("" + post.from_id);
-        textView.setText(post.text);
-        dateView.setText(TimeUtils.format(post.date*1000, activity));
+
+        if(post.text == null){
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setText(post.text);
+        }
+
+        dateView.setText(TimeUtils.format(post.date * 1000, activity));
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopupMenu(v);
             }
         });
+
 
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,17 +164,17 @@ public class NewsAdapter extends BaseAdapter {
         likesCountView.setText("" + post.likes_count);
 
         if (post.user_likes){
-            likesCountView.setTextColor(Color.parseColor("#619de2"));
+            likesCountView.setTextColor(activity.getResources().getColor(R.color.post_item_blue));
             likeView.setTint(0xff619de2);
         } else{
-            likeView.setTint(0xffb5b9bd);
+            likeView.setTint(0xffdddddd);
         }
 
         if (post.user_reposted){
-            repostsCountView.setTextColor(Color.parseColor("#619de2"));
+            repostsCountView.setTextColor(activity.getResources().getColor(R.color.post_item_blue));
             repostView.setTint(0xff619de2);
         } else{
-            repostView.setTint(0xffb5b9bd);
+            repostView.setTint(0xffdddddd);
         }
 
         return itemView;
