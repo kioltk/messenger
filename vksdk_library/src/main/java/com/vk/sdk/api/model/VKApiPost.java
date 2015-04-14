@@ -124,6 +124,18 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
     public String post_type;
 
     /**
+     * Type of source: see VKApiPostSourceType below
+     * */
+    public String sourceType;
+    /**
+     * see VKApiPostSourceData below
+     * */
+    public String sourceData;
+    /**
+     * see VKApiPostSourcePlatform below
+     * */
+    public String sourcePlatform;
+    /**
      * Information about attachments to the post (photos, links, etc.), if any;
      */
     public VKAttachments attachments = new VKAttachments();
@@ -184,6 +196,14 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         }
         signer_id = source.optInt("signer_id");
         copy_history = new VKList<VKApiPost>(source.optJSONArray("copy_history"), VKApiPost.class);
+
+        JSONObject postSource = source.optJSONObject("post_source");
+        if(postSource!=null){
+            sourceType = postSource.optString("type");
+            sourceData = postSource.optString("data");
+            sourcePlatform = postSource.optString("platform");
+        }
+
         return this;
     }
 
@@ -273,5 +293,14 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
             return new VKApiPost[size];
         }
     };
-
+    public final static class VKApiPostSourceType{
+        public final static String VK = "vk";
+        public final static String API = "api";
+    }
+    public final static class VKApiPostSourceData{
+        public final static String PROFILE_PHOTO_CHANGE = "profile_photo";
+    }
+    public final static class VKApiPostSourcePlatform{
+        public final static String ANDROID = "android";
+    }
 }
