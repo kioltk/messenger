@@ -1,10 +1,7 @@
 package org.happysanta.messenger.news;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,21 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.methods.VKApiUsers;
 import com.vk.sdk.api.model.VKApiPost;
-import com.vk.sdk.api.model.VKApiUser;
-import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.BitmapUtil;
-import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.core.util.TimeUtils;
+import org.happysanta.messenger.core.views.TintImageView;
 import org.happysanta.messenger.user.ProfileActivity;
 
 /**
@@ -44,8 +33,8 @@ public class NewsAdapter extends BaseAdapter {
     private TextView textView;
     private View commentsView;
     private View btnMenu;
-    private ImageView repostView;
-    private ImageView likeView;
+    private TintImageView repostView;
+    private TintImageView likeView;
     private TextView commentsCountView;
     private TextView repostsCountView;
     private TextView likesCountView;
@@ -83,8 +72,8 @@ public class NewsAdapter extends BaseAdapter {
         textView = (TextView) itemView.findViewById(R.id.news_body);
 
         commentsView =  itemView.findViewById(R.id.news_comments);
-        repostView = (ImageView) itemView.findViewById(R.id.news_repost);
-        likeView = (ImageView) itemView.findViewById(R.id.news_like);
+        repostView = (TintImageView) itemView.findViewById(R.id.news_repost);
+        likeView = (TintImageView) itemView.findViewById(R.id.news_like);
         commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
         repostsCountView = (TextView) itemView.findViewById(R.id.news_reposts_count);
         likesCountView = (TextView) itemView.findViewById(R.id.news_likes_count);
@@ -131,16 +120,16 @@ public class NewsAdapter extends BaseAdapter {
 
         if (post.user_likes){
             likesCountView.setTextColor(Color.parseColor("#619de2"));
-            likeView.getDrawable().setColorFilter(Color.parseColor("#619de2"), PorterDuff.Mode.SRC_IN);
+            likeView.setTint(0xff619de2);
         } else{
-            likeView.getDrawable().setColorFilter(Color.parseColor("#b5b9bd"), PorterDuff.Mode.SRC_IN);
+            likeView.setTint(0xffb5b9bd);
         }
 
         if (post.user_reposted){
             repostsCountView.setTextColor(Color.parseColor("#619de2"));
-            repostView.getDrawable().setColorFilter(Color.parseColor("#619de2"), PorterDuff.Mode.SRC_IN);
+            repostView.setTint(0xff619de2);
         } else{
-            repostView.getDrawable().setColorFilter(Color.parseColor("#b5b9bd"), PorterDuff.Mode.SRC_IN);
+            repostView.setTint(0xffb5b9bd);
         }
 
         return itemView;
