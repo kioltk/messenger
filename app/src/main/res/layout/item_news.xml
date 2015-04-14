@@ -120,6 +120,7 @@
                         />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/btn_share"
                     android:padding="8dp"
                     android:layout_toLeftOf="@+id/btn_like"
                     android:gravity="center"

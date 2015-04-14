@@ -1,6 +1,7 @@
 package org.happysanta.messenger.news;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.CardView;
@@ -14,12 +15,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiUsers;
 import com.vk.sdk.api.model.VKApiPost;
+import com.vk.sdk.api.model.VKApiUser;
+import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.core.util.TimeUtils;
+import org.happysanta.messenger.user.ProfileActivity;
 
 /**
  * Created by insidefun on 01.01.2015.
@@ -27,6 +38,19 @@ import org.happysanta.messenger.core.util.TimeUtils;
 public class NewsAdapter extends BaseAdapter {
     private final Activity activity;
     private VKList<VKApiPost> newsList;
+
+    private ImageView photoView;
+    private TextView nameView;
+    private TextView textView;
+    private View commentsView;
+    private View btnMenu;
+    private ImageView repostView;
+    private ImageView likeView;
+    private TextView commentsCountView;
+    private TextView repostsCountView;
+    private TextView likesCountView;
+    private View btnShare;
+    private View btnLike;
 
     public NewsAdapter(Activity activity, VKList<VKApiPost> newsList) {
         this.activity = activity;
@@ -48,35 +72,56 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View itemView = LayoutInflater.from(activity).inflate(R.layout.item_news, null);
-        CardView cardView = (CardView) itemView.findViewById(R.id.card_view);
-        final ImageView photoView = (ImageView) itemView.findViewById(R.id.user_photo);
-        TextView nameView = (TextView) itemView.findViewById(R.id.user_name);
-        TextView textView = (TextView) itemView.findViewById(R.id.news_body);
+
+        photoView = (ImageView) itemView.findViewById(R.id.user_photo);
+        nameView = (TextView) itemView.findViewById(R.id.user_name);
         final TextView dateView = (TextView) itemView.findViewById(R.id.news_date);
-        View btnMenu =  itemView.findViewById(R.id.btn_menu);
+        btnMenu =  itemView.findViewById(R.id.btn_menu);
 
-        View commentsView =  itemView.findViewById(R.id.news_comments);
-        ImageView repostView = (ImageView) itemView.findViewById(R.id.news_repost);
-        ImageView likeView = (ImageView) itemView.findViewById(R.id.news_like);
+        textView = (TextView) itemView.findViewById(R.id.news_body);
 
-        TextView commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
-        TextView repostsCountView  = (TextView) itemView.findViewById(R.id.news_reposts_count);
-        TextView likesCountView    = (TextView) itemView.findViewById(R.id.news_likes_count);
+        commentsView =  itemView.findViewById(R.id.news_comments);
+        repostView = (ImageView) itemView.findViewById(R.id.news_repost);
+        likeView = (ImageView) itemView.findViewById(R.id.news_like);
+        commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
+        repostsCountView = (TextView) itemView.findViewById(R.id.news_reposts_count);
+        likesCountView = (TextView) itemView.findViewById(R.id.news_likes_count);
+
+        btnShare = itemView.findViewById(R.id.btn_share);
+        btnLike = itemView.findViewById(R.id.btn_like);
 
         final VKApiPost post = (VKApiPost) getItem(position);
 
         photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.startActivity(ProfileActivity.openProfile(activity, post.from_id));
+            }
+        });
+
         nameView.setText("" + post.from_id);
         textView.setText(post.text);
         dateView.setText(TimeUtils.format(post.date*1000, activity));
-
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopupMenu(v);
+            }
+        });
+
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(activity, "Share button", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(activity, "Like button", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -113,15 +158,11 @@ public class NewsAdapter extends BaseAdapter {
                         switch (item.getItemId()) {
 
                             case R.id.action_edit_post:
-                                Toast.makeText(activity,
-                                        "Edit post",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "Edit post", Toast.LENGTH_SHORT).show();
                                 return true;
 
                             case R.id.action_delete_post:
-                                Toast.makeText(activity,
-                                        "Delete post",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "Delete post", Toast.LENGTH_SHORT).show();
                                 return true;
 
                             default:
