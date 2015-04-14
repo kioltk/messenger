@@ -1,7 +1,8 @@
 package org.happysanta.messenger.news;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
@@ -58,8 +59,8 @@ public class NewsAdapter extends BaseAdapter {
         View btnMenu =  itemView.findViewById(R.id.btn_menu);
 
         View commentsView =  itemView.findViewById(R.id.news_comments);
-        View repostView   =  itemView.findViewById(R.id.news_repost);
-        View likeView     =  itemView.findViewById(R.id.news_like);
+        ImageView repostView = (ImageView) itemView.findViewById(R.id.news_repost);
+        ImageView likeView = (ImageView) itemView.findViewById(R.id.news_like);
 
         TextView commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
         TextView repostsCountView  = (TextView) itemView.findViewById(R.id.news_reposts_count);
@@ -82,6 +83,20 @@ public class NewsAdapter extends BaseAdapter {
         commentsCountView.setText("" + post.comments_count);
         repostsCountView.setText("" + post.reposts_count);
         likesCountView.setText("" + post.likes_count);
+
+        if (post.user_likes){
+            likesCountView.setTextColor(Color.parseColor("#619de2"));
+            likeView.getDrawable().setColorFilter(Color.parseColor("#619de2"), PorterDuff.Mode.SRC_IN);
+        } else{
+            likeView.getDrawable().setColorFilter(Color.parseColor("#b5b9bd"), PorterDuff.Mode.SRC_IN);
+        }
+
+        if (post.user_reposted){
+            repostsCountView.setTextColor(Color.parseColor("#619de2"));
+            repostView.getDrawable().setColorFilter(Color.parseColor("#619de2"), PorterDuff.Mode.SRC_IN);
+        } else{
+            repostView.getDrawable().setColorFilter(Color.parseColor("#b5b9bd"), PorterDuff.Mode.SRC_IN);
+        }
 
         return itemView;
     }

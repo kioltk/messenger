@@ -121,7 +121,7 @@
                 </LinearLayout>
                 <LinearLayout
                     android:padding="8dp"
-                    android:layout_toLeftOf="@+id/news_like"
+                    android:layout_toLeftOf="@+id/btn_like"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -142,7 +142,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/news_like"
+                    android:id="@+id/btn_like"
                     android:padding="8dp"
                     android:layout_alignParentRight="true"
                     android:gravity="center"
@@ -150,6 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
+                        android:id="@+id/news_like"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_margin="8dp"
@@ -164,7 +165,6 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="132"
-                        android:textColor="#619de2"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="5dp" />
