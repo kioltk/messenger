@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    android:padding="4dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/d">
@@ -23,18 +22,22 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/user_photo"
                     android:src="@drawable/user_placeholder"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="22dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginBottom="6dp"
                     android:layout_marginTop="10dp"
-                    android:background="?android:attr/selectableItemBackground"/>
-                <LinearLayout
+                    android:background="?android:attr/selectableItemBackground" />
+
+                <RelativeLayout
+                    android:id="@+id/user_info_layout"
                     android:layout_toRightOf="@+id/user_photo"
+                    android:layout_toLeftOf="@+id/btn_menu"
                     android:paddingLeft="2dp"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
@@ -45,21 +48,30 @@
                         android:text="Anna Lebedeva"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/user_photo"
                         android:textColor="#ff343434"
                         />
 
                     <TextView
                         android:id="@+id/news_date"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="yesterday at 20:00"
                         android:layout_below="@+id/user_name"
-                        android:layout_toRightOf="@+id/user_photo"
 
                         />
-                </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/android_ico"
+                            android:layout_toRightOf="@+id/news_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/android_ico"
+                            android:paddingLeft="4dp"
+                            android:paddingTop="24dp"/>
+
+                </RelativeLayout>
+
 
                 <RelativeLayout
                     android:id="@+id/btn_menu"
@@ -88,9 +100,21 @@
                 android:text="Есть у меня талант долго думать написать ли, в итоге пишу, а человек минуту назад уже выключил телефон."
                 android:textSize="14sp"
                 android:textColor="#ff343434"
-                android:padding="8dp"
                 android:layout_marginBottom="8dp"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                android:paddingLeft="22dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingRight="22dp" />
+
+            <TextView
+                android:id="@+id/new_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="user updated photo:"
+                android:padding="8dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/attach"

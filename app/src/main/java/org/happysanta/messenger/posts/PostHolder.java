@@ -13,6 +13,8 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
+import com.vk.sdk.api.model.VKApiPost.VKApiPostSourceData;
+import com.vk.sdk.api.model.VKApiPost.VKApiPostSourcePlatform;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseViewHolder;
@@ -27,6 +29,7 @@ import org.happysanta.messenger.user.ProfileActivity;
 public class PostHolder extends BaseViewHolder {
     private ImageView photoView;
     private TextView nameView;
+    private ImageView androidIcoView;
     private TextView textView;
     private TextView dateView;
     private View btnComments;
@@ -38,6 +41,7 @@ public class PostHolder extends BaseViewHolder {
     private TextView likesCountView;
     private View btnShare;
     private View btnLike;
+    private TextView newPhotoView;
 
     private View attach;
     private ImageView photoAttachView;
@@ -48,8 +52,11 @@ public class PostHolder extends BaseViewHolder {
         nameView = (TextView) itemView.findViewById(R.id.user_name);
         final TextView dateView = (TextView) itemView.findViewById(R.id.news_date);
         btnMenu = itemView.findViewById(R.id.btn_menu);
+        androidIcoView = (ImageView) itemView.findViewById(R.id.android_ico);
+        btnMenu =  itemView.findViewById(R.id.btn_menu);
 
         textView = (TextView) itemView.findViewById(R.id.news_body);
+        newPhotoView = (TextView) itemView.findViewById(R.id.new_photo);
         attach = itemView.findViewById(R.id.attach);
         photoAttachView = (ImageView) itemView.findViewById(R.id.photo_attach);
 
@@ -64,9 +71,7 @@ public class PostHolder extends BaseViewHolder {
         btnLike = itemView.findViewById(R.id.btn_like);
     }
 
-
-    public View bind(final int position, final VKApiPost post) {
-
+    public void bind(final int position, final VKApiPost post) {
 
 
         if (post.attachments.size() > 0) {
@@ -98,6 +103,15 @@ public class PostHolder extends BaseViewHolder {
             }
         }
 
+        if (post.sourceData.equals(null)) {
+
+        } else {
+            if (post.sourceData.equals(VKApiPostSourceData.PROFILE_PHOTO_CHANGE)) {
+                newPhotoView.setText("user updated profile picture:");
+                newPhotoView.setVisibility(View.VISIBLE);
+            }
+        }
+
         photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,9 +122,19 @@ public class PostHolder extends BaseViewHolder {
 
         nameView.setText("" + post.from_id);
 
-        if (post.text == null) {
+        if (post.sourcePlatform.equals(null)) {
+        } else {
+            if (post.sourcePlatform.equals(VKApiPostSourcePlatform.ANDROID)) {
+                androidIcoView.setVisibility(View.VISIBLE);
+            } else {
+                androidIcoView.setVisibility(View.GONE);
+            }
+        }
+
+        if (post.text.isEmpty()) {
             textView.setVisibility(View.GONE);
         } else {
+            textView.setVisibility(View.VISIBLE);
             textView.setText(post.text);
         }
 
@@ -159,9 +183,8 @@ public class PostHolder extends BaseViewHolder {
             repostView.setTint(getContext().getResources().getColor(R.color.post_item_grey));
         }
 
-        return itemView;
-    }
 
+    }
     private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(getContext(), v);
         popupMenu.inflate(R.menu.menu_news);
