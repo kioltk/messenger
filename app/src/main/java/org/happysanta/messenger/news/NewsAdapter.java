@@ -17,6 +17,8 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
+import com.vk.sdk.api.model.VKApiPost.VKApiPostSourcePlatform;
+import com.vk.sdk.api.model.VKApiPost.VKApiPostSourceData;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
@@ -34,6 +36,7 @@ public class NewsAdapter extends BaseAdapter {
 
     private ImageView photoView;
     private TextView nameView;
+    private ImageView androidIcoView;
     private TextView textView;
     private View btnComments;
     private View btnMenu;
@@ -44,6 +47,7 @@ public class NewsAdapter extends BaseAdapter {
     private TextView likesCountView;
     private View btnShare;
     private View btnLike;
+    private TextView newPhotoView;
 
     private View attach;
     private ImageView photoAttachView;
@@ -75,9 +79,11 @@ public class NewsAdapter extends BaseAdapter {
         photoView = (ImageView) itemView.findViewById(R.id.user_photo);
         nameView = (TextView) itemView.findViewById(R.id.user_name);
         final TextView dateView = (TextView) itemView.findViewById(R.id.news_date);
+        androidIcoView = (ImageView) itemView.findViewById(R.id.android_ico);
         btnMenu =  itemView.findViewById(R.id.btn_menu);
 
         textView = (TextView) itemView.findViewById(R.id.news_body);
+        newPhotoView = (TextView) itemView.findViewById(R.id.new_photo);
         attach = itemView.findViewById(R.id.attach);
         photoAttachView = (ImageView) itemView.findViewById(R.id.photo_attach);
 
@@ -121,6 +127,14 @@ public class NewsAdapter extends BaseAdapter {
             }
         }
 
+        if(post.sourceData.equals(null)) {
+        } else {
+            if (post.sourceData.equals(VKApiPostSourceData.PROFILE_PHOTO_CHANGE)) {
+                newPhotoView.setText("user updated profile picture:");
+                newPhotoView.setVisibility(View.VISIBLE);
+            }
+        }
+
         photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +145,16 @@ public class NewsAdapter extends BaseAdapter {
 
         nameView.setText("" + post.from_id);
 
-        if(post.text == null){
+        if(post.sourcePlatform.equals(null)) {
+        } else {
+            if (post.sourcePlatform.equals(VKApiPostSourcePlatform.ANDROID)) {
+                androidIcoView.setVisibility(View.VISIBLE);
+            } else {
+                androidIcoView.setVisibility(View.GONE);
+            }
+        }
+
+        if(post.text.isEmpty()){
             textView.setVisibility(View.GONE);
         } else {
             textView.setText(post.text);
