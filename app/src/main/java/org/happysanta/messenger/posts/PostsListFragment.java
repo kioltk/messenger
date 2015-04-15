@@ -1,10 +1,10 @@
-package org.happysanta.messenger.news;
+package org.happysanta.messenger.posts;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -25,8 +25,8 @@ public class PostsListFragment extends BaseFragment {
     private VKList<VKApiPost> newsList = new VKList<>();
 
     // ui
-    private ListView listView;
-    private NewsAdapter newsAdapter;
+    private RecyclerView listView;
+    private PostsAdapter postsAdapter;
 
     public PostsListFragment(){
     }
@@ -35,13 +35,13 @@ public class PostsListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_news, container, false);
-        listView = (ListView) rootView.findViewById(R.id.list);
+        listView = (RecyclerView) rootView.findViewById(R.id.list);
 
         new VKApiWall().get(new VKParameters(){{ put(VKApiWall.EXTENDED,1); }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                newsAdapter = new NewsAdapter(getActivity(), (VKList<VKApiPost>) response.parsedModel);
-                listView.setAdapter(newsAdapter);
+                postsAdapter = new PostsAdapter(getActivity(), (VKList<VKApiPost>) response.parsedModel);
+                listView.setAdapter(postsAdapter);
             }
         });
 

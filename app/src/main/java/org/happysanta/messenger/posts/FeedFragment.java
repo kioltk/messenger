@@ -1,4 +1,4 @@
-package org.happysanta.messenger.news;
+package org.happysanta.messenger.posts;
 
 import android.graphics.Color;
 import android.os.Bundle;

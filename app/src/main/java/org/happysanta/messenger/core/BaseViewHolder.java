@@ -28,4 +28,5 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return getResources().getColor(colorId);
     }
 
+    public void bind(int position, Object item){}
 }

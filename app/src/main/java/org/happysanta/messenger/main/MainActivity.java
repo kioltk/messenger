@@ -13,7 +13,7 @@ import org.happysanta.messenger.friends.FriendsFragment;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.messages.chats.ChatsListFragment;
 import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
-import org.happysanta.messenger.news.FeedFragment;
+import org.happysanta.messenger.posts.FeedFragment;
 import org.happysanta.messenger.sandbox.SandboxFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 import org.happysanta.messenger.user.UserFragment;

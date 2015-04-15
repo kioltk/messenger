@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.happysanta.messenger.news.NewsAdapter">
+    tools:context="org.happysanta.messenger.posts.PostsAdapter">
     <item
         android:id="@+id/action_edit_post"
         android:title="@string/action_edit_post"

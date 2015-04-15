@@ -1,4 +1,4 @@
-package org.happysanta.messenger.news;
+package org.happysanta.messenger.posts;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
