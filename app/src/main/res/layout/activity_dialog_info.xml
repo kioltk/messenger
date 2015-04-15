@@ -92,7 +92,8 @@
                     android:id="@+id/city_holder"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground">
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -113,7 +114,8 @@
                     android:id="@+id/bdate_holder"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground">
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"

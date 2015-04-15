@@ -35,7 +35,7 @@ public class NewsAdapter extends BaseAdapter {
     private ImageView photoView;
     private TextView nameView;
     private TextView textView;
-    private View commentsView;
+    private View btnComments;
     private View btnMenu;
     private TintImageView repostView;
     private TintImageView likeView;
@@ -81,13 +81,13 @@ public class NewsAdapter extends BaseAdapter {
         attach = itemView.findViewById(R.id.attach);
         photoAttachView = (ImageView) itemView.findViewById(R.id.photo_attach);
 
-        commentsView =  itemView.findViewById(R.id.news_comments);
         repostView = (TintImageView) itemView.findViewById(R.id.news_repost);
         likeView = (TintImageView) itemView.findViewById(R.id.news_like);
         commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
         repostsCountView = (TextView) itemView.findViewById(R.id.news_reposts_count);
         likesCountView = (TextView) itemView.findViewById(R.id.news_likes_count);
 
+        btnComments =  itemView.findViewById(R.id.btn_comments);
         btnShare = itemView.findViewById(R.id.btn_share);
         btnLike = itemView.findViewById(R.id.btn_like);
 
@@ -145,7 +145,12 @@ public class NewsAdapter extends BaseAdapter {
             }
         });
 
-
+        btnComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(activity, "Comments button", Toast.LENGTH_SHORT).show();
+            }
+        });
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,16 +170,16 @@ public class NewsAdapter extends BaseAdapter {
 
         if (post.user_likes){
             likesCountView.setTextColor(activity.getResources().getColor(R.color.post_item_blue));
-            likeView.setTint(0xff619de2);
+            likeView.setTint(activity.getResources().getColor(R.color.post_item_blue));
         } else{
-            likeView.setTint(0xffdddddd);
+            likeView.setTint(activity.getResources().getColor(R.color.post_item_grey));
         }
 
         if (post.user_reposted){
             repostsCountView.setTextColor(activity.getResources().getColor(R.color.post_item_blue));
-            repostView.setTint(0xff619de2);
+            repostView.setTint(activity.getResources().getColor(R.color.post_item_blue));
         } else{
-            repostView.setTint(0xffdddddd);
+            repostView.setTint(activity.getResources().getColor(R.color.post_item_grey));
         }
 
         return itemView;

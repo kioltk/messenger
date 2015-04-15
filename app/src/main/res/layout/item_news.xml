@@ -31,7 +31,8 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginBottom="6dp"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp"
+                    android:background="?android:attr/selectableItemBackground"/>
                 <LinearLayout
                     android:layout_toRightOf="@+id/user_photo"
                     android:paddingLeft="2dp"
@@ -65,7 +66,8 @@
                     android:layout_alignParentRight="true"
                     android:padding="16dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground">
                     <ImageView
                         android:id="@+id/news_menu"
                         android:layout_width="wrap_content"
@@ -121,12 +123,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
-                    android:id="@+id/news_comments"
+                    android:id="@+id/btn_comments"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:background="?android:attr/selectableItemBackground">
                     <org.happysanta.messenger.core.views.TintImageView
+                        android:id="@+id/news_comments"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:scaleType="centerInside"
@@ -148,7 +152,8 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:background="?android:attr/selectableItemBackground">
                     <org.happysanta.messenger.core.views.TintImageView
                         android:id="@+id/news_repost"
                         android:layout_width="20dp"
@@ -171,7 +176,8 @@
                     android:gravity="center_vertical|right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:background="?android:attr/selectableItemBackground">
                     <org.happysanta.messenger.core.views.TintImageView
                         android:id="@+id/news_like"
                         android:layout_width="20dp"
