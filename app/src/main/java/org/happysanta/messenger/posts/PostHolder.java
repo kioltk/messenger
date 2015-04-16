@@ -29,19 +29,19 @@ import org.happysanta.messenger.user.ProfileActivity;
 public class PostHolder extends BaseViewHolder {
     private ImageView photoView;
     private TextView nameView;
-    private ImageView androidIcoView;
+    private ImageView platformIcoView;
     private TextView textView;
     private TextView dateView;
-    private View btnComments;
-    private View btnMenu;
+    private View commentsButton;
+    private View commentMenu;
     private TintImageView repostView;
     private TintImageView likeView;
     private TextView commentsCountView;
     private TextView repostsCountView;
     private TextView likesCountView;
-    private View btnShare;
-    private View btnLike;
-    private TextView newPhotoView;
+    private View shareButton;
+    private View likeButton;
+    private TextView sourceDataView;
 
     private View attach;
     private ImageView photoAttachView;
@@ -50,15 +50,16 @@ public class PostHolder extends BaseViewHolder {
         super(itemView);
         photoView = (ImageView) itemView.findViewById(R.id.user_photo);
         nameView = (TextView) itemView.findViewById(R.id.user_name);
-        final TextView dateView = (TextView) itemView.findViewById(R.id.news_date);
-        btnMenu = itemView.findViewById(R.id.btn_menu);
-        androidIcoView = (ImageView) itemView.findViewById(R.id.android_ico);
-        btnMenu =  itemView.findViewById(R.id.btn_menu);
+        dateView = (TextView) itemView.findViewById(R.id.news_date);
+        commentMenu = itemView.findViewById(R.id.btn_menu);
+        platformIcoView = (ImageView) itemView.findViewById(R.id.android_ico);
+        commentMenu =  itemView.findViewById(R.id.btn_menu);
 
         textView = (TextView) itemView.findViewById(R.id.news_body);
-        newPhotoView = (TextView) itemView.findViewById(R.id.new_photo);
+        sourceDataView = (TextView) itemView.findViewById(R.id.sourceData);
         attach = itemView.findViewById(R.id.attach);
         photoAttachView = (ImageView) itemView.findViewById(R.id.photo_attach);
+
 
         repostView = (TintImageView) itemView.findViewById(R.id.news_repost);
         likeView = (TintImageView) itemView.findViewById(R.id.news_like);
@@ -66,52 +67,14 @@ public class PostHolder extends BaseViewHolder {
         repostsCountView = (TextView) itemView.findViewById(R.id.news_reposts_count);
         likesCountView = (TextView) itemView.findViewById(R.id.news_likes_count);
 
-        btnComments = itemView.findViewById(R.id.btn_comments);
-        btnShare = itemView.findViewById(R.id.btn_share);
-        btnLike = itemView.findViewById(R.id.btn_like);
+        commentsButton = itemView.findViewById(R.id.btn_comments);
+        shareButton = itemView.findViewById(R.id.btn_share);
+        likeButton = itemView.findViewById(R.id.btn_like);
     }
 
     public void bind(final int position, final VKApiPost post) {
 
-
-        if (post.attachments.size() > 0) {
-            VKApiPhoto photoAttach = (VKApiPhoto) post.attachments.get(0);
-
-            if (photoAttach instanceof VKApiPhoto) {
-                ImageLoader.getInstance().displayImage(photoAttach.photo_604, photoAttachView, new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) {
-
-                    }
-
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        photoAttachView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-                    }
-
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-
-                    }
-                });
-            }
-        }
-
-        if (post.sourceData.equals(null)) {
-
-        } else {
-            if (post.sourceData.equals(VKApiPostSourceData.PROFILE_PHOTO_CHANGE)) {
-                newPhotoView.setText("user updated profile picture:");
-                newPhotoView.setVisibility(View.VISIBLE);
-            }
-        }
-
+        // сначала заполняем всю информацию о пользователе
         photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,46 +82,42 @@ public class PostHolder extends BaseViewHolder {
                 getContext().startActivity(ProfileActivity.openProfile(getContext(), post.from_id));
             }
         });
-
         nameView.setText("" + post.from_id);
 
-        if (post.sourcePlatform.equals(null)) {
-        } else {
+        // потом платформу
+        if (post.sourcePlatform !=null) {
             if (post.sourcePlatform.equals(VKApiPostSourcePlatform.ANDROID)) {
-                androidIcoView.setVisibility(View.VISIBLE);
+                platformIcoView.setVisibility(View.VISIBLE);
             } else {
-                androidIcoView.setVisibility(View.GONE);
+                platformIcoView.setVisibility(View.GONE);
             }
         }
 
-        if (post.text.isEmpty()) {
-            textView.setVisibility(View.GONE);
-        } else {
-            textView.setVisibility(View.VISIBLE);
-            textView.setText(post.text);
-        }
-
+        // заполняем дату
         dateView.setText(TimeUtils.format(post.date * 1000, getContext()));
-        btnMenu.setOnClickListener(new View.OnClickListener() {
+
+
+        // кнопочки
+        commentMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopupMenu(v);
             }
         });
 
-        btnComments.setOnClickListener(new View.OnClickListener() {
+        commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Comments button", Toast.LENGTH_SHORT).show();
             }
         });
-        btnShare.setOnClickListener(new View.OnClickListener() {
+        shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Share button", Toast.LENGTH_SHORT).show();
             }
         });
-        btnLike.setOnClickListener(new View.OnClickListener() {
+        likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Like button", Toast.LENGTH_SHORT).show();
@@ -182,6 +141,56 @@ public class PostHolder extends BaseViewHolder {
         } else {
             repostView.setTint(getContext().getResources().getColor(R.color.post_item_grey));
         }
+
+
+
+        // ТОЛЬКО ПОТОМ ДАННЫЕ
+
+
+
+        // если есть источник, значиит проверяем какой
+        if (post.sourceData != null) {
+            // если источник - изменение фотки, то мы
+            if (post.sourceData.equals(VKApiPostSourceData.PROFILE_PHOTO_CHANGE)) {
+                sourceDataView.setText("user updated profile picture:");
+                sourceDataView.setVisibility(View.VISIBLE);
+                VKApiPhoto photoAttach = (VKApiPhoto) post.attachments.get(0);
+                if (photoAttach instanceof VKApiPhoto) {
+                    ImageLoader.getInstance().displayImage(photoAttach.photo_604, photoAttachView, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            photoAttachView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+
+                        }
+                    });
+                }
+            } // ну или проверяем другие источники
+        }
+
+        if (post.text.isEmpty()) {
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(post.text);
+        }
+
+
+
 
 
     }

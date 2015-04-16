@@ -1,6 +1,7 @@
 package org.happysanta.messenger.posts;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ public class PostsListFragment extends BaseFragment {
     private VKList<VKApiPost> newsList = new VKList<>();
 
     // ui
-    private RecyclerView listView;
+    private RecyclerView recyclerView;
     private PostsAdapter postsAdapter;
 
     public PostsListFragment(){
@@ -35,13 +36,14 @@ public class PostsListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_news, container, false);
-        listView = (RecyclerView) rootView.findViewById(R.id.list);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         new VKApiWall().get(new VKParameters(){{ put(VKApiWall.EXTENDED,1); }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 postsAdapter = new PostsAdapter(getActivity(), (VKList<VKApiPost>) response.parsedModel);
-                listView.setAdapter(postsAdapter);
+                recyclerView.setAdapter(postsAdapter);
             }
         });
 
