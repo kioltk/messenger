@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 
-import org.happysanta.messenger.BuildConfig;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
 import org.happysanta.messenger.core.BaseActivity;
@@ -42,13 +41,13 @@ public class MainActivity extends BaseActivity
                 mDrawerLayout);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if(BuildConfig.DEBUG) {
+        /*if(BuildConfig.DEBUG) {
             fragmentManager.beginTransaction()
                     .replace(R.id.container, new SandboxFragment())
                     .commit();
-        } else {
+        } else */{
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, new ConversationsListFragment())
+                    .replace(R.id.container, new FeedFragment())
                     .commit();
         }
     }
