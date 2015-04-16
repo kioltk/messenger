@@ -69,5 +69,6 @@
     <string name="title_activity_group_info">Group info</string>
     <string name="action_edit_post">Edit</string>
     <string name="action_delete_post">Delete</string>
+    <string name="title_activity_post">Post</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package org.happysanta.messenger.posts;
 
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import org.happysanta.messenger.user.ProfileActivity;
  * Created by Jesus Christ. Amen.
  */
 public class PostHolder extends BaseViewHolder {
+    private CardView postCardView;
     private ImageView photoView;
     private TextView nameView;
     private ImageView platformIcoView;
@@ -48,6 +50,8 @@ public class PostHolder extends BaseViewHolder {
 
     public PostHolder(View itemView) {
         super(itemView);
+        postCardView = (CardView) itemView.findViewById(R.id.card_view);
+
         photoView = (ImageView) itemView.findViewById(R.id.user_photo);
         nameView = (TextView) itemView.findViewById(R.id.user_name);
         dateView = (TextView) itemView.findViewById(R.id.news_date);
@@ -98,6 +102,13 @@ public class PostHolder extends BaseViewHolder {
 
 
         // кнопочки
+        postCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getContext().startActivity(PostActivity.openPost(getContext(), post.from_id, post.id));
+            }
+        });
+
         commentMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +120,7 @@ public class PostHolder extends BaseViewHolder {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Comments button", Toast.LENGTH_SHORT).show();
+                getContext().startActivity(PostActivity.openPost(getContext(), post.from_id, post.id));
             }
         });
         shareButton.setOnClickListener(new View.OnClickListener() {

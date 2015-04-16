@@ -62,6 +62,11 @@
             android:name=".messages.conversations.DialogInfoActivity"
             android:label="@string/title_activity_group_info" >
         </activity>
+        
+        <activity
+            android:name=".posts.PostActivity"
+            android:label="@string/title_activity_post" >
+        </activity>
 
     </application>
 
