@@ -3,17 +3,24 @@ package org.happysanta.messenger.posts;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiUsers;
 import com.vk.sdk.api.methods.VKApiWall;
+import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKCommentArray;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
@@ -29,6 +36,9 @@ public class PostActivity extends BaseActivity {
     private String subtitle;
     private static final String EXTRA_USERID = "extra_userid";
     private static final String EXTRA_POSTID = "extra_postid";
+    private CommentedPostAdapter adapter;
+    private VKApiPost currentPost;
+    private VKCommentArray postComments;
 
 
     @Override
@@ -59,6 +69,12 @@ public class PostActivity extends BaseActivity {
             });
         }
 
+        // мы созда\м ресайклер, который будет показывать наши данные
+        RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CommentedPostAdapter();
+        recycler.setAdapter(adapter);
+
         userId = getIntent().getIntExtra(EXTRA_USERID, 0);
         postId = getIntent().getIntExtra(EXTRA_POSTID, 0);
         new VKApiWall().getById(new VKParameters(){{
@@ -68,13 +84,93 @@ public class PostActivity extends BaseActivity {
             @Override
             public void onComplete(VKResponse response) {
                 VKList<VKApiPost> postList = (VKList<VKApiPost>) response.parsedModel;
+                currentPost = postList.get(0);
+                // когда загрузили пост, то говорим адаптеру, что у нас появился первый итем
+                adapter.notifyItemInserted(0);
 
+                // когда адаптер отобразил новость, мы загружаем комментарии
+                fetchComments();
             }
         });
     }
 
+    private void fetchComments() {
+        // настраиваем запрос
+        new VKApiWall().getComments(new VKParameters(){{
+            put("owner_id", userId);
+            put("post_id", postId);
+
+        }})
+        .executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                postComments = (VKCommentArray) response.parsedModel;
+                // сохраняем комментарии
+                adapter.notifyItemRangeInserted(1, postComments.size());
+                // уведомляем адаптер, что у нас добавились комментарии
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+            }
+        });
+    }
+    // надо сделать страницу юзера по такому же принципу, только первый холдер - юзер, остальные - посты
     public static Intent openPost(Context context,int userid, int postid){
         return new Intent(context, PostActivity.class).putExtra(EXTRA_USERID, userid).putExtra(EXTRA_POSTID, postid);
     }
 
+
+    private class CommentedPostAdapter extends RecyclerView.Adapter {
+
+        @Override
+        public int getItemViewType(int position) {
+
+            // адаптер говорит, что первый итем - пост
+            if(position==0){
+                return 0;// в нулевом будет пост
+            }
+            // адаптер для всех кроме 1 итема говорит, что они - комментарии
+            return 1;// остальное комментарии
+        }
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            // создает также холдер для поста
+            RecyclerView.ViewHolder holder = null;
+            if(viewType==0){
+                PostHolder postHolder = new PostHolder(LayoutInflater.from(getBaseContext()).inflate(R.layout.item_post, parent, false));
+                holder = postHolder;
+            }else{
+                // создаются холдеры комментариев
+                CommentHolder commentHolder = new CommentHolder(LayoutInflater.from(getBaseContext()).inflate(R.layout.item_comment, parent, false));
+                holder = commentHolder;
+            }
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            // и заносит данные поста в холдер
+            if(holder instanceof PostHolder){
+                ((PostHolder)holder).bind(0, currentPost);
+            } else if(holder instanceof CommentHolder){
+                // и заносятся данные этих коментаривев в холдеры
+                ((CommentHolder)holder).bind(postComments.get(position-1));// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+
+            int count = currentPost != null ? 1 : 0; // если currentPost != null  то заносим 1, иначе заносим 0;
+            // если есть пост, то смотрим есть ли комментарии. если есть, то добавляем и комментарии.
+
+            return
+                    currentPost != null ?
+                            (1 + (postComments != null ? postComments.size() : 0))
+                            : 0;
+        }
+    }
 }

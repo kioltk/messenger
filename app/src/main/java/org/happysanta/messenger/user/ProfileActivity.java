@@ -126,7 +126,8 @@ public class ProfileActivity extends BaseActivity {
 
                 VKList<VKApiUserFull> users = (VKList<VKApiUserFull>) response.parsedModel;
                 VKApiUserFull currentUser = users.get(0);
-
+                // давай вот отсюда начинай, только причеши там комментарии, чтобы красивенько было и... и коммит
+                // удачки)
                 // потом этого юзера заносим по вьюшкам
                 // лучше все же не забивать все в одном OnCreate потому что сложно будет читать, так получается более мене читаемо
                 showUser(currentUser);

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <View
+        android:id="@+id/card_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/navigation_divider" />
+
+        <ImageView
+            android:id="@+id/user_photo"
+            android:src="@drawable/user_placeholder"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <RelativeLayout
+            android:id="@+id/user_info_layout"
+            android:paddingLeft="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/user_photo"
+            android:layout_toRightOf="@+id/user_photo"
+            android:layout_toEndOf="@+id/user_photo">
+            <TextView
+                android:id="@+id/user_name"
+                android:text="Anna Lebedeva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ff343434"
+                android:layout_marginBottom="8dp" />
+            <LinearLayout
+                android:id="@+id/comment_body"
+                android:layout_below="@+id/user_name"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/comment_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Это как супер перхоть.медленный косой.из Прем ст уж лучше СДС.а тот кто говорит для новечков и научит выцеливать,да всем ссать на пробитие одни уроды в игре которым спать.годы заредил и поехал.зачем что то целить."
+                    android:textSize="14sp"
+                    android:textColor="#ff343434"/>
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:id="@+id/linearLayout">
+                        <TextView
+                            android:id="@+id/comment_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="yesterday at 20:00"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginRight="4dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_to_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_toRightOf="@+id/linearLayout"
+                        android:background="?android:attr/selectableItemBackground">
+                        <TextView
+                            android:id="@+id/comment_to_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="to Jesus"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginRight="8dp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/btn_like"
+                        android:gravity="center_vertical|right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_alignParentRight="true">
+
+                        <org.happysanta.messenger.core.views.TintImageView
+                            android:id="@+id/comment_likes"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            app:src="@drawable/like"
+                            android:layout_margin="8dp" />
+
+                        <TextView
+                            android:id="@+id/comment_likes_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="132"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="12dp" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>

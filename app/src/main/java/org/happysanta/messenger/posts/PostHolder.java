@@ -201,10 +201,6 @@ public class PostHolder extends BaseViewHolder {
             textView.setText(post.text);
         }
 
-
-
-
-
     }
     private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(getContext(), v);
