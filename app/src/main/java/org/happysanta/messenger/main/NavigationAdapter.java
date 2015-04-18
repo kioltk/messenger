@@ -34,7 +34,7 @@ public class NavigationAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if(BuildConfig.DEBUG){
-            return 9;
+            return 14;
         }
         return 8;
     }
@@ -126,8 +126,20 @@ public class NavigationAdapter extends BaseAdapter {
             case NavigationFragment.NAVIGATION_MESSAGES_ID:
                 textView.setText(R.string.navigation_messages);
                 break;
-            case NavigationFragment.NAVIGATION_GROUPS_ID:
+            case NavigationFragment.NAVIGATION_GROUPSCHAT_ID:
                 textView.setText(R.string.navigation_groups);
+                break;
+            case NavigationFragment.NAVIGATION_VIDEOS_ID:
+                textView.setText(R.string.navigation_videos);
+                break;
+            case NavigationFragment.NAVIGATION_AUDIOS_ID:
+                textView.setText(R.string.navigation_audios);
+                break;
+            case NavigationFragment.NAVIGATION_COMMUNITIES_ID:
+                textView.setText(R.string.navigation_communities);
+                break;
+            case NavigationFragment.NAVIGATION_PHOTOS_ID:
+                textView.setText(R.string.navigation_photos);
                 break;
             case NavigationFragment.NAVIGATION_FRIENDS_ID:
                 textView.setText(R.string.navigation_friends);

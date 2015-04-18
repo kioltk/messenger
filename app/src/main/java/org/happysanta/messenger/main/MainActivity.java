@@ -1,12 +1,14 @@
 package org.happysanta.messenger.main;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 
+import org.happysanta.messenger.Photo.PhotosListFragment;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
+import org.happysanta.messenger.audio.AudiosListFragment;
 import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.friends.FriendsFragment;
 import org.happysanta.messenger.longpoll.LongpollService;
@@ -16,6 +18,7 @@ import org.happysanta.messenger.posts.FeedFragment;
 import org.happysanta.messenger.sandbox.SandboxFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
 import org.happysanta.messenger.user.UserFragment;
+import org.happysanta.messenger.video.VideosListFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationFragment.NavigationDrawerCallbacks {
@@ -56,7 +59,7 @@ public class MainActivity extends BaseActivity
     public void onNavigationDrawerItemSelected(int itemdId) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        getFragmentManager().beginTransaction().replace(R.id.container, new Fragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.container, new android.app.Fragment()).commit();
         currentFragmentId = itemdId;
         switch (itemdId) {
             case (int) NavigationFragment.NAVIGATION_PROFILE_ID:
@@ -75,7 +78,7 @@ public class MainActivity extends BaseActivity
                         .replace(R.id.container, new ConversationsListFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_GROUPS_ID:
+            case (int) NavigationFragment.NAVIGATION_GROUPSCHAT_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new ChatsListFragment())
                         .commit();
@@ -85,6 +88,27 @@ public class MainActivity extends BaseActivity
                         .replace(R.id.container, new FriendsFragment())
                         .commit();
                 break;
+            case (int) NavigationFragment.NAVIGATION_VIDEOS_ID:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new VideosListFragment())
+                        .commit();
+                break;
+            case (int) NavigationFragment.NAVIGATION_PHOTOS_ID:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new PhotosListFragment())
+                        .commit();
+                break;
+            case (int) NavigationFragment.NAVIGATION_AUDIOS_ID:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new AudiosListFragment())
+                        .commit();
+                break;
+            case (int) NavigationFragment.NAVIGATION_COMMUNITIES_ID:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new Fragment())
+                        .commit();
+                break;
+
             case (int) NavigationFragment.NAVIGATION_SETTINGS_ID:
                 fragmentManager.beginTransaction().replace(R.id.container, new android.support.v4.app.Fragment()).commit();
                 getFragmentManager().beginTransaction()

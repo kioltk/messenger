@@ -33,7 +33,11 @@ public class NavigationFragment extends Fragment {
     public static final int NAVIGATION_PROFILE_ID = 11;
     public static final int NAVIGATION_NEWS_ID = 10;
     public static final int NAVIGATION_MESSAGES_ID = 1;
-    public static final int NAVIGATION_GROUPS_ID = 2;
+    public static final int NAVIGATION_GROUPSCHAT_ID = 2;
+    public static final int NAVIGATION_VIDEOS_ID = 7;
+    public static final int NAVIGATION_AUDIOS_ID = 8;
+    public static final int NAVIGATION_PHOTOS_ID = 9;
+    public static final int NAVIGATION_COMMUNITIES_ID = 6;
     public static final int NAVIGATION_FRIENDS_ID = 3;
     public static final int NAVIGATION_SETTINGS_ID = 4;
     public static final int NAVIGATION_ABOUT_ID = 5;
@@ -52,14 +56,24 @@ public class NavigationFragment extends Fragment {
                 case 3:
                     return NavigationFragment.NAVIGATION_MESSAGES_ID;
                 case 4:
-                    return NavigationFragment.NAVIGATION_GROUPS_ID;
+                    return NavigationFragment.NAVIGATION_GROUPSCHAT_ID;
                 case 5:
                     return NavigationFragment.NAVIGATION_FRIENDS_ID;
                 case 6:
                     return DIVIDER;
                 case 7:
-                    return NavigationFragment.NAVIGATION_SETTINGS_ID;
+                    return NavigationFragment.NAVIGATION_VIDEOS_ID;
                 case 8:
+                    return NavigationFragment.NAVIGATION_AUDIOS_ID;
+                case 9:
+                    return NavigationFragment.NAVIGATION_PHOTOS_ID;
+                case 10:
+                    return NavigationFragment.NAVIGATION_COMMUNITIES_ID;
+                case 11:
+                    return DIVIDER;
+                case 12:
+                    return NavigationFragment.NAVIGATION_SETTINGS_ID;
+                case 13:
                     return NavigationFragment.NAVIGATION_ABOUT_ID;
 
             }
@@ -71,7 +85,7 @@ public class NavigationFragment extends Fragment {
                 case 2:
                     return NavigationFragment.NAVIGATION_MESSAGES_ID;
                 case 3:
-                    return NavigationFragment.NAVIGATION_GROUPS_ID;
+                    return NavigationFragment.NAVIGATION_GROUPSCHAT_ID;
                 case 4:
                     return NavigationFragment.NAVIGATION_FRIENDS_ID;
                 case 5:
