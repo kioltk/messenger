@@ -2,62 +2,39 @@ package org.happysanta.messenger.user;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.ViewGroup;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiUsers;
-import com.vk.sdk.api.model.VKApiCity;
+import com.vk.sdk.api.methods.VKApiWall;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKPostArray;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
-import org.happysanta.messenger.core.util.BitmapUtil;
-import org.happysanta.messenger.core.util.Dimen;
-import org.happysanta.messenger.core.util.ImageUtil;
+import org.happysanta.messenger.posts.PostHolder;
 
 public class ProfileActivity extends BaseActivity {
     int userId;
+    int postId;
+
     private String subtitle;
-
     private static final String EXTRA_USERID = "extra_userid";
-
-    // это вьюшки из первой карточки
-    private TextView nameView;
-    private ImageView photoView;
-    private TextView cityView;
-    private TextView statusView;
-
-    // вторая карточка
-    private View friendCardView;
-    private TextView friendsView;
-    private TextView mutualFriendsView;
-    private TextView onlineFriendsView;
-    private TextView followersView;
-    private View btnFriends;
-    private View btnMutual;
-    private View btnOnline;
-    private View btnFollowers;
-    private TextView photosCountView;
-    private View btnPhoto;
+    private static final String EXTRA_POSTID = "extra_postid";
+    private ProfilePostsAdapter adapter;
+    private VKApiUserFull currentUser;
+    private VKPostArray userPosts;
+    // Остальное все ок? Толко вместо поста брать список постов?
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,32 +47,6 @@ public class ProfileActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-
-         nameView = (TextView) findViewById(R.id.text_name);
-         photoView = (ImageView) findViewById(R.id.user_photo);
-         cityView = (TextView) findViewById(R.id.city);
-         statusView = (TextView) findViewById(R.id.status);
-
-
-         friendCardView = findViewById(R.id.content_holder);
-
-         friendsView = (TextView)  findViewById(R.id.friends);
-         mutualFriendsView = (TextView)  findViewById(R.id.mutual);
-         onlineFriendsView = (TextView)  findViewById(R.id.online_friend);
-         followersView = (TextView)  findViewById(R.id.followers);
-
-
-         btnFriends =  findViewById(R.id.btn_friends);
-         btnMutual =  findViewById(R.id.btn_mutual);
-         btnOnline =  findViewById(R.id.btn_online);
-         btnFollowers =  findViewById(R.id.btn_followers);
-
-         photosCountView = (TextView) findViewById(R.id.photos_counter);
-         btnPhoto = findViewById(R.id.btn_photos);
-
-
-        // потом мы загружаем юзера
 
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         if (null != actionbar) {
@@ -111,26 +62,35 @@ public class ProfileActivity extends BaseActivity {
                     finish();
                 }
             });
-
-
         }
 
+        RecyclerView recycler = (RecyclerView) findViewById(R.id.profile_recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ProfilePostsAdapter();
+        recycler.setAdapter(adapter);
+
         userId = getIntent().getIntExtra(EXTRA_USERID, 0);
+        postId = getIntent().getIntExtra(EXTRA_POSTID, 0);
         // todo show loading?
-        new VKApiUsers().get(new VKParameters(){{
+        // потом мы загружаем юзера
+        new VKApiUsers().get(new VKParameters() {{
             put("user_ids", userId);
-            put("fields","photo_200,city,activity,last_seen,counters,bdate");
+            put("fields", "photo_200,city,activity,last_seen,counters,bdate");
         }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
 
                 VKList<VKApiUserFull> users = (VKList<VKApiUserFull>) response.parsedModel;
-                VKApiUserFull currentUser = users.get(0);
+                currentUser = users.get(0);
+                adapter.notifyItemInserted(0);
+
+                fetchPosts();
                 // давай вот отсюда начинай, только причеши там комментарии, чтобы красивенько было и... и коммит
-                // удачки)
+                // удачки) я уже на странице юзера. перезайди на не\
                 // потом этого юзера заносим по вьюшкам
                 // лучше все же не забивать все в одном OnCreate потому что сложно будет читать, так получается более мене читаемо
-                showUser(currentUser);
+
+                //showUser(currentUser);
             }
         });
         /*
@@ -150,153 +110,67 @@ public class ProfileActivity extends BaseActivity {
         */
     }
 
-    private void showUser(VKApiUserFull user) {
-        setUserName(user.toString());
-        setUserId(user.id);
-        setOnline(user.online);
-        setPhoto(user.getPhoto());
-        setCounters(user.counters);
-        setCity(user.city);
-        findViewById(R.id.loading).setVisibility(View.GONE);
-        findViewById(R.id.content_holder).setVisibility(View.VISIBLE);
-    }
-
-    private void setCity(VKApiCity city) {
-        if(city==null){
-            findViewById(R.id.city_holder).setVisibility(View.GONE);
-        }else{
-            cityView.setText(city.title);
-        }
-    }
-
-    private void setCounters(final VKApiUserFull.Counters counters) {
-
-        if (counters == null ||
-                (counters.friends == 0 &&
-                        counters.followers == 0 &&
-                        counters.online_friends == 0 &&
-                        counters.mutual_friends == 0
-                )) {
-            friendCardView.setVisibility(View.GONE);
-            return;
-        }
-
-
-        if (counters.friends > 0) {
-            friendsView.setText(Integer.toString(counters.friends));
-        } else {
-            btnFriends.setVisibility(View.GONE);
-        }
-
-        if (counters.mutual_friends > 0) {
-            mutualFriendsView.setText(Integer.toString(counters.mutual_friends));
-        } else {
-            btnMutual.setVisibility(View.GONE);
-        }
-
-        if (counters.online_friends > 0) {
-            onlineFriendsView.setText(Integer.toString(counters.online_friends));
-        } else {
-            btnOnline.setVisibility(View.GONE);
-        }
-
-        if (counters.followers > 0) {
-            followersView.setText(Integer.toString(counters.followers));
-        } else {
-            btnFollowers.setVisibility(View.GONE);
-        }
-
-        if (counters.photos > 1){
-            photosCountView.setText(counters.photos + " photos");
-        } else if (counters.photos > 0){
-            photosCountView.setText(counters.photos + " photo");
-        } else {
-            btnPhoto.setVisibility(View.GONE);
-        }
-
-        btnFriends.setOnClickListener(new View.OnClickListener() {
+    private void fetchPosts() {
+        // не, getById  возвращает посты по айдишникам. В посты не грузятся данные
+        new VKApiWall().get(new VKParameters() {{
+            put(VKApiWall.EXTENDED, 1);
+            put("owner_id", userId);
+        }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Friends button", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnMutual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Mutual button", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnOnline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Online button", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnFollowers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "Followers button", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ProfileActivity.this, "Photos button", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private void setPhoto(String photo) {
-        photoView.setImageBitmap(BitmapUtil.circle(R.id.user_photo));
-        ImageUtil.showFromCache(photo, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
+            public void onComplete(VKResponse response) {
+                userPosts = (VKPostArray) response.parsedModel;
+                // когда загрузили пост, то говорим адаптеру, что у нас появился первый итем
+                adapter.notifyItemRangeInserted(1, userPosts.size());
 
             }
         });
     }
 
-    public void setUserName(String userName) {
-        nameView.setText(userName);
-    }
 
-
-    public void setUserId(int id) {
-        this.userId = id;
-    }
-
-    public void setOnline(boolean online) {
-        String onlineText;
-        if(online){
-            onlineText = "online";
-        }else{
-            onlineText = "offline";
-        }
-        statusView.setText(onlineText);
-    }
-
-    public static Intent openProfile(Context context, int userid){
+    public static Intent openProfile(Context context, int userid) {
         return new Intent(context, ProfileActivity.class).putExtra(EXTRA_USERID, userid);
     }
 
+    private class ProfilePostsAdapter extends RecyclerView.Adapter {
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position == 0) {
+                return 0;
+            }
+            return 1;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // created profile holder
+            RecyclerView.ViewHolder holder = null;
+            if (viewType == 0) {
+                ProfileHolder profileHolder = new ProfileHolder(LayoutInflater.from(getBaseContext()).inflate(R.layout.item_profile, parent, false));
+                holder = profileHolder;
+            } else {
+                // created post holder
+                PostHolder postHolder = new PostHolder(LayoutInflater.from(getBaseContext()).inflate(R.layout.item_post, parent, false));
+                holder = postHolder;
+            }
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof ProfileHolder) {
+                ((ProfileHolder) holder).bind(0, currentUser);
+            } else if (holder instanceof PostHolder) {
+                // и заносятся данные этих коментаривев в холдеры
+                ((PostHolder) holder).bind((position - 1), userPosts.get(position-1));// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
+            }
+        }
+        // работает? нету постов
+
+        @Override
+        public int getItemCount() {
+            int count = currentUser != null ? 1 + (userPosts != null ? userPosts.size() : 0) : 0;
+            return count;
+        }
+    }
 }

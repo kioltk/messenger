@@ -75,9 +75,7 @@ public class CommentHolder extends BaseViewHolder {
                 if (comment.user_likes) {
                     likesCountView.setTextColor(getContext().getResources().getColor(R.color.post_item_blue));
                     likeView.setTint(getContext().getResources().getColor(R.color.post_item_blue));
-                } else {
-                    likeView.setTint(getContext().getResources().getColor(R.color.post_item_grey));
-                }
+                }else { likeView.setTint(getContext().getResources().getColor(R.color.post_item_grey)); }
         } else {
             btnLike.setVisibility(View.GONE);
         }
