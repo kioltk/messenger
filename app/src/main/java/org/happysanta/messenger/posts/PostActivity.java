@@ -97,8 +97,10 @@ public class PostActivity extends BaseActivity {
     private void fetchComments() {
         // настраиваем запрос
         new VKApiWall().getComments(new VKParameters(){{
+            put(VKApiWall.EXTENDED, 1);
             put("owner_id", userId);
             put("post_id", postId);
+            put("need_likes", 1);
 
         }})
         .executeWithListener(new VKRequest.VKRequestListener() {

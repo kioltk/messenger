@@ -69,9 +69,8 @@ public class CommentHolder extends BaseViewHolder {
             }
         });
 
-        likesCountView.setText("" + comment.likes);
-
         if(comment.likes != 0) {
+                likesCountView.setText("" + comment.likes);
                 likesCountView.setTextColor(getContext().getResources().getColor(R.color.post_item_blue));
                 likeView.setTint(getContext().getResources().getColor(R.color.post_item_blue));
         } else {
