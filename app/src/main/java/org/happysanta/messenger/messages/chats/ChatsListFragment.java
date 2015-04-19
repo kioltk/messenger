@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,8 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseFragment;
+import org.happysanta.messenger.core.BaseViewHolder;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.messages.ChatActivity;
@@ -32,33 +36,34 @@ import org.happysanta.messenger.messages.ChatActivity;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ChatsListFragment extends Fragment {
+public class ChatsListFragment extends BaseFragment {
     private View rootView;
     private VKList<VKApiDialog> dialogs;
     private TextView status;
+    private RecyclerView recycler;
+    private LinearLayoutManager recyclerLayoutManager;
+    private ConversationsAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_chats_list, container, false);
-        final GridView list = (GridView) rootView.findViewById(R.id.grid);
         status = (TextView) rootView.findViewById(R.id.status);
+        recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                VKApiDialog dialog = dialogs.get(position);
-                Intent intent = ChatActivity.openChat(getActivity(), dialog);
-                startActivity(intent);
-            }
-        });
+        recyclerLayoutManager = new LinearLayoutManager(activity);
+        recycler.setLayoutManager(recyclerLayoutManager);
+        recycler.setHasFixedSize(false);
+
 
         new VKApiMessages().getChats().executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                VKList<VKApiDialog> dialogs = (VKList<VKApiDialog>) response.parsedModel;
+                dialogs = (VKList<VKApiDialog>) response.parsedModel;
                 ChatsListFragment.this.dialogs = dialogs;
-                list.setAdapter(new ConversationsAdapter());
+                adapter = new ConversationsAdapter();
+                adapter.setHasStableIds(true);
+                recycler.setAdapter(adapter);
                 status.setVisibility(View.GONE);
             }
 
@@ -71,60 +76,79 @@ public class ChatsListFragment extends Fragment {
         return rootView;
     }
 
-
-    private class ConversationsAdapter extends BaseAdapter {
+    private class ConversationsAdapter extends RecyclerView.Adapter<ChatsHolder> {
         @Override
-        public int getCount() {
-            return dialogs.size();
+        public ChatsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ChatsHolder(View.inflate(activity,R.layout.item_chat, null));
         }
 
         @Override
-        public VKApiDialog getItem(int position) {
-            return dialogs.get(position);
+        public void onBindViewHolder(ChatsHolder holder, int position) {
+            holder.bind(0, dialogs.get(position));
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            VKApiDialog dialog = dialogs.get(position);
+            return dialog.getId();
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View dialogView = getActivity().getLayoutInflater().inflate(R.layout.item_chat, null);
-            TextView titleView = (TextView) dialogView.findViewById(R.id.title);
-            TextView bodyView = (TextView) dialogView.findViewById(R.id.body);
-            final ImageView photoView = (ImageView) dialogView.findViewById(R.id.chat_photo);
-            VKApiDialog dialog = getItem(position);
+        public int getItemCount() {
+            return dialogs.size();
+        }
+    }
 
+    private class ChatsHolder extends BaseViewHolder {
+        private View btnDialog;
+        private TextView titleView;
+        private TextView bodyView;
+        private final ImageView photoView;
 
-            titleView.setText(dialog.getTitle());
-            bodyView.setText(dialog.usersCount+ " в чате");
-            photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
-            // todo group placeholder
-            ImageUtil.showFromCache(dialog.getPhoto(), new ImageLoadingListener() {
+        public ChatsHolder(View itemView) {
+            super(itemView);
+            btnDialog = itemView.findViewById(R.id.btn_chat);
+            titleView = (TextView) itemView.findViewById(R.id.title);
+            bodyView = (TextView) itemView.findViewById(R.id.body);
+            photoView = (ImageView) itemView.findViewById(R.id.chat_photo);
+        }
+        public void bind(final int position, final VKApiDialog dialog){
+            btnDialog.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onLoadingStarted(String imageUri, View view) {
-
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
+                public void onClick(View view) {
+                    dialogs.get(position);
+                    startActivity(ChatActivity.getActivityIntent(getActivity(), dialog));
                 }
             });
-            ImageLoader.getInstance().displayImage(dialog.getPhoto(), photoView);
+            titleView.setText(dialog.getTitle());
+            bodyView.setText(dialog.usersCount+ " в чате");
+            if(dialog.getPhoto().equals(null)){
+                photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
+            }else {
+                // todo group placeholder
+                ImageUtil.showFromCache(dialog.getPhoto(), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
 
-            return dialogView;
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                    }
+                });
+                ImageLoader.getInstance().displayImage(dialog.getPhoto(), photoView);
+            }
         }
     }
 }

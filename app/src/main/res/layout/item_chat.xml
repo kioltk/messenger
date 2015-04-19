@@ -1,41 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="4dp"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardUseCompatPadding="true"
-        android:padding="8dp"
-        card_view:contentPadding="8dp"
-        card_view:cardBackgroundColor="#fff"
-        android:layout_centerInParent="true"
-        android:layout_margin="4dp"
-        android:layout_width="150dp"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/chat_photo"
-                android:layout_margin="10dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/user_placeholder"
-                android:layout_width="70dp"
-                android:layout_height="70dp" />
-            <TextView
-                android:id="@+id/title"
-                android:layout_marginTop="6dp"
-                android:layout_below="@+id/chat_photo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/body"
-                android:layout_below="@+id/title"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+<RelativeLayout
+    android:id="@+id/btn_chat"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/white">
+    <ImageView
+        android:id="@+id/chat_photo"
+        android:padding="5dp"
+        android:src="@drawable/user_placeholder"
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:text="dialog title"
+        android:textSize="16sp"
+        android:textColor="#333"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginTop="19dp"
+        android:layout_toRightOf="@+id/chat_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/body"
+        android:text="dialog body"
+        android:textColor="#777"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_below="@+id/title"
+        android:layout_toRightOf="@+id/chat_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/typing"
+        android:text="Typing..."
+        android:alpha="0"
+        android:textColor="#777"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_below="@+id/title"
+        android:layout_toRightOf="@+id/chat_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignParentBottom="true"
+        android:background="#dadada"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 </RelativeLayout>
