@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -16,10 +17,10 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiWall;
+import com.vk.sdk.api.model.VKApiModel;
 import com.vk.sdk.api.model.VKApiPost;
-import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKCommentArray;
-import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKPostArray;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
@@ -28,7 +29,7 @@ import org.happysanta.messenger.core.BaseActivity;
  * Created by admin on 16.04.2015.
  */
 public class PostActivity extends BaseActivity {
-    int userId;
+    int ownerId;
     int postId;
 
     private String subtitle;
@@ -37,6 +38,7 @@ public class PostActivity extends BaseActivity {
     private CommentedPostAdapter adapter;
     private VKApiPost currentPost;
     private VKCommentArray postComments;
+    private VKApiModel postOwner;
 
 
     @Override
@@ -73,16 +75,21 @@ public class PostActivity extends BaseActivity {
         adapter = new CommentedPostAdapter();
         recycler.setAdapter(adapter);
 
-        userId = getIntent().getIntExtra(EXTRA_USERID, 0);
+        ownerId = getIntent().getIntExtra(EXTRA_USERID, 0);
         postId = getIntent().getIntExtra(EXTRA_POSTID, 0);
+        Log.d("PostActivity",ownerId + " "+ postId);
         new VKApiWall().getById(new VKParameters(){{
             put(VKApiWall.EXTENDED, 1);
-            put("posts", userId+"_"+postId);
+            put("posts", ownerId +"_"+postId);
         }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                VKList<VKApiPost> postList = (VKList<VKApiPost>) response.parsedModel;
+                VKPostArray postList = (VKPostArray) response.parsedModel;
                 currentPost = postList.get(0);
+                if(currentPost.from_id>0)
+                postOwner = postList.usersOwners.get(0);
+                else
+                postOwner = postList.groupsOwners.get(0);
                 // когда загрузили пост, то говорим адаптеру, что у нас появился первый итем
                 adapter.notifyItemInserted(0);
 
@@ -96,7 +103,7 @@ public class PostActivity extends BaseActivity {
         // настраиваем запрос
         new VKApiWall().getComments(new VKParameters(){{
             put(VKApiWall.EXTENDED, 1);
-            put("owner_id", userId);
+            put("owner_id", ownerId);
             put("post_id", postId);
             put("need_likes", 1);
 
@@ -117,8 +124,8 @@ public class PostActivity extends BaseActivity {
         });
     }
     // надо сделать страницу юзера по такому же принципу, только первый холдер - юзер, остальные - посты
-    public static Intent openPost(Context context,int userid, int postid){
-        return new Intent(context, PostActivity.class).putExtra(EXTRA_USERID, userid).putExtra(EXTRA_POSTID, postid);
+    public static Intent openPost(Context context,int ownerId, int postid){
+        return new Intent(context, PostActivity.class).putExtra(EXTRA_USERID, ownerId).putExtra(EXTRA_POSTID, postid);
     }
 
 
@@ -154,7 +161,10 @@ public class PostActivity extends BaseActivity {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             // и заносит данные поста в холдер
             if(holder instanceof PostHolder){
-                ((PostHolder)holder).bind(0, currentPost, new VKApiUserFull(){{ id = currentPost.from_id; }});
+                PostHolder postHolder = ((PostHolder) holder);
+                postHolder.bind(0, currentPost);
+                postHolder.bindOwner(postOwner);
+
             } else if(holder instanceof CommentHolder){
                 // и заносятся данные этих коментаривев в холдеры
                 ((CommentHolder)holder).bind(postComments.get(position-1));// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0

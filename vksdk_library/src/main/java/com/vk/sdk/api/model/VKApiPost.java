@@ -166,6 +166,12 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         id = source.optInt("id");
         to_id = source.optInt("to_id");
         from_id = source.optInt("from_id");
+
+        if(id==0){
+            id = source.optInt("post_id");
+            from_id = source.optInt("source_id");
+        }
+
         date = source.optLong("date");
         text = source.optString("text");
         reply_owner_id = source.optInt("reply_owner_id");

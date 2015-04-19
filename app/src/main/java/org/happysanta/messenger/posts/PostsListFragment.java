@@ -1,6 +1,7 @@
 package org.happysanta.messenger.posts;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiFeed;
 import com.vk.sdk.api.methods.VKApiWall;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKList;
@@ -23,6 +25,12 @@ import org.happysanta.messenger.core.BaseFragment;
  */
 public class PostsListFragment extends BaseFragment {
 
+    private static final String ARG_LIST_TYPE = "list_type";
+    private static final int LIST_TYPE_NEWS = 0;
+    private static final int LIST_TYPE_SUGGESTED = 1;
+    private static final int LIST_TYPE_FRIENDS = 2;
+    private static final int LIST_TYPE_COMMUNITIES = 3;
+    private static final int LIST_TYPE_PHOTOS = 4;
     // core
     private VKList<VKApiPost> newsList = new VKList<>();
 
@@ -40,7 +48,18 @@ public class PostsListFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        new VKApiWall().get(new VKParameters(){{ put(VKApiWall.EXTENDED,1); }}).executeWithListener(new VKRequest.VKRequestListener() {
+        VKRequest request = new VKApiWall().get(new VKParameters() {{
+            put(VKApiWall.EXTENDED, 1);
+        }});
+        switch (getArguments().getInt(ARG_LIST_TYPE)) {
+            case LIST_TYPE_NEWS:
+                request = new VKApiFeed().get(new VKParameters() {{
+                    put(VKApiWall.EXTENDED, 1);
+                }});
+                break;
+        }
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 postsAdapter = new PostsAdapter(getActivity(), (VKPostArray) response.parsedModel);
@@ -50,5 +69,42 @@ public class PostsListFragment extends BaseFragment {
 
 
         return rootView;
+    }
+
+    public static Fragment getNewsInstance() {
+        PostsListFragment fragment = new PostsListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_NEWS);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static Fragment getSuggestedInstance() {
+        PostsListFragment fragment = new PostsListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_SUGGESTED);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public static Fragment getFriendsInstance() {
+        PostsListFragment fragment = new PostsListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_FRIENDS);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public static Fragment getCommunitiesInstance() {
+        PostsListFragment fragment = new PostsListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_COMMUNITIES);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public static Fragment getPhotosInstance() {
+        PostsListFragment fragment = new PostsListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_PHOTOS);
+        fragment.setArguments(args);
+        return fragment;
     }
 }

@@ -32,6 +32,11 @@ import org.json.JSONObject;
  * Created by alex_xpert on 29.01.14.
  */
 public class VKPostArray extends VKList<VKApiPost> {
+
+    public VKList<VKApiUserFull> usersOwners;
+    public VKList<VKApiCommunity> groupsOwners;
+
+
     @Override
     public VKApiModel parse(JSONObject response) throws JSONException {
 
@@ -39,11 +44,16 @@ public class VKPostArray extends VKList<VKApiPost> {
         if(response.getJSONObject("response").has("profiles")){
             Log.d("vksdk", "postarray has a profiles");
             JSONArray ownersObj = response.getJSONObject("response").getJSONArray("profiles");
-            owners = new VKList<VKApiUserFull>(ownersObj, VKApiUserFull.class);
+            usersOwners = new VKList<VKApiUserFull>(ownersObj, VKApiUserFull.class);
         }
+        if(response.getJSONObject("response").has("groups")){
+            Log.d("vksdk", "postarray has a groups");
+            JSONArray ownersObj = response.getJSONObject("response").getJSONArray("groups");
+            groupsOwners = new VKList<VKApiCommunity>(ownersObj, VKApiCommunity.class);
+        }
+
         return this;
     }
 
-    public VKList<VKApiUserFull> owners;
 
 }

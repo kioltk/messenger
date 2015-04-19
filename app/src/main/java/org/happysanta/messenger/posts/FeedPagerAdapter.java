@@ -14,8 +14,24 @@ public class FeedPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment item = new PostsListFragment();
-
+        Fragment item = null;
+        switch (position) {
+            case 0:
+                item = PostsListFragment.getNewsInstance();
+                break;
+            case 1:
+                item = PostsListFragment.getSuggestedInstance();
+                break;
+            case 2:
+                item = PostsListFragment.getFriendsInstance();
+                break;
+            case 3:
+                item = PostsListFragment.getCommunitiesInstance();
+                break;
+            case 4:
+                item = PostsListFragment.getPhotosInstance();
+                break;
+        }
         return item;
     }
 

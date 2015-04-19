@@ -199,6 +199,10 @@ public class VKApiCommunity extends VKApiOwner implements android.os.Parcelable,
         }
     };
 
+    public String getPhoto() {
+        return photo_200 != null ? photo_200 : photo_100 != null ? photo_100 : photo_50 != null ? photo_50 : null;
+    }
+
     /**
      * Access level to manage community.
      */

@@ -35,7 +35,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostHolder> {
     @Override
     public void onBindViewHolder(PostHolder holder, int position) {
         VKApiPost post = postsList.get(position);
-        holder.bind(position, post, postsList.owners.getById(post.from_id));
+        holder.bind(position, post);
+        if(post.from_id>0){
+            holder.bindOwner(postsList.usersOwners.getById(post.from_id));
+        } else {
+            holder.bindOwner(postsList.groupsOwners.getById(-post.from_id));
+        }
     }
 
     @Override

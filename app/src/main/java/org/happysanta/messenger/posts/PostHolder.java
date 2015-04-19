@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.model.VKApiCommunity;
+import com.vk.sdk.api.model.VKApiModel;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiPost.VKApiPostSourceData;
@@ -77,39 +79,7 @@ public class PostHolder extends BaseViewHolder {
         likeButton = itemView.findViewById(R.id.btn_like);
     }
 
-    public void bind(final int position, final VKApiPost post, final VKApiUserFull owner) {
-
-        // сначала заполняем всю информацию о пользователе
-        photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
-        photoView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getContext().startActivity(ProfileActivity.openProfile(getContext(), owner.id));
-            }
-        });
-        ImageLoader.getInstance().loadImage(owner.getPhoto(), new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                if(loadedImage!=null)
-                    photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
-        nameView.setText(owner.toString());
+    public void bind(final int position, final VKApiPost post) {
 
         // потом платформу
         if (post.sourcePlatform !=null) {
@@ -253,7 +223,79 @@ public class PostHolder extends BaseViewHolder {
         popupMenu.show();
     }
 
-    public void bindOwner(VKApiUserFull owner) {
+    public void bindOwner(final VKApiUserFull owner) {
+        // сначала заполняем всю информацию о пользователе
+        photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getContext().startActivity(ProfileActivity.openProfile(getContext(), owner.id));
+            }
+        });
+        ImageLoader.getInstance().loadImage(owner.getPhoto(), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
 
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if(loadedImage!=null)
+                    photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+        nameView.setText(owner.toString());
+    }
+    public void bindOwner(final VKApiCommunity community) {
+        // сначала заполняем всю информацию о пользователе
+        photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getContext().startActivity(ProfileActivity.openProfile(getContext(), community.id));
+            }
+        });
+        ImageLoader.getInstance().loadImage(community.getPhoto(), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if(loadedImage!=null)
+                    photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+        nameView.setText(community.toString());
+    }
+
+    public void bindOwner(VKApiModel owner) {
+        if (owner instanceof VKApiUserFull) {
+            bindOwner((VKApiUserFull) owner);
+        } else {
+            if (owner instanceof VKApiCommunity)
+                bindOwner((VKApiCommunity) owner);
+        }
     }
 }

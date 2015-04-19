@@ -165,7 +165,7 @@ public class ProfileActivity extends BaseActivity {
                 // и заносятся данные этих коментаривев в холдеры
                 VKApiPost post = userPosts.get(position - 1);
                 PostHolder postHolder = (PostHolder) holder;
-                postHolder.bind((position - 1), post,userPosts.owners.getById(post.from_id));// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
+                postHolder.bind((position - 1), post);// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
             }
         }
         // работает? нету постов
