@@ -33,7 +33,6 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.core.util.TimeUtils;
 import org.happysanta.messenger.core.views.SuperViewHolder;
-import org.happysanta.messenger.friends.adapter.FriendsAdapter;
 import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
@@ -361,7 +360,7 @@ public class ConversationsListFragment extends BaseFragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
+                        Intent intent = ChatActivity.openChat(getActivity(), dialog);
                         startActivity(intent);
                     }
                 });

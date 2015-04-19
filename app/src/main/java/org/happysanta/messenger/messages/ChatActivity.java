@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.model.VKApiDialog;
+import com.vk.sdk.api.model.VKApiUser;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
@@ -116,15 +119,27 @@ public class ChatActivity extends BaseActivity {
         conversationFragment.startActivityForResult(intent, requestCode);
     }
 
-    public static Intent getActivityIntent(Context context, VKApiDialog dialog) {
+    public static Intent openChat(Context context, VKApiDialog dialog) {
         Intent intent = new Intent(context, ChatActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_DIALOGID, dialog.getId());
         bundle.putBoolean(ARG_ISCHAT, dialog.isChat());
         bundle.putString(ARG_TITLE, dialog.getTitle());
-        bundle.putString(ARG_SUBTITLE, dialog.getSubtitle());
+        //bundle.putString(ARG_SUBTITLE, "offline");
         bundle.putString(ARG_LOGO, dialog.photo_200);
         bundle.putSparseParcelableArray(ARG_CHAT_PARTICIPANTS, dialog.getParticipants());
+        intent.putExtras(bundle);
+        return intent;
+    }
+    public static Intent openChat(Context context, final VKApiUser user){
+        Intent intent = new Intent(context, ChatActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_DIALOGID, user.id);
+        bundle.putBoolean(ARG_ISCHAT, false);
+        bundle.putString(ARG_TITLE, user.toString());
+        //bundle.putString(ARG_SUBTITLE, "offline");
+        bundle.putString(ARG_LOGO, user.photo_200);
+        bundle.putSparseParcelableArray(ARG_CHAT_PARTICIPANTS, new SparseArray<Parcelable>(){{ put(user.id, user);}});
         intent.putExtras(bundle);
         return intent;
     }

@@ -48,7 +48,7 @@ public class ChatsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 VKApiDialog dialog = dialogs.get(position);
-                Intent intent = ChatActivity.getActivityIntent(getActivity(), dialog);
+                Intent intent = ChatActivity.openChat(getActivity(), dialog);
                 startActivity(intent);
             }
         });
