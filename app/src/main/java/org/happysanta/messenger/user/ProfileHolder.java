@@ -15,6 +15,7 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseViewHolder;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.ImageUtil;
+import org.happysanta.messenger.messages.ChatActivity;
 
 /**
  * Created by admin on 18.04.2015.
@@ -26,6 +27,7 @@ public class ProfileHolder extends BaseViewHolder {
     private ImageView photoView;
     private TextView cityView;
     private TextView statusView;
+    private final View messageButton;
 
     // вторая карточка
     private View friendCardView;
@@ -63,6 +65,9 @@ public class ProfileHolder extends BaseViewHolder {
 
         photosCountView = (TextView) findViewById(R.id.photos_counter);
         btnPhoto = findViewById(R.id.btn_photos);
+
+        messageButton = findViewById(R.id.button_message);
+
     }
 
 
@@ -75,6 +80,17 @@ public class ProfileHolder extends BaseViewHolder {
         setCity(user.city);
         findViewById(R.id.loading).setVisibility(View.GONE);
         findViewById(R.id.content_holder).setVisibility(View.VISIBLE);
+        if (user.can_write_private_message) {
+            messageButton.setVisibility(View.VISIBLE);
+            messageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getContext().startActivity(ChatActivity.openChat(getContext(), user));
+                }
+            });
+        } else{
+            messageButton.setVisibility(View.GONE);
+        }
     }
 
     private void setCity(VKApiCity city) {

@@ -535,7 +535,7 @@ public class VKApiUserFull extends VKApiUser implements android.os.Parcelable {
     }
 
     public String getPhoto() {
-        return photo_200;
+        return photo_200 != null ? photo_200 : photo_100 != null ? photo_100 : photo_50 != null ? photo_50 : null;
     }
 
     public static class Relative extends VKApiModel implements android.os.Parcelable, Identifiable {

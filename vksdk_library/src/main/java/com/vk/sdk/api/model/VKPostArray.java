@@ -21,6 +21,9 @@
 
 package com.vk.sdk.api.model;
 
+import android.util.Log;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +34,16 @@ import org.json.JSONObject;
 public class VKPostArray extends VKList<VKApiPost> {
     @Override
     public VKApiModel parse(JSONObject response) throws JSONException {
+
         fill(response, VKApiPost.class);
+        if(response.getJSONObject("response").has("profiles")){
+            Log.d("vksdk", "postarray has a profiles");
+            JSONArray ownersObj = response.getJSONObject("response").getJSONArray("profiles");
+            owners = new VKList<VKApiUserFull>(ownersObj, VKApiUserFull.class);
+        }
         return this;
     }
+
+    public VKList<VKApiUserFull> owners;
+
 }

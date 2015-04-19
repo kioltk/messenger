@@ -16,6 +16,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiUsers;
 import com.vk.sdk.api.methods.VKApiWall;
+import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKPostArray;
@@ -75,7 +76,7 @@ public class ProfileActivity extends BaseActivity {
         // потом мы загружаем юзера
         new VKApiUsers().get(new VKParameters() {{
             put("user_ids", userId);
-            put("fields", "photo_200,city,activity,last_seen,counters,bdate");
+            put("fields", "photo_200,city,activity,last_seen,counters,bdate,can_write_private_message");
         }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -162,7 +163,9 @@ public class ProfileActivity extends BaseActivity {
                 ((ProfileHolder) holder).bind(0, currentUser);
             } else if (holder instanceof PostHolder) {
                 // и заносятся данные этих коментаривев в холдеры
-                ((PostHolder) holder).bind((position - 1), userPosts.get(position-1));// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
+                VKApiPost post = userPosts.get(position - 1);
+                PostHolder postHolder = (PostHolder) holder;
+                postHolder.bind((position - 1), post,userPosts.owners.getById(post.from_id));// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
             }
         }
         // работает? нету постов

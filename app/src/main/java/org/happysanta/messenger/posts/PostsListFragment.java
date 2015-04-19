@@ -13,6 +13,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiWall;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKPostArray;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
@@ -42,7 +43,7 @@ public class PostsListFragment extends BaseFragment {
         new VKApiWall().get(new VKParameters(){{ put(VKApiWall.EXTENDED,1); }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                postsAdapter = new PostsAdapter(getActivity(), (VKList<VKApiPost>) response.parsedModel);
+                postsAdapter = new PostsAdapter(getActivity(), (VKPostArray) response.parsedModel);
                 recyclerView.setAdapter(postsAdapter);
             }
         });

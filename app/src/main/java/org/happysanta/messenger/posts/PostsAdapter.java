@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.vk.sdk.api.model.VKApiPost;
-import com.vk.sdk.api.model.VKList;
+import com.vk.sdk.api.model.VKPostArray;
 
 import org.happysanta.messenger.R;
 
@@ -15,12 +15,12 @@ import org.happysanta.messenger.R;
  */
 public class PostsAdapter extends RecyclerView.Adapter<PostHolder> {
     private final Activity activity;
-    private VKList<VKApiPost> postsList;
+    private VKPostArray postsList;
 
 
 
 
-    public PostsAdapter(Activity activity, VKList<VKApiPost> postsList) {
+    public PostsAdapter(Activity activity, VKPostArray postsList) {
         this.activity = activity;
         this.postsList = postsList;
     }
@@ -34,7 +34,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostHolder> {
 
     @Override
     public void onBindViewHolder(PostHolder holder, int position) {
-        holder.bind(position, getItem(position));
+        VKApiPost post = postsList.get(position);
+        holder.bind(position, post, postsList.owners.getById(post.from_id));
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiPost.VKApiPostSourceData;
 import com.vk.sdk.api.model.VKApiPost.VKApiPostSourcePlatform;
+import com.vk.sdk.api.model.VKApiUserFull;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseViewHolder;
@@ -76,17 +77,39 @@ public class PostHolder extends BaseViewHolder {
         likeButton = itemView.findViewById(R.id.btn_like);
     }
 
-    public void bind(final int position, final VKApiPost post) {
+    public void bind(final int position, final VKApiPost post, final VKApiUserFull owner) {
 
         // сначала заполняем всю информацию о пользователе
         photoView.setImageBitmap(BitmapUtil.circle(R.drawable.user_placeholder));
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getContext().startActivity(ProfileActivity.openProfile(getContext(), post.from_id));
+                getContext().startActivity(ProfileActivity.openProfile(getContext(), owner.id));
             }
         });
-        nameView.setText("" + post.from_id);
+        ImageLoader.getInstance().loadImage(owner.getPhoto(), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if(loadedImage!=null)
+                    photoView.setImageBitmap(BitmapUtil.circle(loadedImage));
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+        nameView.setText(owner.toString());
 
         // потом платформу
         if (post.sourcePlatform !=null) {
@@ -230,4 +253,7 @@ public class PostHolder extends BaseViewHolder {
         popupMenu.show();
     }
 
+    public void bindOwner(VKApiUserFull owner) {
+
+    }
 }

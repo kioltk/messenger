@@ -15,9 +15,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.methods.VKApiUsers;
 import com.vk.sdk.api.methods.VKApiWall;
-import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKCommentArray;
@@ -156,7 +154,7 @@ public class PostActivity extends BaseActivity {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             // и заносит данные поста в холдер
             if(holder instanceof PostHolder){
-                ((PostHolder)holder).bind(0, currentPost);
+                ((PostHolder)holder).bind(0, currentPost, new VKApiUserFull(){{ id = currentPost.from_id; }});
             } else if(holder instanceof CommentHolder){
                 // и заносятся данные этих коментаривев в холдеры
                 ((CommentHolder)holder).bind(postComments.get(position-1));// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
