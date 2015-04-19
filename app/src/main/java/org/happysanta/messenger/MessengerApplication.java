@@ -29,15 +29,16 @@ public class MessengerApplication extends Application implements VKSdkListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        VKSdk.initialize(this, "4486133");
 
+        if(BuildConfig.DEBUG) {
+            Mint.initAndStartSession(this, "ce6606ab");
+            VKSdk.initialize(this, "4883406");
+        } else {
+            Mint.initAndStartSession(this, "8205f1a9");
+            VKSdk.initialize(this, "4486133");
+        }
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         analytics.newTracker(R.xml.global_tracker);
-        if(!BuildConfig.DEBUG) {
-            Mint.initAndStartSession(this, "8205f1a9");
-        } else {
-            Mint.initAndStartSession(this, "ce6606ab");
-        }
         ImageLoaderConfiguration imageLoaderConfig= new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.MAX_PRIORITY)
                 .memoryCache(new LruMemoryCache(5 * 1024 * 1024))
