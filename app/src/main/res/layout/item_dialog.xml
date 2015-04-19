@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="80dp"
     >
-    <ImageView
-        android:id="@+id/dialog_photo"
-        android:padding="5dp"
-        android:src="@drawable/user_placeholder"
-        android:layout_width="80dp"
-        android:layout_height="80dp" />
-    <ImageView
-        android:id="@+id/online"
-        android:src="@drawable/ic_vk"
-        android:background="@drawable/online_indicator"
-        android:layout_alignBottom="@+id/dialog_photo"
-        android:layout_alignRight="@+id/dialog_photo"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="7dp"
-        android:padding="2dp"
-        android:layout_width="@dimen/online_size"
-        android:layout_height="@dimen/online_size" />
-    <TextView
-        android:id="@+id/title"
-        android:text="dialog title"
-        android:textSize="16sp"
-        android:textColor="#333"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:layout_marginTop="19dp"
-        android:layout_toRightOf="@+id/dialog_photo"
-        android:layout_toLeftOf="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/body"
-        android:text="dialog body"
-        android:textColor="#777"
-        android:textSize="14sp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:layout_below="@+id/title"
-        android:layout_toRightOf="@+id/dialog_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/typing"
-        android:text="Typing..."
-        android:alpha="0"
-        android:textColor="#777"
-        android:textSize="14sp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:layout_below="@+id/title"
-        android:layout_toRightOf="@+id/dialog_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/date"
-        android:textColor="#777"
-        android:layout_alignParentRight="true"
-        android:layout_alignBaseline="@+id/title"
-        android:text="date"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="6dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <View
-        android:layout_alignLeft="@+id/title"
-        android:layout_alignRight="@+id/date"
-        android:layout_alignParentBottom="true"
-        android:background="#dadada"
-        android:layout_width="match_parent"
-        android:layout_height="1px"/>
+<ImageView
+    android:id="@+id/dialog_photo"
+    android:padding="5dp"
+    android:src="@drawable/user_placeholder"
+    android:layout_width="80dp"
+    android:layout_height="80dp" />
+<ImageView
+    android:id="@+id/online"
+    android:src="@drawable/ic_vk"
+    android:background="@drawable/online_indicator"
+    android:layout_alignBottom="@+id/dialog_photo"
+    android:layout_alignRight="@+id/dialog_photo"
+    android:layout_marginRight="7dp"
+    android:layout_marginBottom="7dp"
+    android:padding="2dp"
+    android:layout_width="@dimen/online_size"
+    android:layout_height="@dimen/online_size" />
+<TextView
+    android:id="@+id/title"
+    android:text="dialog title"
+    android:textSize="16sp"
+    android:textColor="#333"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:layout_marginTop="19dp"
+    android:layout_toRightOf="@+id/dialog_photo"
+    android:layout_toLeftOf="@+id/date"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+<TextView
+    android:id="@+id/body"
+    android:text="dialog body"
+    android:textColor="#777"
+    android:textSize="14sp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:layout_below="@+id/title"
+    android:layout_toRightOf="@+id/dialog_photo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+<TextView
+    android:id="@+id/typing"
+    android:text="Typing..."
+    android:alpha="0"
+    android:textColor="#777"
+    android:textSize="14sp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:layout_below="@+id/title"
+    android:layout_toRightOf="@+id/dialog_photo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+<TextView
+    android:id="@+id/date"
+    android:textColor="#777"
+    android:layout_alignParentRight="true"
+    android:layout_alignBaseline="@+id/title"
+    android:text="date"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="6dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+<View
+    android:layout_alignLeft="@+id/title"
+    android:layout_alignRight="@+id/date"
+    android:layout_alignParentBottom="true"
+    android:background="#dadada"
+    android:layout_width="match_parent"
+    android:layout_height="1px"/>
 </RelativeLayout>
