@@ -44,6 +44,9 @@ class VKApiBase {
         }
         mMethodGroup = className.substring("VKApi".length()).toLowerCase();
     }
+    protected VKApiBase(String mMethodGroup){
+        this.mMethodGroup = mMethodGroup;
+    }
 
     VKRequest prepareRequest(String methodName, VKParameters methodParameters) {
         return prepareRequest(methodName, methodParameters, VKRequest.HttpMethod.GET);
