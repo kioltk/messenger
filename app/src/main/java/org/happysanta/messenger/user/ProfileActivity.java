@@ -35,7 +35,6 @@ public class ProfileActivity extends BaseActivity {
     private ProfilePostsAdapter adapter;
     private VKApiUserFull currentUser;
     private VKPostArray userPosts;
-    // Остальное все ок? Толко вместо поста брать список постов?
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,33 +85,12 @@ public class ProfileActivity extends BaseActivity {
                 adapter.notifyItemInserted(0);
 
                 fetchPosts();
-                // давай вот отсюда начинай, только причеши там комментарии, чтобы красивенько было и... и коммит
-                // удачки) я уже на странице юзера. перезайди на не\
-                // потом этого юзера заносим по вьюшкам
-                // лучше все же не забивать все в одном OnCreate потому что сложно будет читать, так получается более мене читаемо
-
-                //showUser(currentUser);
             }
         });
-        /*
-        pagerView = (ViewPager) findViewById(R.id.pager);
-        feedAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return new NewsListFragment();
-            }
 
-            @Override
-            public int getCount() {
-                return 2;
-            }
-        };
-        pagerView.setAdapter(feedAdapter);
-        */
     }
 
     private void fetchPosts() {
-        // не, getById  возвращает посты по айдишникам. В посты не грузятся данные
         new VKApiWall().get(new VKParameters() {{
             put(VKApiWall.EXTENDED, 1);
             put("owner_id", userId);
@@ -168,7 +146,6 @@ public class ProfileActivity extends BaseActivity {
                 postHolder.bind((position - 1), post);// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
             }
         }
-        // работает? нету постов
 
         @Override
         public int getItemCount() {
