@@ -75,17 +75,17 @@ public class TimeUtils {
 
     }
 
-    //Нужно исправить на 0:00
-    public static String formatDuration(int number){
+    public static String formatDuration(int duration){
 
-        if (number == 0) {
-            return "00";
-        }
+        int seconds = duration%60;
+        int minutes = (duration%3600);
+        int hours = duration/3600;
 
-        if (number / 10 == 0) {
-            return "0" + number;
-        }
+        String formattedSeconds =seconds<9?"0":""+seconds;
+        String formattedMinutes =minutes<9?"0":""+minutes;
+        String formattedHours =hours<9?"0":""+hours;
 
-        return String.valueOf(number);
+        String formattedDuration = (hours > 0 ? formattedHours + ":" : "") + formattedMinutes + ":" + formattedSeconds;
+        return formattedDuration;
     }
 }
