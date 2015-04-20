@@ -2,14 +2,12 @@ package org.happysanta.messenger.audio;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +22,7 @@ import com.vk.sdk.api.model.VKList;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.core.BaseViewHolder;
+import org.happysanta.messenger.core.util.TimeUtils;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -85,12 +84,14 @@ public class AudiosListFragment extends BaseFragment {
         private ImageView playView;
         private TextView titleView;
         private TextView subtitleView;
+        private final TextView durationView;
 
         public AudiosHolder(View itemView) {
             super(itemView);
             playView = (ImageView) findViewById(R.id.play);
             titleView = (TextView) findViewById(R.id.title);
             subtitleView = (TextView) findViewById(R.id.subtitle);
+            durationView = (TextView) findViewById(R.id.duration);
         }
         public void bind(final int position, VKApiAudio audio){
             playView.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +102,7 @@ public class AudiosListFragment extends BaseFragment {
             });
             titleView.setText(audio.title);
             subtitleView.setText(audio.artist);
+            durationView.setText(TimeUtils.formatDuration(audio.duration));
         }
     }
 }
