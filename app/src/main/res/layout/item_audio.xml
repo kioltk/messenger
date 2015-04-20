@@ -12,10 +12,11 @@
         android:layout_width="60dp"
         android:layout_height="60dp" />
     <LinearLayout
+        android:id="@+id/title_layout"
         android:layout_toRightOf="@+id/play"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="70dp">
         <TextView
             android:id="@+id/title"
@@ -23,12 +24,31 @@
             android:text="@string/audio_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="false" />
+            android:singleLine="true" />
         <TextView
             android:id="@+id/subtitle"
             android:text="@string/audio_subtitle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:singleLine="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/play"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2:46"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp" />
+
     </LinearLayout>
 
     <View
@@ -36,4 +56,5 @@
         android:background="#dadada"
         android:layout_width="match_parent"
         android:layout_height="1px"/>
+
 </RelativeLayout>
