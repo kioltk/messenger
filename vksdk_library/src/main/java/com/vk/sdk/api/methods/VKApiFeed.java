@@ -16,4 +16,8 @@ public class VKApiFeed extends VKApiBase {
     public VKRequest get(VKParameters params) {
         return prepareRequest("get", params, VKRequest.HttpMethod.GET, VKPostArray.class);
     }
+
+    public VKRequest getRecommended(VKParameters params) {
+        return prepareRequest("getRecommended", params, VKRequest.HttpMethod.GET, VKPostArray.class);
+    }
 }

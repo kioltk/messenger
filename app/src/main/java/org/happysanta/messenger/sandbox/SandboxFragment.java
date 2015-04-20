@@ -16,6 +16,9 @@ public class SandboxFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_sandbox, null);
+
+        
+
         return rootView;
     }
 }

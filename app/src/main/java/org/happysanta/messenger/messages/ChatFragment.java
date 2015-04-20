@@ -1,4 +1,4 @@
-package org.happysanta.messenger.messages.conversations;
+package org.happysanta.messenger.messages;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -42,11 +42,11 @@ import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
-import org.happysanta.messenger.messages.ChatActivity;
 import org.happysanta.messenger.messages.attach.AttachAdapter;
 import org.happysanta.messenger.messages.attach.AttachCountListener;
 import org.happysanta.messenger.messages.attach.AttachDialog;
 import org.happysanta.messenger.messages.attach.AttachRequestCode;
+import org.happysanta.messenger.messages.groupchats.GroupChatInfoActivity;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.ProfileActivity;
@@ -58,7 +58,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ConversationFragment extends BaseFragment {
+public class ChatFragment extends BaseFragment {
 
     // core
     private VKList<VKApiMessage> messages = new VKList<>();
@@ -89,7 +89,7 @@ public class ConversationFragment extends BaseFragment {
         }
     };
 
-    public ConversationFragment() {
+    public ChatFragment() {
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ConversationFragment extends BaseFragment {
         editMessageText.setText(dialogUtil.getBody());
         messagesRecycler.setHasFixedSize(false);
         messagesRecycler.setLayoutManager(new LinearLayoutManager(activity));
-        messagesAdapter = isChat ? new MessagesAdapter(activity, messages, participants) : new MessagesAdapter(activity, messages, participants, false);
+        messagesAdapter = new MessagesAdapter(activity, messages, participants, isChat);
         messagesRecycler.setAdapter(messagesAdapter);
         VKRequest request = isChat ? new VKApiMessages().getChatHistory(dialogId) : new VKApiMessages().getHistory(dialogId);
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -358,7 +358,7 @@ public class ConversationFragment extends BaseFragment {
             }
             break;
             case R.id.action_chat_participants: {
-                startActivity(DialogInfoActivity.openDialogInfo(getActivity(), dialogId));
+                startActivity(GroupChatInfoActivity.openDialogInfo(getActivity(), dialogId));
             }
             break;
         }
@@ -370,8 +370,8 @@ public class ConversationFragment extends BaseFragment {
         super.onConfigurationChanged(newConfig);
     }
 
-    public static ConversationFragment getInstance(Bundle extras) {
-        ConversationFragment fragment = new ConversationFragment();
+    public static ChatFragment getInstance(Bundle extras) {
+        ChatFragment fragment = new ChatFragment();
         fragment.setArguments(extras);
         return fragment;
     }

@@ -148,7 +148,7 @@ public class StartActivity extends ActionBarActivity {
     }
 
     private void start() {
-        VKSdk.authorize( new String[]{  VKScope.WALL, VKScope.STATUS, VKScope.STATS, VKScope.MESSAGES, VKScope.FRIENDS , VKScope.AUDIO, VKScope.VIDEO, VKScope.PHOTOS, VKScope.PAGES, VKScope.GROUPS }, false, true);
+        VKSdk.authorize( new String[]{  VKScope.WALL, VKScope.STATUS, VKScope.STATS, VKScope.MESSAGES, VKScope.FRIENDS , VKScope.AUDIO, VKScope.VIDEO, VKScope.PHOTOS, VKScope.PAGES, VKScope.GROUPS }, false, false);
     }
 
     @Override

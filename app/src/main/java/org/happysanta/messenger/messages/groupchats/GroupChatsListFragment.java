@@ -1,4 +1,4 @@
-package org.happysanta.messenger.messages.chats;
+package org.happysanta.messenger.messages.groupchats;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -31,7 +31,7 @@ import org.happysanta.messenger.messages.ChatActivity;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ChatsListFragment extends BaseFragment {
+public class GroupChatsListFragment extends BaseFragment {
     private View rootView;
     private VKList<VKApiDialog> dialogs;
     private TextView status;
@@ -55,7 +55,7 @@ public class ChatsListFragment extends BaseFragment {
             @Override
             public void onComplete(VKResponse response) {
                 dialogs = (VKList<VKApiDialog>) response.parsedModel;
-                ChatsListFragment.this.dialogs = dialogs;
+                GroupChatsListFragment.this.dialogs = dialogs;
                 adapter = new ConversationsAdapter();
                 adapter.setHasStableIds(true);
                 recycler.setAdapter(adapter);

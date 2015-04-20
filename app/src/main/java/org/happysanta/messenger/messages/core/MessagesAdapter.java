@@ -225,8 +225,18 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
 
     public void newMessages(ArrayList<LongpollNewMessage> newMessages) {
-        messages.addAll(newMessages);
-        notifyDataSetChanged();
+        ArrayList<LongpollNewMessage> filteredMessages = new ArrayList<>();
+        for (LongpollNewMessage newMessage: newMessages) {
+
+            if (!newMessage.out) {
+                messages.add(newMessage);// todo add sorted by time
+                notifyItemInserted(messages.indexOf(newMessage)+1);
+            } else{
+                messages.add(newMessage);// todo add by sending query
+                notifyItemInserted(messages.indexOf(newMessage)+1);
+            }
+            // update to full?
+        }
     }
 
     public void typing() {
@@ -245,21 +255,25 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         }, 5500);
     }
 
+    boolean sending = false;
     public void send(final VKApiMessage message) {
+        sending = true;
+        // sendingQuery.add(message);
         VKRequest request = new VKApiMessages().send(message);
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 message.id = (int) response.parsedModel;
-
+                sending = false;
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
+                sending = false;
             }
         });
-        messages.add(message);
-        notifyItemInserted(messages.size()-1);
+        /* messages.add(message);
+        notifyItemInserted(messages.size()); */
     }
 }

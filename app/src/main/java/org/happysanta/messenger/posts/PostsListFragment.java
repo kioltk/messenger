@@ -55,8 +55,22 @@ public class PostsListFragment extends BaseFragment {
             case LIST_TYPE_NEWS:
                 request = new VKApiFeed().get(new VKParameters() {{
                     put(VKApiWall.EXTENDED, 1);
+                    put("filters", "post");
                 }});
                 break;
+            /*case LIST_TYPE_FRIENDS:
+                request = new VKApiFeed().get(new VKParameters() {{
+                    put(VKApiWall.EXTENDED, 1);
+                    put("filters", "friends");
+                }});
+                break;*/
+            case LIST_TYPE_SUGGESTED:
+                request = new VKApiFeed().getRecommended(new VKParameters() {{
+                    put(VKApiWall.EXTENDED, 1);
+                    put("filters", "post");
+                }});
+                break;
+
         }
 
         request.executeWithListener(new VKRequest.VKRequestListener() {

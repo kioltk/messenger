@@ -1,4 +1,4 @@
-package org.happysanta.messenger.messages.conversations;
+package org.happysanta.messenger.messages.groupchats;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +28,7 @@ import org.happysanta.messenger.core.util.ImageUtil;
 /**
  * Created by admin on 13.04.2015.
  */
-public class DialogInfoActivity extends BaseActivity {
+public class GroupChatInfoActivity extends BaseActivity {
     int userId;
     int dialogId;
     private String subtitle;
@@ -67,7 +67,7 @@ public class DialogInfoActivity extends BaseActivity {
         dialogPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(DialogInfoActivity.this, "Edit photo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GroupChatInfoActivity.this, "Edit photo", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -152,6 +152,6 @@ public class DialogInfoActivity extends BaseActivity {
     }
 
     public static Intent openDialogInfo(Context context, int chatId){
-        return new Intent(context, DialogInfoActivity.class).putExtra(EXTRA_DIALOG_ID, chatId);
+        return new Intent(context, GroupChatInfoActivity.class).putExtra(EXTRA_DIALOG_ID, chatId);
     }
 }

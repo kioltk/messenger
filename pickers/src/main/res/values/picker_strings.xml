@@ -55,7 +55,7 @@
         <item quantity="two">%d minutes ago</item>
         <item quantity="few">%d minutes ago</item>
         <item quantity="many">%d minutes ago</item>
-        <item quantity="other">%d songs found.</item>
+        <item quantity="other">%d minutes ago.</item>
     </plurals>
 
 

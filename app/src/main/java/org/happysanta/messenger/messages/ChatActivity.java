@@ -24,7 +24,6 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
-import org.happysanta.messenger.messages.conversations.ConversationFragment;
 
 public class ChatActivity extends BaseActivity {
 
@@ -35,7 +34,7 @@ public class ChatActivity extends BaseActivity {
     public static final String ARG_SUBTITLE = "arg_subtitle";
     public static final String ARG_CHAT_PARTICIPANTS = "arg_chat_participants";
 
-    private ConversationFragment conversationFragment;
+    private ChatFragment chatFragment;
     private String title;
     private String subtitle;
     private String logo;
@@ -107,16 +106,16 @@ public class ChatActivity extends BaseActivity {
 
 
         if (savedInstanceState == null) {
-            conversationFragment = ConversationFragment.getInstance(bundle);
+            chatFragment = ChatFragment.getInstance(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, conversationFragment)
+                    .replace(R.id.container, chatFragment)
                     .commit();
         }
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
-        conversationFragment.startActivityForResult(intent, requestCode);
+        chatFragment.startActivityForResult(intent, requestCode);
     }
 
     public static Intent openChat(Context context, VKApiDialog dialog) {

@@ -3,6 +3,8 @@ package org.happysanta.messenger.posts;
 import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
+import android.text.Spannable;
+import android.text.util.Linkify;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -191,7 +193,9 @@ public class PostHolder extends BaseViewHolder {
             textView.setVisibility(View.GONE);
         } else {
             textView.setVisibility(View.VISIBLE);
-            textView.setText(post.text);
+            Spannable formattedText = Spannable.Factory.getInstance().newSpannable(post.text);
+            Linkify.addLinks(formattedText, Linkify.ALL);
+            textView.setText(formattedText);
         }
 
     }

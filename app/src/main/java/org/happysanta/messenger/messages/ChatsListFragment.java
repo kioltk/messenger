@@ -1,4 +1,4 @@
-package org.happysanta.messenger.messages.conversations;
+package org.happysanta.messenger.messages;
 
 import android.animation.Animator;
 import android.content.Intent;
@@ -46,7 +46,7 @@ import java.util.ArrayList;
 /**
  * Created by Jesus Christ. Amen.
  */
-public class ConversationsListFragment extends BaseFragment {
+public class ChatsListFragment extends BaseFragment {
     private View rootView;
     private VKList<VKApiDialog> allDialogs = new VKList<>();
     private VKList<VKApiDialog> showingDialogs = new VKList<>();

@@ -12,8 +12,8 @@ import org.happysanta.messenger.audio.AudiosListFragment;
 import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.friends.FriendsFragment;
 import org.happysanta.messenger.longpoll.LongpollService;
-import org.happysanta.messenger.messages.chats.ChatsListFragment;
-import org.happysanta.messenger.messages.conversations.ConversationsListFragment;
+import org.happysanta.messenger.messages.ChatsListFragment;
+import org.happysanta.messenger.messages.groupchats.GroupChatsListFragment;
 import org.happysanta.messenger.posts.FeedFragment;
 import org.happysanta.messenger.sandbox.SandboxFragment;
 import org.happysanta.messenger.settings.SettingsFragment;
@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity
                     .commit();
         } else */{
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, new FeedFragment())
+                    .replace(R.id.container, new SandboxFragment())
                     .commit();
         }
     }
@@ -75,12 +75,12 @@ public class MainActivity extends BaseActivity
                 break;
             case (int) NavigationFragment.NAVIGATION_MESSAGES_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new ConversationsListFragment())
+                        .replace(R.id.container, new ChatsListFragment())
                         .commit();
                 break;
             case (int) NavigationFragment.NAVIGATION_GROUPSCHAT_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new ChatsListFragment())
+                        .replace(R.id.container, new GroupChatsListFragment())
                         .commit();
                 break;
             case (int) NavigationFragment.NAVIGATION_FRIENDS_ID:

@@ -31,6 +31,7 @@ import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.api.model.VKLongPollServer;
+import com.vk.sdk.api.model.VKMessagesArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +59,12 @@ public class VKApiMessages extends VKApiBase {
         return prepareRequest("get", params, VKRequest.HttpMethod.GET, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
-                return new VKList<VKApiMessage>(object, VKApiMessage.class);
+                try {
+                    return new VKMessagesArray().parse(object);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
         });
     }
@@ -77,6 +83,7 @@ public class VKApiMessages extends VKApiBase {
             }
         });
     }
+
     public VKRequest getChats() {
         return prepareRequest("execute", "getChats", null, VKRequest.HttpMethod.GET, new VKParser() {
             @Override
@@ -94,23 +101,22 @@ public class VKApiMessages extends VKApiBase {
             }
         });
     }
-    private VKList<VKApiDialog> parseDialogs(JSONObject object, boolean includeChats, boolean includeConversations){
+
+    private VKList<VKApiDialog> parseDialogs(JSONObject object, boolean includeChats, boolean includeConversations) {
         VKList<VKApiDialog> dialogs = new VKList<VKApiDialog>();
         try {
             JSONObject response = object.getJSONObject("response");
-            VKList<VKApiUserFull> users = new VKList(response.getJSONObject("users"), VKApiUserFull.class);
+            VKList<VKApiUserFull> users = new VKList<VKApiUserFull>(response.getJSONObject("users"), VKApiUserFull.class);
             VKList<VKApiMessage> messages = new VKList<VKApiMessage>(response.getJSONObject("messages"), VKApiMessage.class);
             for (final VKApiMessage dialogMessage : messages) {
-
-                if(dialogMessage.isChat()) {
+                if (dialogMessage.isChat()) {
                     if (includeChats) {
                         VKApiUserFull chatOwner = users.getById(dialogMessage.admin_id);
                         VKList<VKApiUserFull> chatUsers = users.getById(dialogMessage.chat_active);
                         dialogs.add(new VKApiDialog(dialogMessage, chatOwner, chatUsers));
-                        continue;
                     }
-                }else{
-                    if(includeConversations){
+                } else {
+                    if (includeConversations) {
                         VKApiUserFull dialogOwner = users.getById(dialogMessage.user_id);
                         dialogs.add(new VKApiDialog(dialogMessage, dialogOwner));
                     }
@@ -146,11 +152,11 @@ public class VKApiMessages extends VKApiBase {
         }
         if (message.attachments != null && !message.attachments.isEmpty())
             params.put("attachment", message.attachments.toAttachmentsString());
-        params.put("guid",message.guid);
+        params.put("guid", message.guid);
         return prepareRequest("send", params, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
-                return Integer.valueOf(object.toString());
+                return object.optInt("response", -1);
             }
         });
     }
@@ -166,10 +172,11 @@ public class VKApiMessages extends VKApiBase {
         return prepareRequest("send", params, new VKParser() {
             @Override
             public Object createModel(JSONObject object) {
-                return Integer.valueOf(object.toString());
+                return object.optInt("response", -1);
             }
         });
     }
+
     public VKRequest getChat(VKParameters vkParameters) {
 
         return prepareRequest("getChat", vkParameters, new VKParser() {
@@ -202,7 +209,7 @@ public class VKApiMessages extends VKApiBase {
     }
 
     public VKRequest getLongPollService() {
-        return prepareRequest("getLongPollServer",new VKParameters(),new VKParser() {
+        return prepareRequest("getLongPollServer", new VKParameters(), new VKParser() {
             @Override
             public Object createModel(JSONObject response) {
 
