@@ -38,7 +38,7 @@ public class VideoMessageViewHolder extends MessageViewHolder {
     public void bindData(VKApiMessage message) {
         VKApiVideo videoAttach = (VKApiVideo) message.attachments.get(0);
         videoTitleView.setText(videoAttach.title);
-        videoDurationView.setText(getDurationString(videoAttach.duration));
+        videoDurationView.setText(TimeUtils.formatDuration(videoAttach.duration));
 
         ImageLoader.getInstance().displayImage(videoAttach.photo_320, photoView, new ImageLoadingListener() {
             @Override
@@ -61,15 +61,6 @@ public class VideoMessageViewHolder extends MessageViewHolder {
 
             }
         });
-    }
-
-    private String getDurationString(int seconds) {
-
-        int hours = seconds / 3600;
-        int minutes = (seconds % 3600) / 60;
-        seconds = seconds % 60;
-
-        return TimeUtils.formatDuration(hours) + ":" + TimeUtils.formatDuration(minutes) + ":" + TimeUtils.formatDuration(seconds);
     }
 
 
