@@ -27,7 +27,7 @@ import org.happysanta.messenger.core.util.Dimen;
 
 public class ChatActivity extends BaseActivity {
 
-    public static final String ARG_DIALOGID = "arg_dialogid";
+    public static final String ARG_PEERID = "arg_dialogid";
     public static final String ARG_ISCHAT = "arg_ischat";
     public static final String ARG_TITLE = "arg_title";
     public static final String ARG_LOGO = "arg_logo";
@@ -55,7 +55,7 @@ public class ChatActivity extends BaseActivity {
         title = bundle.getString(ARG_TITLE, "Dialog");
         subtitle = bundle.getString(ARG_SUBTITLE, null);
         logo = bundle.getString(ARG_LOGO, null);
-        dialogId = bundle.getInt(ChatActivity.ARG_DIALOGID, 0);
+        dialogId = bundle.getInt(ChatActivity.ARG_PEERID, 0);
         isChat = bundle.getBoolean(ChatActivity.ARG_ISCHAT, false);
 
         setTitle(title);
@@ -121,7 +121,7 @@ public class ChatActivity extends BaseActivity {
     public static Intent openChat(Context context, VKApiDialog dialog) {
         Intent intent = new Intent(context, ChatActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt(ARG_DIALOGID, dialog.getId());
+        bundle.putInt(ARG_PEERID, dialog.getId());
         bundle.putBoolean(ARG_ISCHAT, dialog.isChat());
         bundle.putString(ARG_TITLE, dialog.getTitle());
         //bundle.putString(ARG_SUBTITLE, "offline");
@@ -133,7 +133,7 @@ public class ChatActivity extends BaseActivity {
     public static Intent openChat(Context context, final VKApiUser user){
         Intent intent = new Intent(context, ChatActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt(ARG_DIALOGID, user.id);
+        bundle.putInt(ARG_PEERID, user.id);
         bundle.putBoolean(ARG_ISCHAT, false);
         bundle.putString(ARG_TITLE, user.toString());
         //bundle.putString(ARG_SUBTITLE, "offline");

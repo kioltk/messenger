@@ -38,6 +38,7 @@ public class LongpollService extends Service {
 
     private static final String EXTRA_PARAM1 = "org.happysanta.messenger.core.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "org.happysanta.messenger.core.extra.PARAM2";
+    public static final int MESSENGER_CORE_LISTENER_ID = 10;
     private static HashMap<Integer,LongpollListener> listeners = new HashMap<Integer, LongpollListener>();
     private VKLongPollServer server;
 

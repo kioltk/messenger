@@ -25,9 +25,9 @@ public class DialogUtil {
 
     private final boolean isChat;
     private final int dialogId;
-    public DialogUtil(boolean isChat, int dialogId) {
-        this.isChat = isChat;
-        this.dialogId = dialogId;
+    public DialogUtil(int peerId) {
+        this.isChat = peerId<0;
+        this.dialogId = peerId;
     }
     public void saveBody(String messageBody){
         saveBody(isChat, dialogId, messageBody);
