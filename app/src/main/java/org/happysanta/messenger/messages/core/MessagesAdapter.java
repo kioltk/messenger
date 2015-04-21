@@ -39,17 +39,17 @@ import java.util.ArrayList;
  */
 public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     private final Activity activity;
-    private final VKList<VKApiMessage> messages;
+    private final ArrayList<VKApiMessage> messages;
     private final boolean isChat;
     private final VKList<VKApiUserFull> chatUsers;
     private final View typingViewItem1;
     private View typingView;
 
-    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants) {
+    public MessagesAdapter(Activity activity, ArrayList<VKApiMessage> messages, VKList<VKApiUserFull> participants) {
         this(activity, messages, participants, true);
     }
 
-    public MessagesAdapter(Activity activity, VKList<VKApiMessage> messages, VKList<VKApiUserFull> participants, boolean isChat) {
+    public MessagesAdapter(Activity activity, ArrayList<VKApiMessage> messages, VKList<VKApiUserFull> participants, boolean isChat) {
         this.activity = activity;
         this.messages = messages;
         this.isChat = isChat;
@@ -116,25 +116,25 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case MessageViewType.Typing:
-                return new TypingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_typing, null));
+                return new TypingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_typing, parent, false));
             case MessageViewType.Loading:
-                return new LoadingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_loading, null));
+                return new LoadingMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_loading, parent, false));
             case MessageViewType.Photo:
-                return new PhotoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_photo, null));
+                return new PhotoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_photo, parent, false));
             case MessageViewType.Doc:
-                return new FileMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_file, null));
+                return new FileMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_file, parent, false));
             case MessageViewType.Video:
-                return new VideoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_video, null));
+                return new VideoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_video, parent, false));
             case MessageViewType.Audio:
-                return new AudioMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_audio, null));
+                return new AudioMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_audio, parent, false));
             case MessageViewType.Sticker:
-                return new StickerMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_sticker, null));
+                return new StickerMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_sticker, parent, false));
             case MessageViewType.Geo:
-                return new GeoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_geo, null));
+                return new GeoMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_geo, parent, false));
             case MessageViewType.Complex:
-                return new ComplexMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_complex, null));
+                return new ComplexMessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_complex, parent, false));
         }
-        return new MessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_empty, null));
+        return new MessageViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_message_empty, parent, false));
     }
 
     @Override
@@ -224,21 +224,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     }
 
 
-    public void newMessages(ArrayList<LongpollNewMessage> newMessages) {
-        ArrayList<LongpollNewMessage> filteredMessages = new ArrayList<>();
-        for (LongpollNewMessage newMessage: newMessages) {
-
-            if (!newMessage.out) {
-                messages.add(newMessage);// todo add sorted by time
-                notifyItemInserted(messages.indexOf(newMessage)+1);
-            } else{
-                messages.add(newMessage);// todo add by sending query
-                notifyItemInserted(messages.indexOf(newMessage)+1);
-            }
-            // update to full?
-        }
-    }
-
     public void typing() {
         typingView.setVisibility(View.VISIBLE);
         AnimationSet set = new AnimationSet(true);
@@ -258,7 +243,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     boolean sending = false;
     public void send(final VKApiMessage message) {
         sending = true;
-        // sendingQuery.add(message);
+        // sendingQueues.add(message);
         VKRequest request = new VKApiMessages().send(message);
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override

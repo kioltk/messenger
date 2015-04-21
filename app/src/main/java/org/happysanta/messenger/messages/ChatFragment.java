@@ -54,6 +54,8 @@ import org.happysanta.messenger.user.ProfileActivity;
 import java.io.File;
 import java.util.ArrayList;
 
+import static org.happysanta.messenger.core.MessengerCore.messenger;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -64,8 +66,7 @@ public class ChatFragment extends BaseFragment {
     private VKList<VKApiMessage> messages = new VKList<>();
     private MessagesAdapter messagesAdapter;
     private DialogUtil dialogUtil;
-    private int dialogId;
-    private boolean isChat;
+    private int peerId;
 
     // ui
     private RecyclerView messagesRecycler;
@@ -107,8 +108,7 @@ public class ChatFragment extends BaseFragment {
 
         statusView = (TextView) findViewById(R.id.status);
 
-        dialogId = getArguments().getInt(ChatActivity.ARG_DIALOGID, 0);
-        isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
+        peerId = getArguments().getInt(ChatActivity.ARG_PEERID, 0);
         participants = new VKList<>();
         SparseArray<VKApiUserFull> usersSparseArray = getArguments().getSparseParcelableArray(ChatActivity.ARG_CHAT_PARTICIPANTS);
         for (int i = 0, sparseArray = usersSparseArray.size(); i < sparseArray; i++) {
@@ -118,15 +118,15 @@ public class ChatFragment extends BaseFragment {
         if(participants.getById(ProfileUtil.getUserId())==null){
             participants.add(ProfileUtil.getUser());
         }
-        dialogUtil = new DialogUtil(isChat, dialogId);
+        dialogUtil = new DialogUtil(peerId);
 
         statusView.setText("loading");
         editMessageText.setText(dialogUtil.getBody());
         messagesRecycler.setHasFixedSize(false);
         messagesRecycler.setLayoutManager(new LinearLayoutManager(activity));
-        messagesAdapter = new MessagesAdapter(activity, messages, participants, isChat);
+        messagesAdapter = new MessagesAdapter(activity, messenger().getMessages(peerId), participants, peerId<0);
         messagesRecycler.setAdapter(messagesAdapter);
-        VKRequest request = isChat ? new VKApiMessages().getChatHistory(dialogId) : new VKApiMessages().getHistory(dialogId);
+        VKRequest request = new VKApiMessages().getHistory(peerId);
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -152,10 +152,10 @@ public class ChatFragment extends BaseFragment {
         });
 
 
-        LongpollService.addConversationListener(new LongpollDialogListener(dialogId) {
+        LongpollService.addConversationListener(new LongpollDialogListener(peerId) {
             @Override
             public void onNewMessages(ArrayList<LongpollNewMessage> newMessages) {
-                messagesAdapter.newMessages(newMessages);
+                //messagesAdapter.newMessages(newMessages);
                 tryScrollToBottom();
             }
 
@@ -313,17 +313,17 @@ public class ChatFragment extends BaseFragment {
             return;
         }
         VKApiMessage message = new VKApiMessage();
-        if (isChat) {
-            message.chat_id = dialogId;
+        if (peerId<0) {
+            message.chat_id = -peerId;
         } else {
-            message.user_id = dialogId;
+            message.user_id = peerId;
         }
         message.body = messageText;
         message.out = true;
         message.read_state = false;
-        message.guid = (int) (System.currentTimeMillis() / 1000L * dialogId);
+        message.guid = (int) (System.currentTimeMillis() / 1000L * peerId);
 
-        messagesAdapter.send(message);
+        messenger().send(message);
         tryScrollToBottom();
 
         editMessageText.setText(null);
@@ -342,7 +342,7 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 
-        if (isChat) {
+        if (peerId<0) {
             menuInflater.inflate(R.menu.menu_chat, menu);
         } else {
             menuInflater.inflate(R.menu.menu_conversation, menu);
@@ -354,11 +354,11 @@ public class ChatFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_profile: {
-                startActivity(ProfileActivity.openProfile(getActivity(), dialogId));
+                startActivity(ProfileActivity.openProfile(getActivity(), peerId));
             }
             break;
             case R.id.action_chat_participants: {
-                startActivity(GroupChatInfoActivity.openDialogInfo(getActivity(), dialogId));
+                startActivity(GroupChatInfoActivity.openDialogInfo(getActivity(), peerId));
             }
             break;
         }

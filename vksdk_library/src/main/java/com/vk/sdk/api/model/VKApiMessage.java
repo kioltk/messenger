@@ -220,4 +220,8 @@ public class VKApiMessage extends VKApiModel implements Identifiable, android.os
         return null;
 
     }
+
+    public Integer getPeerId() {
+        return chat_id>0?-chat_id:user_id;
+    }
 }

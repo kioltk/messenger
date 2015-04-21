@@ -187,17 +187,18 @@ public class VKApiMessages extends VKApiBase {
         });
     }
 
-    public VKRequest getHistory(final int userId) {
+    public VKRequest getHistory(final int peerId) {
         return getHistory(new VKParameters() {{
-            put("user_id", userId);
+            if(peerId>0) {
+                put("user_id", peerId);
+            } else {
+                put("chat_id", -peerId);
+
+            }
         }});
     }
 
-    public VKRequest getChatHistory(final int chatId) {
-        return getHistory(new VKParameters() {{
-            put("chat_id", chatId);
-        }});
-    }
+
 
     public VKRequest getHistory(VKParameters params) {
         return prepareRequest("getHistory", params, new VKParser() {
