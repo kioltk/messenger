@@ -7,7 +7,7 @@
     >
 
     <ImageView
-        android:id="@+id/video_bg"
+        android:id="@+id/videoPreview"
         android:background="#e0e0e0"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"

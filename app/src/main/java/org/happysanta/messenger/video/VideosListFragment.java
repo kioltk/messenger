@@ -3,8 +3,8 @@ package org.happysanta.messenger.video;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,7 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiVideos;
+import com.vk.sdk.api.model.VKApiPhotoSize;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKList;
 
@@ -35,7 +36,6 @@ public class VideosListFragment extends BaseFragment {
     private VKList<VKApiVideo> videos;
     private TextView statusView;
     private RecyclerView recycler;
-    private GridLayoutManager recyclerLayoutManager;
     private VideosAdapter adapter;
 
     @Nullable
@@ -45,8 +45,7 @@ public class VideosListFragment extends BaseFragment {
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         statusView = (TextView) rootView.findViewById(R.id.status);
 
-        recyclerLayoutManager = new GridLayoutManager(activity, 2);
-        recycler.setLayoutManager(recyclerLayoutManager);
+        recycler.setLayoutManager(new StaggeredGridLayoutManager(2, android.support.v7.widget.OrientationHelper.VERTICAL));
         recycler.setHasFixedSize(false);
 
         new VKApiVideos().get(new VKParameters()).executeWithListener(new VKRequest.VKRequestListener() {
@@ -66,14 +65,14 @@ public class VideosListFragment extends BaseFragment {
         return rootView;
     }
 
-    private class VideosAdapter extends RecyclerView.Adapter<VideosHolder>{
+    private class VideosAdapter extends RecyclerView.Adapter<VideoHolder>{
         @Override
-        public VideosHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new VideosHolder(View.inflate(activity, R.layout.item_video, null));
+        public VideoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new VideoHolder(LayoutInflater.from(activity).inflate(R.layout.item_video, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(VideosHolder holder, int position) {
+        public void onBindViewHolder(VideoHolder holder, int position) {
             holder.bind(0, videos.get(position));
 
         }
@@ -82,17 +81,17 @@ public class VideosListFragment extends BaseFragment {
         public int getItemCount() { return videos.size(); }
     }
 
-    private class VideosHolder extends BaseViewHolder {
+    private class VideoHolder extends BaseViewHolder {
 
-        private final ImageView bgView;
+        private final ImageView videoPreviewView;
         private final TextView titleView;
         private final TextView durationView;
         private final TextView countView;
         private final TextView ownerIdView;
 
-        public VideosHolder(View itemView) {
+        public VideoHolder(View itemView) {
             super(itemView);
-            bgView = (ImageView) findViewById(R.id.video_bg);
+            videoPreviewView = (ImageView) findViewById(R.id.videoPreview);
             titleView = (TextView) findViewById(R.id.title);
             durationView = (TextView) findViewById(R.id.duration);
             countView = (TextView) findViewById(R.id.view_count);
@@ -101,27 +100,27 @@ public class VideosListFragment extends BaseFragment {
 
         public void bind(final int position, VKApiVideo video) {
 
-            ImageLoader.getInstance().displayImage(video.photo_320, bgView, new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
+            if (video.photo.isEmpty()) {
+                // todo показать черную картинку
+            } else {
+                final VKApiPhotoSize preview = video.photo.get(video.photo.size() - 1);
 
-                }
+                final ViewGroup.LayoutParams params = videoPreviewView.getLayoutParams();
+                videoPreviewView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int width = videoPreviewView.getWidth();
+                        params.height = width/3*2;
+                        videoPreviewView.setLayoutParams(params);
+                        videoPreviewView.invalidate();
 
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    }
+                });
 
-                }
+                ImageLoader.getInstance().displayImage(preview.src, videoPreviewView);
+            }
 
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    bgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                }
 
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
-                }
-            });
 
             titleView.setText(video.title);
             durationView.setText(TimeUtils.formatDuration(video.duration));

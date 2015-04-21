@@ -75,15 +75,15 @@ public class TimeUtils {
 
     }
 
-    public static String formatDuration(int duration){
+    public static String formatDuration(int duration) {
 
-        int seconds = duration%60;
-        int minutes = (duration%3600);
-        int hours = duration/3600;
+        int seconds = duration % 60;
+        int minutes = (duration % 3600)/60;
+        int hours = duration / 3600;
 
-        String formattedSeconds =seconds<9?"0":""+seconds;
-        String formattedMinutes =minutes<9?"0":""+minutes;
-        String formattedHours =hours<9?"0":""+hours;
+        String formattedSeconds = (seconds < 9 ? "0" : "") + seconds;
+        String formattedMinutes = (minutes < 9 ? "0" : "") + minutes;
+        String formattedHours = (hours < 9 ? "0" : "") + hours;
 
         String formattedDuration = (hours > 0 ? formattedHours + ":" : "") + formattedMinutes + ":" + formattedSeconds;
         return formattedDuration;
