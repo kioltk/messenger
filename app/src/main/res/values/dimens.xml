@@ -32,5 +32,8 @@
     <dimen name="attachRecyclerHeight">110dp</dimen>
     <dimen name="typing_item_jumpheight">10dp</dimen>
     <dimen name="typing_item_margin">14dp</dimen>
+    <dimen name="pause_bar_width">30dp</dimen>
+    <dimen name="pause_bar_height">30dp</dimen>
+    <dimen name="pause_bar_distance">15dp</dimen>
 
 </resources>

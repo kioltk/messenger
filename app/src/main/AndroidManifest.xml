@@ -68,6 +68,11 @@
             android:label="@string/title_activity_post" >
         </activity>
 
+        <activity
+            android:name=".audio.PlayerActivity"
+            android:label="@string/title_activity_player" >
+        </activity>
+
     </application>
 
 </manifest>

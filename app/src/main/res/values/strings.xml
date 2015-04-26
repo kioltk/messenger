@@ -70,6 +70,7 @@
     <string name="action_edit_post">Edit</string>
     <string name="action_delete_post">Delete</string>
     <string name="title_activity_post">Post</string>
+    <string name="title_activity_player">Player</string>
     <string name="navigation_videos">Videos</string>
     <string name="navigation_photos">Photo</string>
     <string name="navigation_communities">Communities</string>
