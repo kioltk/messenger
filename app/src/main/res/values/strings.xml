@@ -75,5 +75,7 @@
     <string name="navigation_photos">Photo</string>
     <string name="navigation_communities">Communities</string>
     <string name="navigation_audios">Audio</string>
+    <string name="action_edit_feed">Edit feed</string>
+    <string name="title_activity_manage">Manage</string>
 
 </resources>

@@ -73,6 +73,11 @@
             android:label="@string/title_activity_player" >
         </activity>
 
+        <activity
+            android:name=".posts.manage.ManageActivity"
+            android:label="@string/title_activity_manage" >
+        </activity>
+
     </application>
 
 </manifest>
