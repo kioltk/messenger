@@ -99,7 +99,7 @@ public class VideosListFragment extends BaseFragment {
             ownerIdView = (TextView) findViewById(R.id.owner_id);
         }
 
-        public void bind(final int position, VKApiVideo video) {
+        public void bind(final int position, final VKApiVideo video) {
 
             ImageLoader.getInstance().displayImage(video.photo_320, bgView, new ImageLoadingListener() {
                 @Override
@@ -120,6 +120,13 @@ public class VideosListFragment extends BaseFragment {
                 @Override
                 public void onLoadingCancelled(String imageUri, View view) {
 
+                }
+            });
+
+            bgView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    activity.startActivity(VideoPlayerActivity.openVideo(activity, video.player, video.id, video.photo_640, video.duration));
                 }
             });
 

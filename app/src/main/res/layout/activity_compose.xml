@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center|left">
+
+        <org.happysanta.messenger.core.views.TintImageView
+            android:id="@+id/remove"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:src="@drawable/ic_pic_remove"
+            app:tintColor="#000"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New hustle"
+            android:textSize="18dp"
+            android:textColor="#000"
+            android:layout_marginLeft="89dp" />
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:text="Устраиваете вписку? Напишите:
+ - В каком районе будет вписка
+ - В каком районе будет вписка
+ - В каком районе будет вписка"
+        android:layout_margin="32dp" />
+
+    <RecyclerView
+        android:id="@+id/recycler"
+        android:layout_marginLeft="32dp"
+        android:layout_below="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </RecyclerView>
+
+    <LinearLayout
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <org.happysanta.messenger.core.views.TintImageView
+            android:id="@+id/photo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="38dp"
+            android:layout_marginBottom="38dp"
+            app:src="@drawable/ic_photo"
+            app:tintColor="#40000000"/>
+        <org.happysanta.messenger.core.views.TintImageView
+            android:id="@+id/map"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="38dp"
+            android:layout_marginBottom="38dp"
+            app:src="@drawable/ic_picture"
+            app:tintColor="#40000000"/>
+        <org.happysanta.messenger.core.views.TintImageView
+            android:id="@+id/smile"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="38dp"
+            app:src="@drawable/ic_smile"
+            app:tintColor="#40000000"/>
+
+        <org.happysanta.messenger.core.views.TintImageView
+            android:id="@+id/send"
+            android:layout_width="52dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="100dp"
+            app:src="@drawable/ic_send"
+            app:tintColor="#40000000"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

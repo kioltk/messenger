@@ -77,5 +77,6 @@
     <string name="navigation_audios">Audio</string>
     <string name="action_edit_feed">Edit feed</string>
     <string name="title_activity_manage">Manage</string>
+    <string name="title_activity_compose">Compose</string>
 
 </resources>

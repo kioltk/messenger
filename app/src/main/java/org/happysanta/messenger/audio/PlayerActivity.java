@@ -30,12 +30,12 @@ public class PlayerActivity extends BaseActivity {
     private String audioUrl;
     private String audioTitle;
     private String audioArtist;
-    private int audioDuration;// а это тогда что? Это для интента. для интента что? Для получения длительности с аудио. точно? да. вот это получченное с сервера, переданное в это активити. оно отличается от того, что покажет плеер? нет, но нужно задавать 0 пересенной, а если я тут сделаю 0, то вью с длительностью будет 0
+    private int audioDuration;
     private static final String EXTRA_AUDIOS_URL = "extra_audiourl";
     private static final String EXTRA_AUDIO_ID = "extra_audioid";
     private static final String EXTRA_AUDIO_TITLE = "extra_audiotitle";
     private static final String EXTRA_AUDIO_ARTIST = "extra_audioartist";
-    private static final String EXTRA_AUDIO_DURATION = "extra_audioduration"; // а это? Тоже оно
+    private static final String EXTRA_AUDIO_DURATION = "extra_audioduration";
     // как так? Просто можно получать длительность еще до загрузки песни
     // хорошо, и куда ты ее заносишь? справа от сикбара
     // а в какой переменной ты хранишь длительность?
@@ -46,13 +46,11 @@ public class PlayerActivity extends BaseActivity {
 
     private ImageView playpauseView;
     private TextView titleView, subTitleView;
-    private TextView currentPlayingPositionView; // а это что за переменная? Это вью текста, где таймер. текущего времени? Ага
+    private TextView currentPlayingPositionView;
     private TextView durationView;
     private SeekBar seekbar;
-    private Handler myHandler = new Handler();
-    // а это что за переменная?
+
     private int currentPlayingPosition = 0;
-    private int finalTimer = 0;// а это что? а это что? для получения длительеости из плеера. а длительность песни, о которой сообщил сервер и длительность самой песни - разные? у меня не работало с серверной
     private PlayerTask playerTask;
     private int bufferedProgress;
     private PlayPauseDrawable playpauseDrawable;
@@ -145,11 +143,11 @@ public class PlayerActivity extends BaseActivity {
         });
         timerTask.start();
     }
-    //не работает перемотка, возвращает на 0
+
     private void updateTimer() {
-        currentPlayingPosition = audioPlayer.getCurrentPosition();
-        currentPlayingPositionView.setText(TimeUtils.formatDuration(currentPlayingPosition/1000));
-        seekbar.setProgress(currentPlayingPosition/1000);
+            currentPlayingPosition = audioPlayer.getCurrentPosition();
+            currentPlayingPositionView.setText(TimeUtils.formatDuration(currentPlayingPosition / 1000));
+            seekbar.setProgress(currentPlayingPosition / 1000);
     }
 
     private View.OnClickListener playViewClickListener = new View.OnClickListener() {
@@ -211,9 +209,6 @@ public class PlayerActivity extends BaseActivity {
             audioPlayer.seekTo(value * 1000);// мы же max у сикбара поставили другой, теперь он возвращает в секундах, а не в процентах
             Log.d("VKPlayer", "stopTrackingTouch");
         }
-        // что-то еще?
-        // разберись что я сделал в Thread и попробуй понять принцип того, что я сделал
-        // пойм\шь что такое поток - поймешь джаву. это легче, чем понять женщину =)
     };
 
 
@@ -222,7 +217,7 @@ public class PlayerActivity extends BaseActivity {
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            seekbar.setSecondaryProgress(bufferedProgress * audioDuration /100);
+            seekbar.setSecondaryProgress(bufferedProgress * audioDuration / 100);
         }
 
         @Override
