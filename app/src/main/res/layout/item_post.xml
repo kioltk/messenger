@@ -135,8 +135,10 @@
                     android:background="#e0e0e0"
                     android:scaleType="centerCrop"
                     android:layout_weight="0.8"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
 
             </LinearLayout>
 
@@ -164,7 +166,7 @@
                         android:layout_height="20dp"
                         android:scaleType="centerInside"
                         app:tintColor="@color/post_item_grey"
-                        app:src="@drawable/comment"
+                        app:src="@drawable/ic_reply"
                         android:layout_margin="8dp" />
 
                     <TextView
@@ -212,7 +214,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         app:tintColor="@color/post_item_grey"
-                        app:src="@drawable/like"
+                        app:src="@drawable/ic_like"
                         android:layout_margin="8dp" />
 
                     <TextView

@@ -106,10 +106,10 @@
 
                         <org.happysanta.messenger.core.views.TintImageView
                             android:id="@+id/comment_likes"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
                             app:tintColor="@color/post_item_grey"
-                            app:src="@drawable/like"
+                            app:src="@drawable/ic_like"
                             android:layout_margin="8dp" />
 
                         <TextView

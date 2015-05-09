@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="103dp" android:layout_height="103dp">
-    <ImageView
-        android:layout_width="103dp"
+    android:layout_width="match_parent" android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="103dp"
-        android:background="@android:color/darker_gray"
-        android:id="@+id/photo" />
+        android:paddingRight="18dp">
+        <ImageView
+            android:layout_width="103dp"
+            android:layout_height="103dp"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/photo" />
 
-    <ImageView
-        android:id="@+id/remove_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_pic_remove"
-        android:padding="8dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:background="@android:color/white" />
+        <ImageView
+            android:id="@+id/remove_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pic_remove"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/photo"
+            android:layout_alignEnd="@+id/photo" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progress_bar"
-        android:layout_alignBottom="@+id/photo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"/>
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress_bar"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/remove_photo"
+            android:layout_toStartOf="@+id/remove_photo"
+            android:layout_marginBottom="16dp" />
+    </RelativeLayout>
+
 </RelativeLayout>

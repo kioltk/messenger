@@ -336,9 +336,9 @@ public class VideoPlayerActivity extends Activity implements
     }
 
 
-    public static Intent openVideo(Context context, String player, int videoid, String photo_640, int duration) {
+    public static Intent openVideo(Context context, String link, int videoid, String photo_640, int duration) {
         return new Intent(context, VideoPlayerActivity.class)
-                .putExtra(EXTRA_VIDEO_URL, player)
+                .putExtra(EXTRA_VIDEO_URL, link)
                 .putExtra(EXTRA_VIDEO_ID, videoid)
                 .putExtra(EXTRA_VIDEO_PHOTO, photo_640)
                 .putExtra(EXTRA_VIDEO_DURATION, duration);

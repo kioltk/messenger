@@ -2,6 +2,7 @@ package com.vk.sdk.api.methods;
 
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.model.VKCommentArray;
 import com.vk.sdk.api.model.VKPostArray;
 
 /**
@@ -19,5 +20,9 @@ public class VKApiFeed extends VKApiBase {
 
     public VKRequest getRecommended(VKParameters params) {
         return prepareRequest("getRecommended", params, VKRequest.HttpMethod.GET, VKPostArray.class);
+    }
+
+    public VKRequest getComments(VKParameters params) {
+        return prepareRequest("getComments", params, VKRequest.HttpMethod.GET, VKCommentArray.class);
     }
 }

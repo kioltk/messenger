@@ -11,15 +11,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import org.happysanta.messenger.R;
+import org.happysanta.messenger.core.BaseFragment;
+import org.happysanta.messenger.posts.ComposeActivity;
 import org.happysanta.messenger.user.UserDialog;
 
 /**
  * Created by Jesus Christ. Amen.
  */
-public class AboutFragment extends Fragment {
+public class AboutFragment extends BaseFragment {
+    private Button btnCompose;
+    int userId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        rootView = inflater.inflate(R.layout.fragment_about, container, false);
+
+        btnCompose = (Button) rootView.findViewById(R.id.compose_post);
+        btnCompose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.startActivity(ComposeActivity.openCompose(activity, userId));
+            }
+        });
 
         return rootView;
     }

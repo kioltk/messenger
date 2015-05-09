@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -31,22 +32,24 @@ public class PostsListFragment extends BaseFragment {
     private static final int LIST_TYPE_FRIENDS = 2;
     private static final int LIST_TYPE_COMMUNITIES = 3;
     private static final int LIST_TYPE_PHOTOS = 4;
+
     // core
     private VKList<VKApiPost> newsList = new VKList<>();
 
     // ui
     private RecyclerView recyclerView;
     private PostsAdapter postsAdapter;
-
-    public PostsListFragment(){
-    }
+    private ProgressBar progressView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         rootView = inflater.inflate(R.layout.fragment_news, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        progressView = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
         VKRequest request = new VKApiWall().get(new VKParameters() {{
             put(VKApiWall.EXTENDED, 1);
@@ -56,6 +59,7 @@ public class PostsListFragment extends BaseFragment {
                 request = new VKApiFeed().get(new VKParameters() {{
                     put(VKApiWall.EXTENDED, 1);
                     put("filters", "post");
+                    fetchComments();
                 }});
                 break;
             /*case LIST_TYPE_FRIENDS:
@@ -68,6 +72,7 @@ public class PostsListFragment extends BaseFragment {
                 request = new VKApiFeed().getRecommended(new VKParameters() {{
                     put(VKApiWall.EXTENDED, 1);
                     put("filters", "post");
+                    fetchComments();
                 }});
                 break;
 
@@ -78,11 +83,19 @@ public class PostsListFragment extends BaseFragment {
             public void onComplete(VKResponse response) {
                 postsAdapter = new PostsAdapter(getActivity(), (VKPostArray) response.parsedModel);
                 recyclerView.setAdapter(postsAdapter);
+                progressView.setVisibility(View.GONE);
             }
         });
 
 
         return rootView;
+    }
+
+    private void fetchComments() {
+        new VKApiFeed().getComments(new VKParameters() {{
+            put(VKApiWall.EXTENDED, 1);
+            put("need_likes", 1);
+        }});
     }
 
     public static Fragment getNewsInstance() {
@@ -121,4 +134,5 @@ public class PostsListFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 }

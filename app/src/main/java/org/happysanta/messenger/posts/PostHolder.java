@@ -5,6 +5,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Spannable;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,13 +15,19 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.methods.VKApiPhotos;
+import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiCommunity;
+import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiModel;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiPost.VKApiPostSourceData;
 import com.vk.sdk.api.model.VKApiPost.VKApiPostSourcePlatform;
 import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKApiVideo;
+import com.vk.sdk.api.model.VKAttachments;
+import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseViewHolder;
@@ -29,10 +36,13 @@ import org.happysanta.messenger.core.util.TimeUtils;
 import org.happysanta.messenger.core.views.TintImageView;
 import org.happysanta.messenger.user.ProfileActivity;
 
+import java.security.KeyStore;
+
 /**
  * Created by Jesus Christ. Amen.
  */
 public class PostHolder extends BaseViewHolder {
+    private static final String TAG = "PostHolder";
     private CardView postCardView;
     private ImageView photoView;
     private TextView nameView;
@@ -50,7 +60,6 @@ public class PostHolder extends BaseViewHolder {
     private View likeButton;
     private TextView sourceDataView;
 
-    private View attach;
     private ImageView photoAttachView;
 
     public PostHolder(View itemView) {
@@ -64,18 +73,19 @@ public class PostHolder extends BaseViewHolder {
         platformIcoView = (ImageView) itemView.findViewById(R.id.android_ico);
         commentMenu =  itemView.findViewById(R.id.btn_menu);
 
+        //Post attaches
         textView = (TextView) itemView.findViewById(R.id.news_body);
         sourceDataView = (TextView) itemView.findViewById(R.id.sourceData);
-        attach = itemView.findViewById(R.id.attach);
         photoAttachView = (ImageView) itemView.findViewById(R.id.photo_attach);
 
-
+        //Counts and views
         repostView = (TintImageView) itemView.findViewById(R.id.news_repost);
         likeView = (TintImageView) itemView.findViewById(R.id.news_like);
         commentsCountView = (TextView) itemView.findViewById(R.id.news_comments_count);
         repostsCountView = (TextView) itemView.findViewById(R.id.news_reposts_count);
         likesCountView = (TextView) itemView.findViewById(R.id.news_likes_count);
 
+        //Buttons
         commentsButton = itemView.findViewById(R.id.btn_comments);
         shareButton = itemView.findViewById(R.id.btn_share);
         likeButton = itemView.findViewById(R.id.btn_like);
@@ -84,7 +94,7 @@ public class PostHolder extends BaseViewHolder {
     public void bind(final int position, final VKApiPost post) {
 
         // потом платформу
-        if (post.sourcePlatform !=null) {
+        if (post.sourcePlatform != null) {
             if (post.sourcePlatform.equals(VKApiPostSourcePlatform.ANDROID)) {
                 platformIcoView.setVisibility(View.VISIBLE);
             } else {
@@ -161,6 +171,7 @@ public class PostHolder extends BaseViewHolder {
             if (post.sourceData.equals(VKApiPostSourceData.PROFILE_PHOTO_CHANGE)) {
                 sourceDataView.setText("user updated profile picture:");
                 sourceDataView.setVisibility(View.VISIBLE);
+
                 VKApiPhoto photoAttach = (VKApiPhoto) post.attachments.get(0);
                 if (photoAttach instanceof VKApiPhoto) {
                     ImageLoader.getInstance().displayImage(photoAttach.photo_604, photoAttachView, new ImageLoadingListener() {
@@ -177,7 +188,6 @@ public class PostHolder extends BaseViewHolder {
                         @Override
                         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                             photoAttachView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
                         }
 
                         @Override
@@ -186,7 +196,54 @@ public class PostHolder extends BaseViewHolder {
                         }
                     });
                 }
-            } // ну или проверяем другие источники
+            }
+        }
+
+
+        // когда я прошу сделать из одного массива, в котором данные не рассортированы по типу, сделать несколько массивов с конкретными данными,
+        // это значет, что нужно сделать несколько массивов, и запихнуть из одно в несколько
+        VKList<VKApiPhoto> photos = new VKList<>();
+        VKList<VKApiAudio> audios = new VKList<>();
+        VKList<VKApiVideo> videos = new VKList<>();
+        VKList<VKApiDocument> docs = new VKList<>();
+        Log.d(TAG, "PostId :" + post.id);
+
+        VKAttachments attachments = post.attachments;
+        for (VKAttachments.VKApiAttachment attachment : attachments) {
+            Log.d(TAG, "Attach :" + attachment.toAttachmentString());
+            switch (attachment.getType()) {
+                case VKAttachments.TYPE_PHOTO:
+                    photos.add((VKApiPhoto) attachment);
+                    break;
+                case VKAttachments.TYPE_AUDIO:
+                    audios.add((VKApiAudio) attachment);
+                    break;
+                case VKAttachments.TYPE_VIDEO:
+                    videos.add((VKApiVideo) attachment);
+                    break;
+                case VKAttachments.TYPE_DOC:
+                    docs.add((VKApiDocument) attachment);
+                    break;
+            }
+        }
+
+        // расскидали по массивам
+
+        for (VKApiPhoto photo : photos) {
+            // ну вот, утебя есть массив фоточек, придумай как их запихнуть в холдер
+            // каждую фотку запихнуть в вьюшку
+        }
+
+        for (VKApiAudio audio : audios) {
+            // каждую аудио запихнуть в вьюшку
+        }
+
+        for (VKApiVideo video : videos) {
+            // каждую видюшку
+        }
+
+        for (VKApiDocument doc : docs) {
+            // каждый док
         }
 
         if (post.text.isEmpty()) {

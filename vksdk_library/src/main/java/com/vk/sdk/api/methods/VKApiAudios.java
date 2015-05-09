@@ -31,4 +31,40 @@ public class VKApiAudios extends VKApiBase {
             }
         });
     }
+
+    public VKRequest getById(VKParameters params) {
+        return prepareRequest("getById", params, VKRequest.HttpMethod.GET, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return new VKList<VKApiAudio>(object, VKApiAudio.class);
+            }
+        });
+    }
+
+    public VKRequest getRecommendations(VKParameters params) {
+        return prepareRequest("getRecommendations", params, VKRequest.HttpMethod.GET, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return new VKList<VKApiAudio>(object, VKApiAudio.class);
+            }
+        });
+    }
+
+    public VKRequest getPopular(VKParameters params) {
+        return prepareRequest("getPopular", params, VKRequest.HttpMethod.GET, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return new VKList<VKApiAudio>(object, VKApiAudio.class);
+            }
+        });
+    }
+
+    public VKRequest getAlbums(VKParameters params) {
+        return prepareRequest("getAlbums", params, VKRequest.HttpMethod.GET, new VKParser() {
+            @Override
+            public Object createModel(JSONObject object) {
+                return new VKList<VKApiAudio>(object, VKApiAudio.class);
+            }
+        });
+    }
 }

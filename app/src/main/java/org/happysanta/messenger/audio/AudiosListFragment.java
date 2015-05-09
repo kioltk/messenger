@@ -1,9 +1,12 @@
 package org.happysanta.messenger.audio;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +25,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiAudios;
 import com.vk.sdk.api.model.VKApiAudio;
+import com.vk.sdk.api.model.VKAudioArray;
 import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
@@ -33,6 +37,12 @@ import org.happysanta.messenger.core.util.TimeUtils;
  * Created by Jesus Christ. Amen.
  */
 public class AudiosListFragment extends BaseFragment {
+    private static final String ARG_LIST_TYPE = "list_type";
+    private static final int LIST_TYPE_MY_MUSIC = 0;
+    private static final int LIST_TYPE_SUGGESTED = 1;
+    private static final int LIST_TYPE_POPULAR = 2;
+    private static final int LIST_TYPE_ALBUMS = 3;
+
     int audioId;
     private View rootView;
     private VKList<VKApiAudio> audios;
@@ -53,28 +63,89 @@ public class AudiosListFragment extends BaseFragment {
         recycler.setLayoutManager(recyclerLayoutManager);
         recycler.setHasFixedSize(false);
 
-        new VKApiAudios().get(new VKParameters()).executeWithListener(new VKRequest.VKRequestListener() {
+        VKRequest request = new VKApiAudios().get(new VKParameters());
+        switch (getArguments().getInt(ARG_LIST_TYPE)) {
+
+            case LIST_TYPE_MY_MUSIC:
+                request = new VKApiAudios().get(new VKParameters() {{
+                }});
+                break;
+            case LIST_TYPE_SUGGESTED:
+                request = new VKApiAudios().getRecommendations(new VKParameters() {{
+                }});
+                break;
+            case LIST_TYPE_POPULAR:
+                request = new VKApiAudios().getPopular(new VKParameters() {{
+                }});
+                break;
+            case LIST_TYPE_ALBUMS:
+                request = new VKApiAudios().getAlbums(new VKParameters() {{
+                }});
+                break;
+        }
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                audios = (VKList<VKApiAudio>) response.parsedModel;
-                AudiosListFragment.this.audios = audios;
-                adapter = new AudiosAdapter();
+                adapter = new AudiosAdapter(getActivity(), (VKAudioArray) response.parsedModel);
                 adapter.setHasStableIds(true);
                 recycler.setAdapter(adapter);
                 statusView.setVisibility(View.GONE);
             }
 
             @Override
-            public void onError(VKError error) { statusView.setText(error.toString()); }
+            public void onError(VKError error) {
+                statusView.setText(error.toString());
+            }
         });
 
         return rootView;
     }
 
+    public static Fragment getMyAudiosInstance() {
+        AudiosListFragment fragment = new AudiosListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_MY_MUSIC);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static Fragment getSuggestedInstance() {
+        AudiosListFragment fragment = new AudiosListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_SUGGESTED);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static Fragment getPopularInstance() {
+        AudiosListFragment fragment = new AudiosListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_POPULAR);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static Fragment getAlbumsInstance() {
+        AudiosListFragment fragment = new AudiosListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_LIST_TYPE, LIST_TYPE_ALBUMS);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private class AudiosAdapter extends RecyclerView.Adapter<AudiosHolder> {
+        private final Activity activity;
+        private final VKAudioArray audios;
+
+        public AudiosAdapter(FragmentActivity activity, VKAudioArray audios) {
+            this.activity = activity;
+            this.audios = audios;
+        }
+
         @Override
         public AudiosHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new AudiosHolder(View.inflate(activity, R.layout.item_audio, null));
+            return new AudiosHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio, null));
         }
 
         @Override

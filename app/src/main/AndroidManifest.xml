@@ -79,8 +79,7 @@
         </activity>
 
         <activity
-            android:name=".video.VideoPlayerActivity"
-            android:screenOrientation="landscape" >
+            android:name=".video.VideoPlayerActivity" >
         </activity>
 
         <activity

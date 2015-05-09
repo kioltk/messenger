@@ -29,7 +29,6 @@ public class ProfileActivity extends BaseActivity {
     int userId;
     int postId;
 
-    private String subtitle;
     private static final String EXTRA_USERID = "extra_userid";
     private static final String EXTRA_POSTID = "extra_postid";
     private ProfilePostsAdapter adapter;
@@ -55,7 +54,6 @@ public class ProfileActivity extends BaseActivity {
             actionbar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-            toolbar.setSubtitle(subtitle);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -106,8 +104,9 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    public static Intent openProfile(Context context, int userid) {
-        return new Intent(context, ProfileActivity.class).putExtra(EXTRA_USERID, userid);
+    public static Intent openProfile(Context context, int userId) {
+        return new Intent(context, ProfileActivity.class)
+                .putExtra(EXTRA_USERID, userId);
     }
 
     private class ProfilePostsAdapter extends RecyclerView.Adapter {

@@ -8,8 +8,11 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.methods.VKApiPhotos;
 import com.vk.sdk.api.model.VKApiCity;
+import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseViewHolder;
@@ -18,7 +21,7 @@ import org.happysanta.messenger.core.util.ImageUtil;
 import org.happysanta.messenger.messages.ChatActivity;
 
 /**
- * Created by admin on 18.04.2015.
+ * Created by insidefun on 18.04.2015
  */
 public class ProfileHolder extends BaseViewHolder {
     int userId;
@@ -69,7 +72,6 @@ public class ProfileHolder extends BaseViewHolder {
         messageButton = findViewById(R.id.button_message);
 
     }
-
 
     public void bind(final int position, final VKApiUserFull user) {
         setUserName(user.toString());

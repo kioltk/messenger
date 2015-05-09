@@ -69,7 +69,7 @@ public class VideosListFragment extends BaseFragment {
     private class VideosAdapter extends RecyclerView.Adapter<VideosHolder>{
         @Override
         public VideosHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new VideosHolder(View.inflate(activity, R.layout.item_video, null));
+            return new VideosHolder(LayoutInflater.from(activity).inflate(R.layout.item_video, null));
         }
 
         @Override
@@ -126,7 +126,7 @@ public class VideosListFragment extends BaseFragment {
             bgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.startActivity(VideoPlayerActivity.openVideo(activity, video.player, video.id, video.photo_640, video.duration));
+                    activity.startActivity(VideoPlayerActivity.openVideo(activity, video.link, video.id, video.photo_640, video.duration));
                 }
             });
 

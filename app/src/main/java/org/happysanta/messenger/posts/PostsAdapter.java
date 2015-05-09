@@ -43,6 +43,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostHolder> {
         }
     }
 
+
     @Override
     public long getItemId(int position) {
         return 0;

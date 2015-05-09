@@ -8,7 +8,10 @@ import android.support.v4.widget.DrawerLayout;
 import org.happysanta.messenger.Photo.PhotosListFragment;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.about.AboutFragment;
+import org.happysanta.messenger.audio.AudioFragment;
 import org.happysanta.messenger.audio.AudiosListFragment;
+import org.happysanta.messenger.communities.CommunitiesListFragment;
+import org.happysanta.messenger.communities.CommunityFragment;
 import org.happysanta.messenger.core.BaseActivity;
 import org.happysanta.messenger.friends.FriendsFragment;
 import org.happysanta.messenger.longpoll.LongpollService;
@@ -100,12 +103,12 @@ public class MainActivity extends BaseActivity
                 break;
             case (int) NavigationFragment.NAVIGATION_AUDIOS_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new AudiosListFragment())
+                        .replace(R.id.container, new AudioFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_COMMUNITIES_ID:
+            case NavigationFragment.NAVIGATION_COMMUNITIES_ID:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new Fragment())
+                        .replace(R.id.container, new CommunityFragment())
                         .commit();
                 break;
 

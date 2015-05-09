@@ -1,9 +1,12 @@
 package org.happysanta.messenger.posts;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +22,7 @@ import org.happysanta.messenger.core.views.TintImageView;
  * Created by admin on 01.05.2015.
  */
 public class ComposeActivity extends BaseActivity {
+    private static final String EXTRA_USER_ID = "extra_user_id";
     private TintImageView removeView;
     private TextView titleView;
     private TextView bodyView;
@@ -33,19 +37,36 @@ public class ComposeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
-        removeView = (TintImageView) findViewById(R.id.remove);
+        //removeView = (TintImageView) findViewById(R.id.remove);
         titleView = (TextView) findViewById(R.id.title);
         bodyView = (TextView) findViewById(R.id.body);
         photoView = (TintImageView) findViewById(R.id.photo);
         mapView = (TintImageView) findViewById(R.id.map);
         smileView = (TintImageView) findViewById(R.id.smile);
 
-        //Added photo recycler
+        //Added photos recycler
         RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         adapter = new PhotoListAdapter();
         recycler.setAdapter(adapter);
+
+        //Toolbar
+        android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+        if (null != actionbar) {
+            actionbar.setHomeButtonEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
     }
+
 
     private class PhotoListAdapter extends RecyclerView.Adapter<PhotoHolder> {
         @Override
@@ -55,6 +76,7 @@ public class ComposeActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(PhotoHolder holder, int position) {
+            holder.bind(0);
         }
 
         @Override
@@ -74,5 +96,14 @@ public class ComposeActivity extends BaseActivity {
             removePhotoView = (ImageView) itemView.findViewById(R.id.remove_photo);
             progressView = (ProgressBar) itemView.findViewById(R.id.progress_bar);
         }
+
+        public void bind(final int position){
+        }
+    }
+
+
+    public static Intent openCompose(Context context, int userId) {
+        return new Intent(context, ComposeActivity.class)
+                .putExtra(EXTRA_USER_ID, userId);
     }
 }
