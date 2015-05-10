@@ -4,13 +4,16 @@
     android:layout_height="match_parent"
     android:background="@color/white">
     <ImageView
-        android:layout_margin="5dp"
         android:id="@+id/play"
         android:src="@drawable/ic_attach_music"
         android:scaleType="centerInside"
         android:background="@color/color_primary"
         android:layout_width="60dp"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp" />
     <LinearLayout
         android:id="@+id/title_layout"
         android:layout_toRightOf="@+id/play"
@@ -47,7 +50,8 @@
             android:layout_height="wrap_content"
             android:text="2:46"
             android:layout_gravity="center_vertical"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:layout_marginRight="15dp" />
 
     </LinearLayout>
 

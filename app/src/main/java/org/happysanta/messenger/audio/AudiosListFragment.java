@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -42,6 +44,7 @@ public class AudiosListFragment extends BaseFragment {
     private static final int LIST_TYPE_SUGGESTED = 1;
     private static final int LIST_TYPE_POPULAR = 2;
     private static final int LIST_TYPE_ALBUMS = 3;
+    private int listType;
 
     int audioId;
     private View rootView;
@@ -50,6 +53,7 @@ public class AudiosListFragment extends BaseFragment {
     private TextView statusView;
     private LinearLayoutManager recyclerLayoutManager;
     private AudiosAdapter adapter;
+    private GridLayoutManager recyclerGridLayoutManager;
 
 
     @Nullable
@@ -59,27 +63,40 @@ public class AudiosListFragment extends BaseFragment {
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         statusView = (TextView) rootView.findViewById(R.id.status);
 
-        recyclerLayoutManager = new LinearLayoutManager(activity);
-        recycler.setLayoutManager(recyclerLayoutManager);
-        recycler.setHasFixedSize(false);
+        listType = getArguments().getInt(ARG_LIST_TYPE);
+        if(listType == LIST_TYPE_ALBUMS){
+            recyclerGridLayoutManager = new GridLayoutManager(activity, 2);
+            recycler.setLayoutManager(recyclerGridLayoutManager);
+            recycler.setHasFixedSize(false);
+        } else {
+            recyclerLayoutManager = new LinearLayoutManager(activity);
+            recycler.setLayoutManager(recyclerLayoutManager);
+            recycler.setHasFixedSize(false);
+        }
 
-        VKRequest request = new VKApiAudios().get(new VKParameters());
+        VKRequest request = new VKApiAudios().get(new VKParameters(){{
+            put(VKApiConst.EXTENDED, 1);
+        }});
         switch (getArguments().getInt(ARG_LIST_TYPE)) {
 
             case LIST_TYPE_MY_MUSIC:
                 request = new VKApiAudios().get(new VKParameters() {{
+                    put(VKApiConst.EXTENDED, 1);
                 }});
                 break;
             case LIST_TYPE_SUGGESTED:
                 request = new VKApiAudios().getRecommendations(new VKParameters() {{
+                    put(VKApiConst.EXTENDED, 1);
                 }});
                 break;
             case LIST_TYPE_POPULAR:
                 request = new VKApiAudios().getPopular(new VKParameters() {{
+                    put(VKApiConst.EXTENDED, 1);
                 }});
                 break;
             case LIST_TYPE_ALBUMS:
                 request = new VKApiAudios().getAlbums(new VKParameters() {{
+                    put(VKApiConst.EXTENDED, 1);
                 }});
                 break;
         }
@@ -145,7 +162,12 @@ public class AudiosListFragment extends BaseFragment {
 
         @Override
         public AudiosHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new AudiosHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio, null));
+            listType = getArguments().getInt(ARG_LIST_TYPE);
+            if(listType == LIST_TYPE_ALBUMS){
+                return new AudiosHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio_album, null));
+            } else {
+                return new AudiosHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio, null));
+            }
         }
 
         @Override
@@ -171,18 +193,34 @@ public class AudiosListFragment extends BaseFragment {
             durationView = (TextView) findViewById(R.id.duration);
         }
         public void bind(final int position, final VKApiAudio audio){
-            playView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(activity, "Play audio", Toast.LENGTH_SHORT).show();
-                    activity.startActivity(PlayerActivity.openAudio(getContext(), audio.id, audio.url, audio.title, audio.artist, audio.duration));
-                }
-            });
+            listType = getArguments().getInt(ARG_LIST_TYPE);
+
+            if(listType == LIST_TYPE_ALBUMS) {
+                //Go to album
+            } else {
+                playView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(activity, "Play audio", Toast.LENGTH_SHORT).show();
+                        activity.startActivity(PlayerActivity.openAudio(getContext(), audio.id, audio.url, audio.title, audio.artist, audio.duration));
+                    }
+                });
+            }
 
 
             titleView.setText(audio.title);
-            subtitleView.setText(audio.artist);
-            durationView.setText(TimeUtils.formatDuration(audio.duration));
+
+            if(audio.artist != null && !audio.artist.isEmpty()) {
+                subtitleView.setText(audio.artist);
+            } else {
+                subtitleView.setVisibility(View.GONE);
+            }
+
+            if(audio.duration != 0) {
+                durationView.setText(TimeUtils.formatDuration(audio.duration));
+            } else {
+                durationView.setVisibility(View.GONE);
+            }
         }
     }
 }
