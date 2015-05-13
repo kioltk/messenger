@@ -1,8 +1,6 @@
 package org.happysanta.messenger.audio;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,16 +8,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
@@ -34,6 +31,7 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.core.BaseViewHolder;
 import org.happysanta.messenger.core.util.TimeUtils;
+import org.happysanta.messenger.core.views.TintImageView;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -46,30 +44,34 @@ public class AudiosListFragment extends BaseFragment {
     private static final int LIST_TYPE_ALBUMS = 3;
     private int listType;
 
-    int audioId;
-    private View rootView;
+    private int audioId;
+    int ownerId;
+    private String newTitleName = "title";
+    private String newArtistName = "artist";
+
     private VKList<VKApiAudio> audios;
     private RecyclerView recycler;
     private TextView statusView;
-    private LinearLayoutManager recyclerLayoutManager;
     private AudiosAdapter adapter;
-    private GridLayoutManager recyclerGridLayoutManager;
+    private String editTitleString;
+    private String editArtistString;
+    private String TAG = "AudioListFragment";
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_audio_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_audio_list, container, false);
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         statusView = (TextView) rootView.findViewById(R.id.status);
 
         listType = getArguments().getInt(ARG_LIST_TYPE);
         if(listType == LIST_TYPE_ALBUMS){
-            recyclerGridLayoutManager = new GridLayoutManager(activity, 2);
+            GridLayoutManager recyclerGridLayoutManager = new GridLayoutManager(activity, 2);
             recycler.setLayoutManager(recyclerGridLayoutManager);
             recycler.setHasFixedSize(false);
         } else {
-            recyclerLayoutManager = new LinearLayoutManager(activity);
+            LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(activity);
             recycler.setLayoutManager(recyclerLayoutManager);
             recycler.setHasFixedSize(false);
         }
@@ -82,6 +84,7 @@ public class AudiosListFragment extends BaseFragment {
             case LIST_TYPE_MY_MUSIC:
                 request = new VKApiAudios().get(new VKParameters() {{
                     put(VKApiConst.EXTENDED, 1);
+                    put("count", 1000);
                 }});
                 break;
             case LIST_TYPE_SUGGESTED:
@@ -117,6 +120,31 @@ public class AudiosListFragment extends BaseFragment {
         });
 
         return rootView;
+    }
+
+    private void editAudio(){
+
+        new VKApiAudios().edit(new VKParameters(){{
+            put("owner_id", ownerId);
+            put("audio_id", audioId);
+            put("title", editTitleString);
+            put("artist", editArtistString);
+        }}).executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                if (editTitleString != null) {
+                    newTitleName = editTitleString;
+                    Log.v(TAG, "new Title in VK is " + newTitleName);
+                }
+                if (editArtistString != null) {
+                    newArtistName = editArtistString;
+                    Log.v(TAG, "new Artist in VK is " + newArtistName);
+                }
+            }
+
+            @Override
+            public void onError(VKError error) { statusView.setText(error.toString()); }
+        });
     }
 
     public static Fragment getMyAudiosInstance() {
@@ -172,7 +200,7 @@ public class AudiosListFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(AudiosHolder holder, int position) {
-            holder.bind(0, audios.get(position));
+            holder.bind(audios.get(position));
         }
 
         @Override
@@ -185,19 +213,48 @@ public class AudiosListFragment extends BaseFragment {
         private TextView subtitleView;
         private final TextView durationView;
 
+        private final EditText editTitleView;
+        private final EditText editArtistView;
+        private final View titleLayout;
+        private final View editLayout;
+        private final View durationLayout;
+        private final View buttonsLayout;
+        private final TintImageView btnConfirm;
+        private final TintImageView btnCancel;
+
         public AudiosHolder(View itemView) {
             super(itemView);
             playView = (ImageView) findViewById(R.id.play);
             titleView = (TextView) findViewById(R.id.title);
-            subtitleView = (TextView) findViewById(R.id.subtitle);
+            subtitleView = (TextView) findViewById(R.id.artist);
             durationView = (TextView) findViewById(R.id.duration);
+            durationLayout = findViewById(R.id.duration_layout);
+            buttonsLayout = findViewById(R.id.buttons_layout);
+
+            //Audio edit
+            editTitleView = (EditText) findViewById(R.id.edit_title);
+            editArtistView = (EditText) findViewById(R.id.edit_artist);
+            titleLayout = findViewById(R.id.title_layout);
+            editLayout = findViewById(R.id.edit_layout);
+            btnConfirm = (TintImageView) findViewById(R.id.confirm);
+            btnCancel = (TintImageView) findViewById(R.id.cancel);
         }
-        public void bind(final int position, final VKApiAudio audio){
+        public void bind(final VKApiAudio audio){
+            ownerId = audio.owner_id;
+            audioId = audio.id;
             listType = getArguments().getInt(ARG_LIST_TYPE);
 
             if(listType == LIST_TYPE_ALBUMS) {
                 //Go to album
+                Toast.makeText(activity, "Open album", Toast.LENGTH_SHORT).show();
             } else {
+                titleLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(activity, "Play audio", Toast.LENGTH_SHORT).show();
+                        activity.startActivity(PlayerActivity.openAudio(getContext(), audio.id, audio.url, audio.title, audio.artist, audio.duration));
+                    }
+                });
                 playView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -205,7 +262,63 @@ public class AudiosListFragment extends BaseFragment {
                         activity.startActivity(PlayerActivity.openAudio(getContext(), audio.id, audio.url, audio.title, audio.artist, audio.duration));
                     }
                 });
+
+                titleLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        titleLayout.setVisibility(View.GONE);
+                        durationLayout.setVisibility(View.GONE);
+                        editLayout.setVisibility(View.VISIBLE);
+                        buttonsLayout.setVisibility(View.VISIBLE);
+
+                        btnConfirm.setOnClickListener(new View.OnClickListener() {
+
+
+                            @Override
+                            public void onClick(View v) {
+                                editTitleString = editTitleView.getText().toString();
+                                editArtistString = editArtistView.getText().toString();
+                                if (!editTitleString.isEmpty() && !editTitleString.equals("")){
+                                    Log.v(TAG, "new Title is " + editTitleString);
+                                    editAudio();
+                                } else {
+                                    Log.v(TAG, "new Title is empty");
+                                }
+
+                                if (!editArtistString.isEmpty() && !editArtistString.equals("")){
+                                    Log.v(TAG, "new Artist is " + editArtistString);
+                                    editAudio();
+                                } else {
+                                    Log.v(TAG, "new Artist is empty");
+                                }
+
+
+                                titleLayout.setVisibility(View.VISIBLE);
+                                durationLayout.setVisibility(View.VISIBLE);
+                                editLayout.setVisibility(View.GONE);
+                                buttonsLayout.setVisibility(View.GONE);
+                            }
+                        });
+
+                        btnCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Log.v(TAG, "Cancel");
+                                titleLayout.setVisibility(View.VISIBLE);
+                                durationLayout.setVisibility(View.VISIBLE);
+                                editLayout.setVisibility(View.GONE);
+                                buttonsLayout.setVisibility(View.GONE);
+                            }
+                        });
+
+
+                        Toast.makeText(activity, "Long click", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
             }
+
 
 
             titleView.setText(audio.title);
