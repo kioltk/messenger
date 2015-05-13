@@ -47,7 +47,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/attach"
-                android:src="@drawable/ic_header_important"
+                android:src="@drawable/ic_attach"
                 android:scaleType="centerInside"
                 android:layout_alignBottom="@+id/message_box"
                 android:layout_width="56dp"

@@ -31,7 +31,7 @@ public class VideoMessageViewHolder extends MessageViewHolder {
         ownerView = (ImageView) findViewById(R.id.owner);
         videoTitleView = (TextView) itemView.findViewById(R.id.video_title);
         videoDurationView = (TextView) itemView.findViewById(R.id.video_duration);
-        photoView = (ImageView) itemView.findViewById(R.id.video_bg);
+        photoView = (ImageView) itemView.findViewById(R.id.videoPreview);
     }
 
     @Override
