@@ -64,18 +64,29 @@ public class MessengerCore {
     }
 
     public void newMessages(ArrayList<LongpollNewMessage> newMessages) {
-        /*ArrayList<LongpollNewMessage> filteredMessages = new ArrayList<>();
+        ArrayList<LongpollNewMessage> filteredMessages = new ArrayList<>();
         for (LongpollNewMessage newMessage: newMessages) {
 
             if (!newMessage.out) {
-                messages.add(newMessage);// todo add sorted by time
-                notifyItemInserted(messages.indexOf(newMessage)+1);
+                onInMessage(newMessage);
             } else{
-                messages.add(newMessage);// todo add by sending query
-                notifyItemInserted(messages.indexOf(newMessage)+1);
+                /*messages.add(newMessage);// todo add by sending query
+                notifyItemInserted(messages.indexOf(newMessage)+1);*/
             }
             // update to full?
-        }*/
+        }
+    }
+
+    public void onInMessage(LongpollNewMessage newMessage){
+        ArrayList<VKApiMessage> messages = getMessages(newMessage.getPeerId());
+        int pasteIndex = 0;
+        for (int i = 0; i < messages.size(); i++) {
+            VKApiMessage message = messages.get(i);
+            if(message.id<newMessage.id){
+                pasteIndex=i+1;
+            }
+        }
+        messages.add(pasteIndex, newMessage);
     }
 
 }
