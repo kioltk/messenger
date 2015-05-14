@@ -92,7 +92,7 @@ public class VideosListFragment extends BaseFragment {
 
         public VideosHolder(View itemView) {
             super(itemView);
-            bgView = (ImageView) findViewById(R.id.video_bg);
+            bgView = (ImageView) findViewById(R.id.videoPreview);
             titleView = (TextView) findViewById(R.id.title);
             durationView = (TextView) findViewById(R.id.duration);
             countView = (TextView) findViewById(R.id.view_count);

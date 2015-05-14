@@ -52,7 +52,7 @@ public class AudiosListFragment extends BaseFragment {
     private VKList<VKApiAudio> audios;
     private RecyclerView recycler;
     private TextView statusView;
-    private AudiosAdapter adapter;
+    private AudioListAdapter adapter;
     private String editTitleString;
     private String editArtistString;
     private String TAG = "AudioListFragment";
@@ -69,12 +69,11 @@ public class AudiosListFragment extends BaseFragment {
         if(listType == LIST_TYPE_ALBUMS){
             GridLayoutManager recyclerGridLayoutManager = new GridLayoutManager(activity, 2);
             recycler.setLayoutManager(recyclerGridLayoutManager);
-            recycler.setHasFixedSize(false);
         } else {
             LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(activity);
             recycler.setLayoutManager(recyclerLayoutManager);
-            recycler.setHasFixedSize(false);
         }
+        recycler.setHasFixedSize(false);
 
         VKRequest request = new VKApiAudios().get(new VKParameters(){{
             put(VKApiConst.EXTENDED, 1);
@@ -107,8 +106,7 @@ public class AudiosListFragment extends BaseFragment {
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                adapter = new AudiosAdapter(getActivity(), (VKAudioArray) response.parsedModel);
-                adapter.setHasStableIds(true);
+                adapter = new AudioListAdapter(getActivity(), (VKAudioArray) response.parsedModel);
                 recycler.setAdapter(adapter);
                 statusView.setVisibility(View.GONE);
             }
@@ -179,27 +177,27 @@ public class AudiosListFragment extends BaseFragment {
         return fragment;
     }
 
-    private class AudiosAdapter extends RecyclerView.Adapter<AudiosHolder> {
+    private class AudioListAdapter extends RecyclerView.Adapter<AudioViewHolder> {
         private final Activity activity;
         private final VKAudioArray audios;
 
-        public AudiosAdapter(FragmentActivity activity, VKAudioArray audios) {
+        public AudioListAdapter(FragmentActivity activity, VKAudioArray audios) {
             this.activity = activity;
             this.audios = audios;
         }
 
         @Override
-        public AudiosHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public AudioViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             listType = getArguments().getInt(ARG_LIST_TYPE);
             if(listType == LIST_TYPE_ALBUMS){
-                return new AudiosHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio_album, null));
+                return new AudioViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio_album, null));
             } else {
-                return new AudiosHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio, null));
+                return new AudioViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio, null));
             }
         }
 
         @Override
-        public void onBindViewHolder(AudiosHolder holder, int position) {
+        public void onBindViewHolder(AudioViewHolder holder, int position) {
             holder.bind(audios.get(position));
         }
 
@@ -207,7 +205,7 @@ public class AudiosListFragment extends BaseFragment {
         public int getItemCount() { return audios.size(); }
     }
 
-    private class AudiosHolder extends BaseViewHolder {
+    private class AudioViewHolder extends BaseViewHolder {
         private ImageView playView;
         private TextView titleView;
         private TextView subtitleView;
@@ -222,7 +220,7 @@ public class AudiosListFragment extends BaseFragment {
         private final TintImageView btnConfirm;
         private final TintImageView btnCancel;
 
-        public AudiosHolder(View itemView) {
+        public AudioViewHolder(View itemView) {
             super(itemView);
             playView = (ImageView) findViewById(R.id.play);
             titleView = (TextView) findViewById(R.id.title);
