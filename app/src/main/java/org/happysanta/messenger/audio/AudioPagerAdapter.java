@@ -20,26 +20,30 @@ public class AudioPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 item = AudiosListFragment.getSuggestedInstance();
                 break;
+            /*
             case 2:
                 item = AudiosListFragment.getPopularInstance();
                 break;
             case 3:
                 item = AudiosListFragment.getAlbumsInstance();
                 break;
+                */
         }
         return item;
     }
 
     @Override
-    public int getCount() { return 4; }
+    public int getCount() { return 2; }
 
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0: return "MY MUSIC";
             case 1: return "SUGGESTED";
+            /*
             case 2: return "POPULAR";
             case 3: return "ALBUMS";
+            */
         }
         return "error";
     }

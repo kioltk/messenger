@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,7 +24,6 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.methods.VKApiAudios;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKAudioArray;
-import com.vk.sdk.api.model.VKList;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
@@ -40,21 +38,23 @@ public class AudiosListFragment extends BaseFragment {
     private static final String ARG_LIST_TYPE = "list_type";
     private static final int LIST_TYPE_MY_MUSIC = 0;
     private static final int LIST_TYPE_SUGGESTED = 1;
+    /*
     private static final int LIST_TYPE_POPULAR = 2;
     private static final int LIST_TYPE_ALBUMS = 3;
     private int listType;
+    listType = getArguments().getInt(ARG_LIST_TYPE);
+    */
 
     private int audioId;
     int ownerId;
-    private String newTitleName = "title";
-    private String newArtistName = "artist";
+    //Edit audio strings
+    private String editTitleString;
+    private String editArtistString;
 
-    private VKList<VKApiAudio> audios;
     private RecyclerView recycler;
     private TextView statusView;
     private AudioListAdapter adapter;
-    private String editTitleString;
-    private String editArtistString;
+
     private String TAG = "AudioListFragment";
 
 
@@ -65,14 +65,8 @@ public class AudiosListFragment extends BaseFragment {
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         statusView = (TextView) rootView.findViewById(R.id.status);
 
-        listType = getArguments().getInt(ARG_LIST_TYPE);
-        if(listType == LIST_TYPE_ALBUMS){
-            GridLayoutManager recyclerGridLayoutManager = new GridLayoutManager(activity, 2);
-            recycler.setLayoutManager(recyclerGridLayoutManager);
-        } else {
-            LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(activity);
-            recycler.setLayoutManager(recyclerLayoutManager);
-        }
+        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(activity);
+        recycler.setLayoutManager(recyclerLayoutManager);
         recycler.setHasFixedSize(false);
 
         VKRequest request = new VKApiAudios().get(new VKParameters(){{
@@ -89,8 +83,11 @@ public class AudiosListFragment extends BaseFragment {
             case LIST_TYPE_SUGGESTED:
                 request = new VKApiAudios().getRecommendations(new VKParameters() {{
                     put(VKApiConst.EXTENDED, 1);
+                    put("count", 100);
                 }});
                 break;
+
+            /*
             case LIST_TYPE_POPULAR:
                 request = new VKApiAudios().getPopular(new VKParameters() {{
                     put(VKApiConst.EXTENDED, 1);
@@ -101,6 +98,7 @@ public class AudiosListFragment extends BaseFragment {
                     put(VKApiConst.EXTENDED, 1);
                 }});
                 break;
+                */
         }
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -130,14 +128,6 @@ public class AudiosListFragment extends BaseFragment {
         }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                if (editTitleString != null) {
-                    newTitleName = editTitleString;
-                    Log.v(TAG, "new Title in VK is " + newTitleName);
-                }
-                if (editArtistString != null) {
-                    newArtistName = editArtistString;
-                    Log.v(TAG, "new Artist in VK is " + newArtistName);
-                }
             }
 
             @Override
@@ -161,6 +151,7 @@ public class AudiosListFragment extends BaseFragment {
         return fragment;
     }
 
+    /*
     public static Fragment getPopularInstance() {
         AudiosListFragment fragment = new AudiosListFragment();
         Bundle args = new Bundle();
@@ -176,6 +167,7 @@ public class AudiosListFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+    */
 
     private class AudioListAdapter extends RecyclerView.Adapter<AudioViewHolder> {
         private final Activity activity;
@@ -188,12 +180,7 @@ public class AudiosListFragment extends BaseFragment {
 
         @Override
         public AudioViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            listType = getArguments().getInt(ARG_LIST_TYPE);
-            if(listType == LIST_TYPE_ALBUMS){
-                return new AudioViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio_album, null));
-            } else {
-                return new AudioViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio, null));
-            }
+            return new AudioViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_audio, null));
         }
 
         @Override
@@ -239,13 +226,8 @@ public class AudiosListFragment extends BaseFragment {
         }
         public void bind(final VKApiAudio audio){
             ownerId = audio.owner_id;
-            audioId = audio.id;
-            listType = getArguments().getInt(ARG_LIST_TYPE);
+            audioId = audio.getId();
 
-            if(listType == LIST_TYPE_ALBUMS) {
-                //Go to album
-                Toast.makeText(activity, "Open album", Toast.LENGTH_SHORT).show();
-            } else {
                 titleLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -253,6 +235,7 @@ public class AudiosListFragment extends BaseFragment {
                         activity.startActivity(PlayerActivity.openAudio(getContext(), audio.id, audio.url, audio.title, audio.artist, audio.duration));
                     }
                 });
+
                 playView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -261,35 +244,55 @@ public class AudiosListFragment extends BaseFragment {
                     }
                 });
 
+                //Fill views
+                titleView.setText(audio.title);
+                subtitleView.setText(audio.artist);
+                if(audio.duration != 0) {
+                    durationView.setText(TimeUtils.formatDuration(audio.duration));
+                } else {
+                    durationView.setVisibility(View.GONE);
+                }
+
+                //Edit audio on long click
                 titleLayout.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
+
                         titleLayout.setVisibility(View.GONE);
                         durationLayout.setVisibility(View.GONE);
                         editLayout.setVisibility(View.VISIBLE);
                         buttonsLayout.setVisibility(View.VISIBLE);
 
+                        //Confirm renaming
                         btnConfirm.setOnClickListener(new View.OnClickListener() {
-
+                            String newTitleName;
+                            String newArtistName;
 
                             @Override
                             public void onClick(View v) {
                                 editTitleString = editTitleView.getText().toString();
                                 editArtistString = editArtistView.getText().toString();
-                                if (!editTitleString.isEmpty() && !editTitleString.equals("")){
+                                if (!editTitleString.isEmpty() && !editTitleString.equals("") && editTitleString != null) {
+                                    newTitleName = editTitleString;
+                                    editAudio();
+
+                                    Toast.makeText(activity, "new Title is: " + editTitleString, Toast.LENGTH_SHORT).show();
                                     Log.v(TAG, "new Title is " + editTitleString);
-                                    editAudio();
                                 } else {
-                                    Log.v(TAG, "new Title is empty");
+                                    editTitleString = audio.title;
+                                    Log.v(TAG, "new Title is empty, current: " + audio.title);
                                 }
 
-                                if (!editArtistString.isEmpty() && !editArtistString.equals("")){
+                                if (!editArtistString.isEmpty() && !editArtistString.equals("") && editArtistString != null) {
+                                    newArtistName = editArtistString;
+                                    editAudio();
+
+                                    Toast.makeText(activity, "new Artist is: " + editArtistString, Toast.LENGTH_SHORT).show();
                                     Log.v(TAG, "new Artist is " + editArtistString);
-                                    editAudio();
                                 } else {
-                                    Log.v(TAG, "new Artist is empty");
+                                    editArtistString = audio.artist;
+                                    Log.v(TAG, "new Artist is empty, current: " + audio.artist);
                                 }
-
 
                                 titleLayout.setVisibility(View.VISIBLE);
                                 durationLayout.setVisibility(View.VISIBLE);
@@ -298,9 +301,13 @@ public class AudiosListFragment extends BaseFragment {
                             }
                         });
 
+                        //Cancel renaming
                         btnCancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                editTitleString = audio.title;
+                                editArtistString = audio.artist;
 
                                 Log.v(TAG, "Cancel");
                                 titleLayout.setVisibility(View.VISIBLE);
@@ -311,27 +318,10 @@ public class AudiosListFragment extends BaseFragment {
                         });
 
 
-                        Toast.makeText(activity, "Long click", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
-            }
 
-
-
-            titleView.setText(audio.title);
-
-            if(audio.artist != null && !audio.artist.isEmpty()) {
-                subtitleView.setText(audio.artist);
-            } else {
-                subtitleView.setVisibility(View.GONE);
-            }
-
-            if(audio.duration != 0) {
-                durationView.setText(TimeUtils.formatDuration(audio.duration));
-            } else {
-                durationView.setVisibility(View.GONE);
-            }
         }
     }
 }
