@@ -139,6 +139,32 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"/>
 
+                <RelativeLayout
+                    android:id="@+id/attach_map"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+                    <ImageView
+                        android:id="@+id/map"
+                        android:scaleType="centerCrop"
+                        android:src="#e0e0e0"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+                    <TextView
+                        android:id="@+id/map_title"
+                        android:background="@drawable/map_title_background"
+                        android:padding="5dp"
+                        android:text="Map title"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:layout_alignBottom="@+id/map"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="match_parent"
+                        android:gravity="right"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
 
             </LinearLayout>
 

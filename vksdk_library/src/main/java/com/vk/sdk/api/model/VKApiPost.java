@@ -29,6 +29,8 @@
 package com.vk.sdk.api.model;
 
 import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -143,7 +145,7 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
     /**
      * Information about location.
      */
-    public VKApiPlace geo;
+    public VKApiGeo geo;
 
     /**
      * ID of the author (if the post was published by a community and signed by a user).
@@ -198,7 +200,7 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         attachments.fill(source.optJSONArray("attachments"));
         JSONObject geo = source.optJSONObject("geo");
         if(geo != null) {
-            this.geo = new VKApiPlace().parse(geo);
+            this.geo = new VKApiGeo().parse(geo);
         }
         signer_id = source.optInt("signer_id");
         copy_history = new VKList<VKApiPost>(source.optJSONArray("copy_history"), VKApiPost.class);
@@ -286,7 +288,7 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         dest.writeByte(user_reposted ? (byte) 1 : (byte) 0);
         dest.writeString(this.post_type);
         dest.writeParcelable(attachments, flags);
-        dest.writeParcelable(this.geo, flags);
+        dest.writeParcelable((Parcelable) this.geo, flags);
         dest.writeInt(this.signer_id);
     }
 

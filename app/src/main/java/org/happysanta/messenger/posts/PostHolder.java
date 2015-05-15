@@ -1,6 +1,10 @@
 package org.happysanta.messenger.posts;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Spannable;
@@ -18,6 +22,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiDocument;
+import com.vk.sdk.api.model.VKApiGeo;
 import com.vk.sdk.api.model.VKApiModel;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
@@ -31,6 +36,7 @@ import com.vk.sdk.api.model.VKList;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseViewHolder;
 import org.happysanta.messenger.core.util.BitmapUtil;
+import org.happysanta.messenger.core.util.MapUtil;
 import org.happysanta.messenger.core.util.TimeUtils;
 import org.happysanta.messenger.core.views.TintImageView;
 import org.happysanta.messenger.user.ProfileActivity;
@@ -57,7 +63,12 @@ public class PostHolder extends BaseViewHolder {
     private View likeButton;
     private TextView sourceDataView;
 
+    //Attaches
     private ImageView photoAttachView;
+    private final View mapAttachView;
+    private final ImageView mapView;
+    private final TextView mapTitleView;
+
 
     public PostHolder(View itemView) {
         super(itemView);
@@ -74,6 +85,10 @@ public class PostHolder extends BaseViewHolder {
         textView = (TextView) itemView.findViewById(R.id.news_body);
         sourceDataView = (TextView) itemView.findViewById(R.id.sourceData);
         photoAttachView = (ImageView) itemView.findViewById(R.id.photo_attach);
+        //Post attaches | Map
+        mapAttachView = itemView.findViewById(R.id.attach_map);
+        mapView = (ImageView) itemView.findViewById(R.id.map);
+        mapTitleView = (TextView) itemView.findViewById(R.id.map_title);
 
         //Counts and views
         repostView = (TintImageView) itemView.findViewById(R.id.news_repost);
@@ -112,7 +127,6 @@ public class PostHolder extends BaseViewHolder {
         // заполняем дату
         dateView.setText(TimeUtils.format(post.date * 1000, getContext()));
 
-
         // кнопочки
         postCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +141,6 @@ public class PostHolder extends BaseViewHolder {
                 showPopupMenu(v);
             }
         });
-
         commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -262,6 +275,60 @@ public class PostHolder extends BaseViewHolder {
             textView.setText(formattedText);
         }
 
+        //Map
+        if(post.geo != null){
+            Log.v(TAG, "Map :" + post.geo);
+            mapAttachView.setVisibility(View.VISIBLE);
+
+            final VKApiGeo geo = post.geo;
+            mapView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.map_show_title)
+                            .setMessage(R.string.map_show_message)
+                            .setPositiveButton(R.string.map_show_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    getContext().startActivity(
+                                            new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + geo.lat + "," + geo.lon
+                                                    + "?q=" + geo.lat + "," + geo.lon + "&z=" + 10)));
+                                }
+                            })
+                            .setNegativeButton(R.string.map_show_cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .setCancelable(true).show();
+                }
+            });
+            mapTitleView.setText(geo.place.title);
+
+            ImageLoader.getInstance().displayImage(MapUtil.getMap(geo.lat, geo.lon, 600, 400, true, "").toString(), mapView, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    mapView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+
+                }
+            });
+        }
     }
     private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(getContext(), v);
