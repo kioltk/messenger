@@ -121,7 +121,7 @@ public class PostActivity extends BaseActivity {
             }
         });
     }
-    // надо сделать страницу юзера по такому же принципу, только первый холдер - юзер, остальные - посты
+
     public static Intent openPost(Context context,int ownerId, int postid){
         return new Intent(context, PostActivity.class).putExtra(EXTRA_USERID, ownerId).putExtra(EXTRA_POSTID, postid);
     }

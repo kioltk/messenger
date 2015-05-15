@@ -308,5 +308,9 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
     }
     public final static class VKApiPostSourcePlatform{
         public final static String ANDROID = "android";
+        public final static String IPHONE = "iphone";
+        public final static String IPAD = "ipad";
+        public final static String WIN = "wphone";
+        public final static String MOBILE = "mobile";
     }
 }

@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.vk.sdk.api.methods.VKApiPhotos;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiDocument;
@@ -35,8 +34,6 @@ import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.TimeUtils;
 import org.happysanta.messenger.core.views.TintImageView;
 import org.happysanta.messenger.user.ProfileActivity;
-
-import java.security.KeyStore;
 
 /**
  * Created by Jesus Christ. Amen.
@@ -95,8 +92,18 @@ public class PostHolder extends BaseViewHolder {
 
         // потом платформу
         if (post.sourcePlatform != null) {
-            if (post.sourcePlatform.equals(VKApiPostSourcePlatform.ANDROID)) {
+            if(post.sourcePlatform.equals(VKApiPostSourcePlatform.ANDROID)){
                 platformIcoView.setVisibility(View.VISIBLE);
+                platformIcoView.setImageResource(R.drawable.ico_android);
+            } else if (post.sourcePlatform.equals(VKApiPostSourcePlatform.IPAD) || post.sourcePlatform.equals(VKApiPostSourcePlatform.IPHONE)){
+                platformIcoView.setVisibility(View.VISIBLE);
+                platformIcoView.setImageResource(R.drawable.ico_ios);
+            } else if (post.sourcePlatform.equals(VKApiPostSourcePlatform.WIN)){
+                platformIcoView.setVisibility(View.VISIBLE);
+                platformIcoView.setImageResource(R.drawable.ico_win);
+            } else if (post.sourcePlatform.equals(VKApiPostSourcePlatform.MOBILE)){
+                platformIcoView.setVisibility(View.VISIBLE);
+                platformIcoView.setImageResource(R.drawable.ico_mobile);
             } else {
                 platformIcoView.setVisibility(View.GONE);
             }

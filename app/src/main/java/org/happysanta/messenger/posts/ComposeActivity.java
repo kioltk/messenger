@@ -19,17 +19,15 @@ import org.happysanta.messenger.core.BaseViewHolder;
 import org.happysanta.messenger.core.views.TintImageView;
 
 /**
- * Created by admin on 01.05.2015.
+ * Created by admin on 01.05.2015
  */
 public class ComposeActivity extends BaseActivity {
     private static final String EXTRA_USER_ID = "extra_user_id";
-    private TintImageView removeView;
     private TextView titleView;
     private TextView bodyView;
     private TintImageView photoView;
     private TintImageView mapView;
     private TintImageView smileView;
-    private RecyclerView recycler;
     private PhotoListAdapter adapter;
 
     @Override
