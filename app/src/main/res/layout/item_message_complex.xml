@@ -40,7 +40,7 @@
             <ImageView
                 android:id="@+id/map"
                 android:background="#fff"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/user_placeholder"
                 android:scaleType="centerInside"
                 android:visibility="gone"
                 android:layout_marginTop="6dp"

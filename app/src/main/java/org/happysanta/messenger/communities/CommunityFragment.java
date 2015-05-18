@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.friends.views.SlidingTabLayout;
-import org.happysanta.messenger.posts.FeedPagerAdapter;
 
 /**
  * Created by admin on 09.05.2015
@@ -42,12 +41,12 @@ public class CommunityFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbarShadow.setVisibility(View.GONE);
+        //toolbarShadow.setVisibility(View.GONE);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        toolbarShadow.setVisibility(View.VISIBLE);
+        //toolbarShadow.setVisibility(View.VISIBLE);
     }
 }

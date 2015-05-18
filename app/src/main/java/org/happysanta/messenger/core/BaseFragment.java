@@ -14,7 +14,7 @@ public class BaseFragment extends Fragment {
     protected View          rootView;
     protected BaseActivity  activity;
     protected Toolbar       toolbar;
-    protected View          toolbarShadow;
+    //protected View          toolbarShadow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,6 @@ public class BaseFragment extends Fragment {
         this.activity   = (BaseActivity) activity;
 
         toolbar         = this.activity.getToolbar();
-        toolbarShadow   = this.activity.getToolBarShadow();
+        /*toolbarShadow   = this.activity.getToolBarShadow();*/
     }
 }

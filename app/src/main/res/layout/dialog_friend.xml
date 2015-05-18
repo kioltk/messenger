@@ -60,7 +60,7 @@
                 android:layout_height="45dp">
                 <ImageView
                     android:layout_marginRight="11dp"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/user_placeholder"
                     android:scaleType="centerInside"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
@@ -91,7 +91,7 @@
                 android:layout_height="45dp">
                 <ImageView
                     android:layout_marginRight="11dp"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/user_placeholder"
                     android:scaleType="centerInside"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"

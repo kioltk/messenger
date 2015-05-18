@@ -42,7 +42,7 @@ public class FriendsFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        toolbarShadow.setVisibility(View.GONE);
+        //toolbarShadow.setVisibility(View.GONE);
 
         mShadowView                        = view.findViewById(R.id.tab_shadow);
         mViewPager      = (ViewPager)        view.findViewById(R.id.friends_viewpager);
@@ -66,7 +66,7 @@ public class FriendsFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        toolbarShadow.setVisibility(View.VISIBLE);
+        //toolbarShadow.setVisibility(View.VISIBLE);
     }
 
     private class TabPagerAdapter extends FragmentStatePagerAdapter

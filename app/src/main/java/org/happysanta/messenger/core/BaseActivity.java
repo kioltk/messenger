@@ -3,7 +3,6 @@ package org.happysanta.messenger.core;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.vk.sdk.VKUIHelper;
 
@@ -16,7 +15,7 @@ import org.happysanta.messenger.core.util.Dimen;
 public class BaseActivity extends ActionBarActivity {
 
     protected Toolbar toolbar;
-    protected View toolBarShadow;
+    //protected View toolBarShadow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,7 @@ public class BaseActivity extends ActionBarActivity {
         VKUIHelper.onCreate(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolBarShadow = findViewById(R.id.toolbar_shadow);
+        //toolBarShadow = findViewById(R.id.toolbar_shadow);
 
         if (toolbar != null) {
 
@@ -57,7 +56,7 @@ public class BaseActivity extends ActionBarActivity {
         return toolbar;
     }
 
-    public View getToolBarShadow() {
+    /*public View getToolBarShadow() {
         return toolBarShadow;
-    }
+    }*/
 }
