@@ -15,6 +15,10 @@ import java.util.HashMap;
 public class MessengerCore {
     private static MessengerCore core;
 
+
+    public static void init() {
+        new MessengerCore();
+    }
     public MessengerCore(){
         MessengerCore.core = this;
         LongpollService.addListener(new LongpollListener() {

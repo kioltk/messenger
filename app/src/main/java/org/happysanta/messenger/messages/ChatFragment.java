@@ -46,7 +46,7 @@ import org.happysanta.messenger.messages.attach.AttachAdapter;
 import org.happysanta.messenger.messages.attach.AttachCountListener;
 import org.happysanta.messenger.messages.attach.AttachDialog;
 import org.happysanta.messenger.messages.attach.AttachRequestCode;
-import org.happysanta.messenger.messages.groupchats.GroupChatInfoActivity;
+import org.happysanta.messenger.messages.groupchats.ChatInfoActivity;
 import org.happysanta.messenger.messages.core.DialogUtil;
 import org.happysanta.messenger.messages.core.MessagesAdapter;
 import org.happysanta.messenger.user.ProfileActivity;
@@ -89,6 +89,7 @@ public class ChatFragment extends BaseFragment {
             return false;
         }
     };
+    private boolean isChat;
 
     public ChatFragment() {
     }
@@ -109,6 +110,7 @@ public class ChatFragment extends BaseFragment {
         statusView = (TextView) findViewById(R.id.status);
 
         peerId = getArguments().getInt(ChatActivity.ARG_PEERID, 0);
+        isChat = getArguments().getBoolean(ChatActivity.ARG_ISCHAT, false);
         participants = new VKList<>();
         SparseArray<VKApiUserFull> usersSparseArray = getArguments().getSparseParcelableArray(ChatActivity.ARG_CHAT_PARTICIPANTS);
         for (int i = 0, sparseArray = usersSparseArray.size(); i < sparseArray; i++) {
@@ -118,7 +120,7 @@ public class ChatFragment extends BaseFragment {
         if(participants.getById(ProfileUtil.getUserId())==null){
             participants.add(ProfileUtil.getUser());
         }
-        dialogUtil = new DialogUtil(peerId);
+        dialogUtil = new DialogUtil(peerId, isChat);
 
         statusView.setText("loading");
         editMessageText.setText(dialogUtil.getBody());
@@ -309,12 +311,13 @@ public class ChatFragment extends BaseFragment {
 
     public void sendMessage() {
         String messageText = editMessageText.getText().toString();
-        if (messageText == null || messageText.equals("")) {
+        // todo check using regex
+        if (messageText.isEmpty() || messageText.equals("")) {
             return;
         }
         VKApiMessage message = new VKApiMessage();
-        if (peerId<0) {
-            message.chat_id = -peerId;
+        if (isChat) {
+            message.chat_id = peerId;
         } else {
             message.user_id = peerId;
         }
@@ -342,7 +345,7 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 
-        if (peerId<0) {
+        if (isChat) {
             menuInflater.inflate(R.menu.menu_chat, menu);
         } else {
             menuInflater.inflate(R.menu.menu_conversation, menu);
@@ -357,8 +360,8 @@ public class ChatFragment extends BaseFragment {
                 startActivity(ProfileActivity.openProfile(getActivity(), peerId));
             }
             break;
-            case R.id.action_chat_participants: {
-                startActivity(GroupChatInfoActivity.openDialogInfo(getActivity(), peerId));
+            case R.id.action_chat_info: {
+                startActivity(ChatInfoActivity.openInfo(getActivity(), peerId));
             }
             break;
         }

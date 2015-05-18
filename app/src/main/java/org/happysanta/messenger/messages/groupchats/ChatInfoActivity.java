@@ -28,11 +28,11 @@ import org.happysanta.messenger.core.util.ImageUtil;
 /**
  * Created by admin on 13.04.2015.
  */
-public class GroupChatInfoActivity extends BaseActivity {
+public class ChatInfoActivity extends BaseActivity {
     int userId;
     int dialogId;
     private String subtitle;
-    private static final String EXTRA_DIALOG_ID = "extra_chat_participants";
+    private static final String EXTRA_CHAT_ID = "extra_chat_participants";
 
     private ImageView dialogPhotoView;
     private TextView dialogTitleView;
@@ -67,7 +67,7 @@ public class GroupChatInfoActivity extends BaseActivity {
         dialogPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(GroupChatInfoActivity.this, "Edit photo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChatInfoActivity.this, "Edit photo", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -87,7 +87,7 @@ public class GroupChatInfoActivity extends BaseActivity {
             });
         }
 
-        dialogId = getIntent().getIntExtra(EXTRA_DIALOG_ID, 0);
+        dialogId = getIntent().getIntExtra(EXTRA_CHAT_ID, 0);
 
         new VKApiMessages().getChat(new VKParameters() {{
             put("chat_id", dialogId);
@@ -151,7 +151,7 @@ public class GroupChatInfoActivity extends BaseActivity {
         statusView.setText(onlineText);
     }
 
-    public static Intent openDialogInfo(Context context, int chatId){
-        return new Intent(context, GroupChatInfoActivity.class).putExtra(EXTRA_DIALOG_ID, chatId);
+    public static Intent openInfo(Context context, int chatId){
+        return new Intent(context, ChatInfoActivity.class).putExtra(EXTRA_CHAT_ID, chatId);
     }
 }

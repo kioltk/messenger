@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.happysanta.messenger.messages.ChatActivity">
     <item
-        android:id="@+id/action_chat_participants"
-        android:title="@string/action_chat_participants"
+        android:id="@+id/action_chat_info"
+        android:title="@string/action_chat_info"
         android:orderInCategory="0"
         app:showAsAction="never" />
     <item

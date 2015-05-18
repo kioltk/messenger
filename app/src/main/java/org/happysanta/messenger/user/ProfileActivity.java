@@ -33,7 +33,7 @@ public class ProfileActivity extends BaseActivity {
     private static final String EXTRA_POSTID = "extra_postid";
     private ProfilePostsAdapter adapter;
     private VKApiUserFull currentUser;
-    private VKPostArray userPosts;
+    private VKPostArray wall;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,9 +95,9 @@ public class ProfileActivity extends BaseActivity {
         }}).executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                userPosts = (VKPostArray) response.parsedModel;
+                wall = (VKPostArray) response.parsedModel;
                 // когда загрузили пост, то говорим адаптеру, что у нас появился первый итем
-                adapter.notifyItemRangeInserted(1, userPosts.size());
+                adapter.notifyItemRangeInserted(1, wall.size());
 
             }
         });
@@ -140,15 +140,21 @@ public class ProfileActivity extends BaseActivity {
                 ((ProfileHolder) holder).bind(0, currentUser);
             } else if (holder instanceof PostHolder) {
                 // и заносятся данные этих коментаривев в холдеры
-                VKApiPost post = userPosts.get(position - 1);
+                VKApiPost post = wall.get(position - 1);
                 PostHolder postHolder = (PostHolder) holder;
                 postHolder.bind((position - 1), post);// position-1 потому что на 0 индексе у нас новость, и комментарии в адаптере идут с 1, но в списке комментариев они все равно с 0
+                if(post.from_id>0){
+                    postHolder.bindOwner(wall.usersOwners.getById(post.from_id));
+                } else {
+                    postHolder.bindOwner(wall.groupsOwners.getById(-post.from_id));
+                }
+
             }
         }
 
         @Override
         public int getItemCount() {
-            int count = currentUser != null ? 1 + (userPosts != null ? userPosts.size() : 0) : 0;
+            int count = currentUser != null ? 1 + (wall != null ? wall.size() : 0) : 0;
             return count;
         }
     }

@@ -59,7 +59,7 @@
         </activity>
 
         <activity
-            android:name=".messages.groupchats.GroupChatInfoActivity"
+            android:name=".messages.groupchats.ChatInfoActivity"
             android:label="@string/title_activity_group_info" >
         </activity>
         

@@ -1,20 +1,18 @@
 package org.happysanta.messenger.audio;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
@@ -99,7 +97,7 @@ public class PlayerActivity extends BaseActivity {
         // создали активити и получили и нашли все данные, с которыми будем работать
     }
 
-    private void processAudio(){
+    private void processAudio() {
         // начало процесса работы с аудио
         // показываем данные
         titleView.setText(audioTitle);
@@ -118,14 +116,14 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private void startTimer() {
-        if(timerTask!=null){
+        if (timerTask != null) {
             timerTask.interrupt();
             timerTask = null;
         }
         timerTask = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(currentPlayerStatus == AudioPlayingStatus.PLAYING){
+                while (currentPlayerStatus == AudioPlayingStatus.PLAYING) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -145,9 +143,9 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private void updateTimer() {
-            currentPlayingPosition = audioPlayer.getCurrentPosition();
-            currentPlayingPositionView.setText(TimeUtils.formatDuration(currentPlayingPosition / 1000));
-            seekbar.setProgress(currentPlayingPosition / 1000);
+        currentPlayingPosition = audioPlayer.getCurrentPosition();
+        currentPlayingPositionView.setText(TimeUtils.formatDuration(currentPlayingPosition / 1000));
+        seekbar.setProgress(currentPlayingPosition / 1000);
     }
 
     private View.OnClickListener playViewClickListener = new View.OnClickListener() {
@@ -155,7 +153,7 @@ public class PlayerActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
 
-            switch (currentPlayerStatus){
+            switch (currentPlayerStatus) {
                 case PLAYING:
                     pause();
                     break;
@@ -172,7 +170,7 @@ public class PlayerActivity extends BaseActivity {
         playpauseDrawable.pause();
         if (!audioPlayer.isPlaying())
             audioPlayer.start();
-            startTimer();
+        startTimer();
 
     }
 
@@ -187,7 +185,7 @@ public class PlayerActivity extends BaseActivity {
     // а почему там запуск? Нам же не нужно видеть таймер до загрузки песни
     // чет темно у тебя тут
 
-    private OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener(){
+    private OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
         public int value;
 
         @Override
@@ -213,7 +211,6 @@ public class PlayerActivity extends BaseActivity {
 
 
     class PlayerTask extends AsyncTask<String, Void, Boolean> {
-        private ProgressDialog progress;
 
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -287,6 +284,7 @@ public class PlayerActivity extends BaseActivity {
             }
             return prepared;
         }
+
         // работает?
         // после нескольких перемоток сломалось и сам сикбар не перемещается на нужную позицию, только таймер
         // значит перемудрили. что именно сломалось? там затуп где-то с переодом с мили. у меян перемотка работает только в небольшой части сикбар.а.в какой? меньше половины
@@ -294,31 +292,14 @@ public class PlayerActivity extends BaseActivity {
         protected void onPostExecute(Boolean result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            if (progress.isShowing()) {
-                progress.cancel();
-            }
             Log.d("Prepared", "//" + result);
             audioPlayer.start();
 
             // вот тут ты почему-то подумал, что длительность, которую мы передали и длительность, которую получил плеер - разная. хз как ты так подумал, но не страшно.
-            Log.d("VKPlayer","Audio duration is " + audioDuration +"s, however audioplayer told its " +audioPlayer.getDuration()+"ms. Should we worry about it?");
+            Log.d("VKPlayer", "Audio duration is " + audioDuration + "s, however audioplayer told its " + audioPlayer.getDuration() + "ms. Should we worry about it?");
             seekbar.setProgress(currentPlayingPosition);
             initialStage = false;
         }
-
-        public PlayerTask() {
-            progress = new ProgressDialog(PlayerActivity.this);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            this.progress.setMessage("Buffering...");
-            this.progress.show();
-
-        }
-
 
 
     }
@@ -335,8 +316,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
 
-
-    public static Intent openAudio(Context context, int audioid, String audiourl, String audiotitle, String audioartist, int audioduration){
+    public static Intent openAudio(Context context, int audioid, String audiourl, String audiotitle, String audioartist, int audioduration) {
         return new Intent(context, PlayerActivity.class)
                 .putExtra(EXTRA_AUDIO_ID, audioid)
                 .putExtra(EXTRA_AUDIOS_URL, audiourl)

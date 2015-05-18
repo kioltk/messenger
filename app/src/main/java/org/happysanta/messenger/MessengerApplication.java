@@ -15,6 +15,7 @@ import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.api.VKError;
 
 import org.happysanta.messenger.chatheads.ChatHeadsManager;
+import org.happysanta.messenger.core.MessengerCore;
 import org.happysanta.messenger.core.util.BitmapUtil;
 import org.happysanta.messenger.core.util.Dimen;
 import org.happysanta.messenger.core.util.MapUtil;
@@ -55,6 +56,7 @@ public class MessengerApplication extends Application implements VKSdkListener {
         ProfileUtil.init(this);
         DialogUtil.init(this);
         ChatHeadsManager.init(this);
+        MessengerCore.init();
     }
 
 
