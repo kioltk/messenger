@@ -26,7 +26,7 @@ import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseActivity;
 
 /**
- * Created by admin on 16.04.2015.
+ * Created by insidefun on 16.04.2015
  */
 public class PostActivity extends BaseActivity {
     int ownerId;

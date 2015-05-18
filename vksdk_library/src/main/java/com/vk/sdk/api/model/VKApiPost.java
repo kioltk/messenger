@@ -157,6 +157,16 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
      */
     public VKList<VKApiPost> copy_history;
 
+    /**
+     * Whether the user can pin the post (false — can't, true — can).
+     */
+    public boolean can_pin;
+
+    /**
+     * Whether the user pinned the post (false — unpinned, true — pinned).
+     */
+    public boolean is_pinned;
+
 	public VKApiPost(JSONObject from) throws JSONException
 	{
 		parse(from);
@@ -212,6 +222,8 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
             sourcePlatform = postSource.optString("platform");
         }
 
+        is_pinned = ParseUtils.parseBoolean(source, "is_pinned");
+        can_pin = ParseUtils.parseBoolean(source, "can_pin");
         return this;
     }
 
@@ -239,6 +251,8 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         this.attachments = in.readParcelable(VKAttachments.class.getClassLoader());
         this.geo = in.readParcelable(VKApiPlace.class.getClassLoader());
         this.signer_id = in.readInt();
+        this.is_pinned = in.readByte() != 0;
+        this.can_pin = in.readByte() != 0;
     }
 
     /**
@@ -290,6 +304,8 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         dest.writeParcelable(attachments, flags);
         dest.writeParcelable((Parcelable) this.geo, flags);
         dest.writeInt(this.signer_id);
+        dest.writeByte(is_pinned ? (byte) 1 : (byte) 0);
+        dest.writeByte(can_pin ? (byte) 1 : (byte) 0);
     }
 
     public static Creator<VKApiPost> CREATOR = new Creator<VKApiPost>() {
@@ -314,5 +330,6 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         public final static String IPAD = "ipad";
         public final static String WIN = "wphone";
         public final static String MOBILE = "mobile";
+        public final static String DEFAULT = "default";
     }
 }

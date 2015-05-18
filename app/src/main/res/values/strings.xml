@@ -78,5 +78,7 @@
     <string name="action_edit_feed">Edit feed</string>
     <string name="title_activity_manage">Manage</string>
     <string name="title_activity_compose">Compose</string>
+    <string name="action_pin_post">Pin</string>
+    <string name="action_unpin_post">Unpin</string>
 
 </resources>
