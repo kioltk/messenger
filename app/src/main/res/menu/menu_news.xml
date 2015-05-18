@@ -13,4 +13,16 @@
         android:orderInCategory="1"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/action_pin_post"
+        android:title="@string/action_pin_post"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_unpin_post"
+        android:title="@string/action_unpin_post"
+        android:orderInCategory="3"
+        app:showAsAction="never"
+        />
 </menu>

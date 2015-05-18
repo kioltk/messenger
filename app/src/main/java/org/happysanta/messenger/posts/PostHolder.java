@@ -19,6 +19,10 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.methods.VKApiWall;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiDocument;
@@ -46,6 +50,7 @@ import org.happysanta.messenger.user.ProfileActivity;
  */
 public class PostHolder extends BaseViewHolder {
     private static final String TAG = "PostHolder";
+    private final TintImageView pinIcoView;
     private CardView postCardView;
     private ImageView photoView;
     private TextView nameView;
@@ -69,6 +74,12 @@ public class PostHolder extends BaseViewHolder {
     private final ImageView mapView;
     private final TextView mapTitleView;
 
+    //Post menu
+    int ownerId;
+    int postId;
+    private boolean canPin;
+    private boolean isPinned;
+
 
     public PostHolder(View itemView) {
         super(itemView);
@@ -78,8 +89,8 @@ public class PostHolder extends BaseViewHolder {
         nameView = (TextView) itemView.findViewById(R.id.user_name);
         dateView = (TextView) itemView.findViewById(R.id.news_date);
         commentMenu = itemView.findViewById(R.id.btn_menu);
-        platformIcoView = (ImageView) itemView.findViewById(R.id.android_ico);
-        commentMenu =  itemView.findViewById(R.id.btn_menu);
+        platformIcoView = (ImageView) itemView.findViewById(R.id.platform_ico);
+        pinIcoView = (TintImageView) itemView.findViewById(R.id.pin);
 
         //Post attaches
         textView = (TextView) itemView.findViewById(R.id.news_body);
@@ -104,24 +115,34 @@ public class PostHolder extends BaseViewHolder {
     }
 
     public void bind(final int position, final VKApiPost post) {
+        //Actions
+        postId = post.getId();
+        ownerId = post.to_id;
+        canPin = post.can_pin;
+        isPinned = post.is_pinned;
 
         // потом платформу
         if (post.sourcePlatform != null) {
-            if(post.sourcePlatform.equals(VKApiPostSourcePlatform.ANDROID)){
-                platformIcoView.setVisibility(View.VISIBLE);
-                platformIcoView.setImageResource(R.drawable.ico_android);
-            } else if (post.sourcePlatform.equals(VKApiPostSourcePlatform.IPAD) || post.sourcePlatform.equals(VKApiPostSourcePlatform.IPHONE)){
-                platformIcoView.setVisibility(View.VISIBLE);
-                platformIcoView.setImageResource(R.drawable.ico_ios);
-            } else if (post.sourcePlatform.equals(VKApiPostSourcePlatform.WIN)){
-                platformIcoView.setVisibility(View.VISIBLE);
-                platformIcoView.setImageResource(R.drawable.ico_win);
-            } else if (post.sourcePlatform.equals(VKApiPostSourcePlatform.MOBILE)){
-                platformIcoView.setVisibility(View.VISIBLE);
-                platformIcoView.setImageResource(R.drawable.ico_mobile);
-            } else {
-                platformIcoView.setVisibility(View.GONE);
+
+            platformIcoView.setVisibility(View.VISIBLE);
+            switch (post.sourcePlatform) {
+                case VKApiPostSourcePlatform.ANDROID:
+                    platformIcoView.setImageResource(R.drawable.ico_android);
+                    break;
+                case VKApiPostSourcePlatform.IPAD:
+                case VKApiPostSourcePlatform.IPHONE:
+                    platformIcoView.setImageResource(R.drawable.ico_ios);
+                    break;
+                case VKApiPostSourcePlatform.WIN:
+                    platformIcoView.setImageResource(R.drawable.ico_win);
+                    break;
+                case VKApiPostSourcePlatform.MOBILE:
+                    platformIcoView.setImageResource(R.drawable.ico_mobile);
+                    break;
             }
+
+        }else {
+            platformIcoView.setVisibility(View.GONE);
         }
 
         // заполняем дату
@@ -219,6 +240,17 @@ public class PostHolder extends BaseViewHolder {
             }
         }
 
+        //Post pinned status
+        if (isPinned){
+            pinIcoView.setVisibility(View.VISIBLE);
+            Log.v(TAG, "Pin status: " + isPinned);
+        } else {
+            pinIcoView.setVisibility(View.GONE);
+        }
+
+        if (canPin) {
+            Log.v(TAG, "User can pin? " + canPin);
+        }
 
         // когда я прошу сделать из одного массива, в котором данные не рассортированы по типу, сделать несколько массивов с конкретными данными,
         // это значет, что нужно сделать несколько массивов, и запихнуть из одно в несколько
@@ -330,6 +362,7 @@ public class PostHolder extends BaseViewHolder {
             });
         }
     }
+
     private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(getContext(), v);
         popupMenu.inflate(R.menu.menu_news);
@@ -349,6 +382,20 @@ public class PostHolder extends BaseViewHolder {
                                 Toast.makeText(getContext(), "Delete post", Toast.LENGTH_SHORT).show();
                                 return true;
 
+                            case R.id.action_pin_post:
+                                    pinPost();
+                                    Toast.makeText(getContext(), "Post was pinned", Toast.LENGTH_SHORT).show();
+                                    return true;
+
+                            case R.id.action_unpin_post:
+                                if (pinIcoView.getVisibility() == View.VISIBLE) {
+                                    unpinPost();
+                                    Toast.makeText(getContext(), "Post was unpinned", Toast.LENGTH_SHORT).show();
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+
                             default:
                                 return false;
                         }
@@ -356,6 +403,31 @@ public class PostHolder extends BaseViewHolder {
                 });
 
         popupMenu.show();
+    }
+
+
+    private void pinPost() {
+        new VKApiWall().pin(new VKParameters() {{
+            put("owner_id", ownerId);
+            put("post_id", postId);
+        }}).executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                    pinIcoView.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+    private void unpinPost() {
+        new VKApiWall().unPin(new VKParameters() {{
+            put("owner_id", ownerId);
+            put("post_id", postId);
+        }}).executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                    pinIcoView.setVisibility(View.GONE);
+
+            }
+        });
     }
 
     public void bindOwner(final VKApiUserFull owner) {

@@ -105,4 +105,12 @@ public class VKApiWall extends VKApiBase {
     public VKRequest reportComment(VKParameters params) {
         return prepareRequest("reportComment", params);
     }
+
+    public VKRequest pin(VKParameters params) {
+        return prepareRequest("pin", params);
+    }
+
+    public VKRequest unPin(VKParameters params) {
+        return prepareRequest("unpin", params);
+    }
 }
