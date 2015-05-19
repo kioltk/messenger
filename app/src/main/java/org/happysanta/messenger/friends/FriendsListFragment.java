@@ -24,7 +24,6 @@ import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.friends.adapter.FriendsAdapter;
 import org.happysanta.messenger.friends.adapter.LetterHeaderAdapter;
 import org.happysanta.messenger.user.ProfileActivity;
-import org.happysanta.messenger.user.UserDialog;
 
 import java.util.Collections;
 import java.util.Comparator;

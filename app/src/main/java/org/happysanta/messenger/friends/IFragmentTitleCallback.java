@@ -5,5 +5,5 @@ package org.happysanta.messenger.friends;
  */
 public interface IFragmentTitleCallback {
 
-    public void setFriendsCountTitle(int count, int position);
+    void setFriendsCountTitle(int count, int position);
 }

@@ -20,7 +20,7 @@ public class ProfileUtil {
 
     public static void init(Context context) {
         ProfileUtil.context = context;
-        manager = context.getSharedPreferences(PREF_PROFILE_KEY, context.MODE_MULTI_PROCESS);
+        manager = context.getSharedPreferences(PREF_PROFILE_KEY, Context.MODE_MULTI_PROCESS);
     }
 
     public static void setUserPhoto(String userPhoto){

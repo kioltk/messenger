@@ -65,7 +65,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     public interface IViewHolderCallback {
 
-        public void onItemClick(int position);
+        void onItemClick(int position);
     }
 
 

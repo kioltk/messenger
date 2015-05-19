@@ -434,8 +434,8 @@ public class VKShareDialog extends DialogFragment {
         };
     }
 
-    public static interface VKShareDialogListener {
-        public void onVkShareComplete(int postId);
-        public void onVkShareCancel();
+    public interface VKShareDialogListener {
+        void onVkShareComplete(int postId);
+        void onVkShareCancel();
     }
 }

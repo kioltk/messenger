@@ -30,6 +30,7 @@ package com.vk.sdk.api.model;
 
 import android.os.Parcel;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -66,6 +67,10 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
      *  Is user left from chat.
      * */
     private boolean left;
+    /**
+     * Users in chat - invited, invites, left.
+    * */
+    private VKUsersArray users;
 
     public VKApiChat(JSONObject from) {
 		parse(from);
@@ -80,8 +85,8 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
         type = source.optString("type");
         title = source.optString("title");
         admin_id = source.optInt("admin_id");
-        left = source.optInt("left")>0;
-        if(type.equals("extended")) {
+        left = source.optInt("left") > 0;
+        if (type.equals("extended")) {
             JSONArray participants = source.optJSONArray("participants");
             if (participants != null) {
                 this.participants = new VKApiChatParticipant[participants.length()];
@@ -90,7 +95,12 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
                     this.participants[i] = new VKApiChatParticipant(chatParticipant.optInt("id"), chatParticipant.optInt("invited_by"));
                 }
             }
-        } else{
+            try {
+                users = new VKUsersArray().parse(source.optJSONObject("users"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
             JSONArray participants = source.optJSONArray("users");
             if (participants != null) {
                 this.participants = new VKApiChatParticipant[participants.length()];

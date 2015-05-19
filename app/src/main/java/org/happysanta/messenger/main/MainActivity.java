@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity
         getFragmentManager().beginTransaction().replace(R.id.container, new android.app.Fragment()).commit();
         currentFragmentId = itemdId;
         switch (itemdId) {
-            case (int) NavigationFragment.NAVIGATION_PROFILE_ID:
+            case NavigationFragment.NAVIGATION_PROFILE_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new UserFragment())
                         .commit();
@@ -76,32 +76,32 @@ public class MainActivity extends BaseActivity
                         .replace(R.id.container, new FeedFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_MESSAGES_ID:
+            case NavigationFragment.NAVIGATION_MESSAGES_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new ChatsListFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_GROUPSCHAT_ID:
+            case NavigationFragment.NAVIGATION_GROUPSCHAT_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new GroupChatsListFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_FRIENDS_ID:
+            case NavigationFragment.NAVIGATION_FRIENDS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new FriendsFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_VIDEOS_ID:
+            case NavigationFragment.NAVIGATION_VIDEOS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new VideosListFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_PHOTOS_ID:
+            case NavigationFragment.NAVIGATION_PHOTOS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new PhotosListFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_AUDIOS_ID:
+            case NavigationFragment.NAVIGATION_AUDIOS_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new AudioFragment())
                         .commit();
@@ -112,13 +112,13 @@ public class MainActivity extends BaseActivity
                         .commit();
                 break;
 
-            case (int) NavigationFragment.NAVIGATION_SETTINGS_ID:
+            case NavigationFragment.NAVIGATION_SETTINGS_ID:
                 fragmentManager.beginTransaction().replace(R.id.container, new android.support.v4.app.Fragment()).commit();
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, new SettingsFragment())
                         .commit();
                 break;
-            case (int) NavigationFragment.NAVIGATION_ABOUT_ID:
+            case NavigationFragment.NAVIGATION_ABOUT_ID:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new AboutFragment())
                         .commit();

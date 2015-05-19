@@ -446,7 +446,7 @@ public class VKList<T extends VKApiModel & Parcelable & Identifiable> extends VK
      * Used when parsing the list objects as interator created from {@link org.json.JSONArray} a instances of items of the list.
      * @param <D> list item type.
      */
-    public static interface Parser<D> {
+    public interface Parser<D> {
 
         /**
          * Creates a list item of its representation return VK API from {@link org.json.JSONArray}

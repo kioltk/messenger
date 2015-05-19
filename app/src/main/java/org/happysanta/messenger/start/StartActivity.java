@@ -61,7 +61,7 @@ public class StartActivity extends ActionBarActivity {
         });
 
         String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
-        Log.d("fingerprint", Arrays.toString(fingerprints));
+        Log.i("fingerprint", Arrays.toString(fingerprints));
 
         startButton.postDelayed(new Runnable() {
             @Override

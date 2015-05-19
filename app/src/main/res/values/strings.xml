@@ -2,22 +2,22 @@
 <resources>
 
     <string name="app_name">Messenger</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world" translatable="false">Hello world!</string>
     <string name="action_chat_info">Chat info</string>
     <string name="action_log_out">Log out</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_start">@string/app_name</string>
-    <string name="title_activity_navigation_test">NavigationTestActivity</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="title_activity_start" translatable="false">@string/app_name</string>
+    <string name="title_activity_navigation_test" translatable="false">NavigationTestActivity</string>
     <string name="navigation_profile">Profile</string>
     <string name="navigation_messages">Messages</string>
     <string name="navigation_friends">Friends</string>
     <string name="navigation_groups">Chats</string>
     <string name="navigation_settings">Settings</string>
     <string name="navigation_about">About</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="action_example">Example action</string>
-    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_chat" translatable="false">ChatActivity</string>
     <string name="about_help">Help</string>
     <string name="about_license">License</string>
     <string name="about_privacy">Privacy</string>
@@ -33,27 +33,26 @@
     <string name="conversation_action_profile">Profile</string>
     <!-- preferences -->
     <string name="pref_category_notifications">Notifications</string>
-    <string name="pref_key_notifications_enable">pref_notifications_enable</string>
-    <string name="pref_key_notify_ringtone">pref_notify_ringtone</string>
-    <string name="pref_title_notify_ringtone">Sound</string>
-    <string name="pref_summary_silent">Silent</string>
-    <string name="pref_title_vibration">Vibration</string>
-    <string name="pref_key_vibration">pref_vibration</string>
-    <string name="pref_key_led_blink">pref_led_blink</string>
-    <string name="pref_title_led_blink">Blinking LED</string>
-    <string name="pref_key_popup_notify">pref_popup_notify</string>
-    <string name="pref_title_popup_notify">Pop-up notifications</string>
-    <string name="pref_key_sync">pref_contact_sync</string>
-    <string name="pref_title_sync">Synced contacts</string>
+    <string name="pref_key_notifications_enable">Enabled</string>
+    <string name="pref_key_notify_ringtone">Sound</string>
+    <string name="pref_title_notify_ringtone" translatable="false">Sound</string>
+    <string name="pref_summary_silent" translatable="false">Silent</string>
+    <string name="pref_title_vibration" translatable="false">Vibration</string>
+    <string name="pref_key_led_blink">LED indicator</string>
+    <string name="pref_title_led_blink" translatable="false">Blinking LED</string>
+    <string name="pref_key_popup_notify">Popup notification</string>
+    <string name="pref_title_popup_notify" translatable="false">Pop-up notifications</string>
+    <string name="pref_key_sync">Enabled</string>
+    <string name="pref_title_sync" translatable="false">Synced contacts</string>
     <string name="pref_category_sync">Contact sync</string>
     <string name="pref_category_chat_heads">Chat heads</string>
-    <string name="pref_key_chat_heads">pref_chat_heads</string>
-    <string name="pref_key_chat_heads_hide_on_fullscreen">pref_chat_heads_hide_on_fullscreen</string>
-    <string name="pref_title_chat_heads_hide_on_fullscreen">Hide when using apps that take up the full screen</string>
-    <string name="pref_key_chat_heads_start_from_tray">pref_chat_heads_start_from_tray</string>
-    <string name="pref_title_chat_heads_start_from_tray">Start conversation from the notification tray</string>
-    <string name="pref_msg_stop_sync">Stop syncing?</string>
-    <string name="pref_msg_start_sync">Do you want to start syncing your phone contacts with VK Messenger?</string>
+    <string name="pref_key_chat_heads">Enabled</string>
+    <string name="pref_key_chat_heads_hide_on_fullscreen">Hide on fullscreen apps</string>
+    <string name="pref_title_chat_heads_hide_on_fullscreen" translatable="false">Hide when using apps that take up the full screen</string>
+    <string name="pref_key_chat_heads_start_from_tray">Open from notification</string>
+    <string name="pref_title_chat_heads_start_from_tray" translatable="false">Start conversation from the notification tray</string>
+    <string name="pref_msg_stop_sync" translatable="false">Stop syncing?</string>
+    <string name="pref_msg_start_sync" translatable="false">Do you want to start syncing your phone contacts with VK Messenger?</string>
     <string name="action_dialogs_showchats">Chats</string>
     <string name="friends_onlines_none">None is online</string>
     <string name="friends_empty">No friends</string>
@@ -64,21 +63,22 @@
     <!-- audio message -->
     <string name="audio_title">title</string>
     <string name="audio_subtitle">Subtitle</string>
-    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_profile" translatable="false">Profile</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_group_info">Group info</string>
+    <string name="title_activity_group_info" translatable="false">Group info</string>
     <string name="action_edit_post">Edit</string>
     <string name="action_delete_post">Delete</string>
-    <string name="title_activity_post">Post</string>
-    <string name="title_activity_player">Player</string>
+    <string name="title_activity_post" translatable="false">Post</string>
+    <string name="title_activity_player" translatable="false">Player</string>
     <string name="navigation_videos">Videos</string>
     <string name="navigation_photos">Photo</string>
     <string name="navigation_communities">Communities</string>
     <string name="navigation_audios">Audio</string>
     <string name="action_edit_feed">Edit feed</string>
-    <string name="title_activity_manage">Manage</string>
-    <string name="title_activity_compose">Compose</string>
+    <string name="title_activity_manage" translatable="false">Manage</string>
+    <string name="title_activity_compose" translatable="false">Compose</string>
     <string name="action_pin_post">Pin</string>
     <string name="action_unpin_post">Unpin</string>
+    <string name="pref_key_vibration">Vibration</string>
 
 </resources>

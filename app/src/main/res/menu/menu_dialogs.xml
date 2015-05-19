@@ -9,13 +9,13 @@
         android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
         app:showAsAction="ifRoom"
         />
-    <item android:id="@+id/action_dialogs_showchats"
+    <!--<item android:id="@+id/action_dialogs_showchats"
         android:title="@string/action_dialogs_showchats"
         android:checkable="true"
         android:checked="false"
         android:orderInCategory="1"
         app:showAsAction="never"
-        />
+        />-->
     <item
         android:id="@+id/action_dialogs_starred"
         android:title="@string/action_dialogs_starred"

@@ -1,10 +1,7 @@
 package org.happysanta.messenger.about;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +10,6 @@ import android.widget.Button;
 import org.happysanta.messenger.R;
 import org.happysanta.messenger.core.BaseFragment;
 import org.happysanta.messenger.posts.ComposeActivity;
-import org.happysanta.messenger.user.UserDialog;
 
 /**
  * Created by Jesus Christ. Amen.

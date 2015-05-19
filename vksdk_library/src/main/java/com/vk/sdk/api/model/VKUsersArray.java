@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 public class VKUsersArray extends VKList<VKApiUserFull> {
     @Override
-    public VKApiModel parse(JSONObject response) throws JSONException {
+    public VKUsersArray parse(JSONObject response) throws JSONException {
         fill(response, VKApiUserFull.class);
         return this;
     }

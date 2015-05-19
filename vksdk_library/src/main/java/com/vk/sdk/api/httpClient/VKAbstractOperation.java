@@ -161,8 +161,8 @@ public abstract class VKAbstractOperation {
         }
     }
 
-    public static interface VKOperationCompleteListener {
-        public void onComplete();
+    public interface VKOperationCompleteListener {
+        void onComplete();
     }
 
     public static abstract class VKAbstractCompleteListener<OperationType,ResponseType> {

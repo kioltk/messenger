@@ -27,10 +27,16 @@ import org.happysanta.messenger.messages.core.DialogUtil;
  */
 public class MessengerApplication extends Application implements VKSdkListener {
 
+    private static MessengerApplication application;
+
+    public static MessengerApplication app(){
+        return application;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        application  = this;
         if(BuildConfig.DEBUG) {
             Mint.initAndStartSession(this, "ce6606ab");
             VKSdk.initialize(this, "4883406");
@@ -38,6 +44,7 @@ public class MessengerApplication extends Application implements VKSdkListener {
             Mint.initAndStartSession(this, "8205f1a9");
             VKSdk.initialize(this, "4486133");
         }
+        VKSdk.wakeUpSession(this);
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         analytics.newTracker(R.xml.global_tracker);
         ImageLoaderConfiguration imageLoaderConfig= new ImageLoaderConfiguration.Builder(this)

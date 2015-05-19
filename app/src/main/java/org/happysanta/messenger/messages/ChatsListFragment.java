@@ -37,7 +37,6 @@ import org.happysanta.messenger.longpoll.LongpollService;
 import org.happysanta.messenger.longpoll.listeners.LongpollDialogListener;
 import org.happysanta.messenger.longpoll.updates.LongpollNewMessage;
 import org.happysanta.messenger.longpoll.updates.LongpollTyping;
-import org.happysanta.messenger.messages.ChatActivity;
 import org.happysanta.messenger.messages.core.DialogUtil;
 
 import java.util.ArrayList;
@@ -185,7 +184,7 @@ public class ChatsListFragment extends BaseFragment {
         RecyclerView.ViewHolder firstHolder = recycler.findViewHolderForPosition(0);
         int top = 0;
         if(firstHolder!=null) {
-            top = (int) firstHolder.itemView.getTop();
+            top = firstHolder.itemView.getTop();
         } else {
             top = 1;
         }
@@ -208,21 +207,21 @@ public class ChatsListFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.menu_dialogs, menu);
-        for (int i = 0; i < menu.size(); i++) {
+        /*for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
             switch (item.getItemId()) {
                 case R.id.action_dialogs_showchats:{
                     item.setChecked(chatsShowed);
                 }break;
             }
-        }
+        }*/
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.action_dialogs_showchats: {
+            /*case R.id.action_dialogs_showchats: {
                 //ыц
                 chatsShowed = !item.isChecked();
                 DialogUtil.setChatsShowed(chatsShowed);
@@ -249,7 +248,8 @@ public class ChatsListFragment extends BaseFragment {
 
 
             }
-            break;
+            break;*/
+
 
         }
 

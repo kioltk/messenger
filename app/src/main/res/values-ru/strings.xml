@@ -23,7 +23,6 @@
     <string name="map_show_message">Показать карту в отдельном приложении?</string>
     <string name="map_show_title">Карта</string>
     <string name="navigation_about">О приложении</string>
-    <string name="navigation_drawer_close"></string>
     <string name="navigation_friends">Друзья</string>
     <string name="navigation_groups">Чаты</string>
     <string name="navigation_messages">Сообщения</string>
@@ -32,4 +31,26 @@
     <string name="navigation_settings">Настройки</string>
     <string name="pref_category_chat_heads">Чатхедс</string>
     <string name="pref_category_notifications">Уведомления</string>
+    <string name="action_delete_post">Удалить</string>
+    <string name="action_edit_feed">Редактировать</string>
+    <string name="action_edit_post">Редактировать</string>
+    <string name="action_pin_post">Прикрепить</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_unpin_post">Открепить</string>
+    <string name="audio_subtitle">Подзаголовок</string>
+    <string name="audio_title">Заголовок</string>
+    <string name="navigation_audios">Аудио</string>
+    <string name="navigation_communities">Сообщества</string>
+    <string name="navigation_photos">Фото</string>
+    <string name="navigation_videos">Видео</string>
+    <string name="pref_category_sync">Синхронизация контактов</string>
+    <string name="pref_key_chat_heads">Включено</string>
+    <string name="pref_key_chat_heads_hide_on_fullscreen">Скрывать в полноэкранных приложениях</string>
+    <string name="pref_key_chat_heads_start_from_tray">Открывать из уведомлений</string>
+    <string name="pref_key_led_blink">LED индикатор</string>
+    <string name="pref_key_notifications_enable">Включено</string>
+    <string name="pref_key_notify_ringtone">Звук</string>
+    <string name="pref_key_popup_notify">Попап уведомление</string>
+    <string name="pref_key_sync">включено</string>
+    <string name="pref_key_vibration">Вибрация</string>
 </resources>
