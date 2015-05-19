@@ -47,4 +47,7 @@ dependencies {
     compile 'com.eowise:recyclerview-stickyheaders:0.5.0@aar'
     // trackers
     compile 'com.splunk.mint:mint:4.0.8'
+
+    compile 'com.facebook.rebound:rebound:0.3.7'
+
 }

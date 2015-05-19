@@ -102,6 +102,15 @@ public class VKApiMessages extends VKApiBase {
         });
     }
 
+    public VKRequest getChatInfo() {
+        return prepareRequest("execute", "getChatInfo", null, VKRequest.HttpMethod.GET, new VKParser() {
+            @Override
+            public VKApiChat createModel(JSONObject object) {
+                return new VKApiChat(object);
+            }
+        });
+    }
+
     private VKList<VKApiDialog> parseDialogs(JSONObject object, boolean includeChats, boolean includeConversations) {
         VKList<VKApiDialog> dialogs = new VKList<VKApiDialog>();
         try {

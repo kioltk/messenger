@@ -61,9 +61,13 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
     /**
      * List of chat participants' IDs.
      */
-    public int[] users;
+    public VKApiChatParticipant[] participants;
+    /**
+     *  Is user left from chat.
+     * */
+    private boolean left;
 
-	public VKApiChat(JSONObject from) {
+    public VKApiChat(JSONObject from) {
 		parse(from);
 	}
 
@@ -76,11 +80,23 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
         type = source.optString("type");
         title = source.optString("title");
         admin_id = source.optInt("admin_id");
-        JSONArray users = source.optJSONArray("users");
-        if(users != null) {
-            this.users = new int[users.length()];
-            for(int i = 0; i < this.users.length; i++) {
-                this.users[i] = users.optInt(i);
+        left = source.optInt("left")>0;
+        if(type.equals("extended")) {
+            JSONArray participants = source.optJSONArray("participants");
+            if (participants != null) {
+                this.participants = new VKApiChatParticipant[participants.length()];
+                for (int i = 0; i < this.participants.length; i++) {
+                    JSONObject chatParticipant = participants.optJSONObject(i);
+                    this.participants[i] = new VKApiChatParticipant(chatParticipant.optInt("id"), chatParticipant.optInt("invited_by"));
+                }
+            }
+        } else{
+            JSONArray participants = source.optJSONArray("users");
+            if (participants != null) {
+                this.participants = new VKApiChatParticipant[participants.length()];
+                for (int i = 0; i < this.participants.length; i++) {
+                    this.participants[i] = new VKApiChatParticipant(participants.optInt(i));
+                }
             }
         }
         return this;
@@ -94,7 +110,7 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
         this.type = in.readString();
         this.title = in.readString();
         this.admin_id = in.readInt();
-        this.users = in.createIntArray();
+        /*this.participants = in.readArray();*/
     }
 
     /**
@@ -120,7 +136,7 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
         dest.writeString(this.type);
         dest.writeString(this.title);
         dest.writeInt(this.admin_id);
-        dest.writeIntArray(this.users);
+        dest.writeArray(this.participants);
     }
 
     public static Creator<VKApiChat> CREATOR = new Creator<VKApiChat>() {
@@ -132,4 +148,19 @@ public class VKApiChat extends VKApiModel implements Identifiable, android.os.Pa
             return new VKApiChat[size];
         }
     };
+
+    private class VKApiChatParticipant {
+        private final int userId;
+        private final int invitedBy;
+
+        public VKApiChatParticipant(int id) {
+            this.userId = id;
+            invitedBy = 0;
+        }
+
+        public VKApiChatParticipant(int id, int invitedBy) {
+            this.userId = id;
+            this.invitedBy = invitedBy;
+        }
+    }
 }
